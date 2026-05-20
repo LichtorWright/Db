@@ -1,0 +1,8 @@
+namespace Db
+{
+    /// <summary>
+    /// Marks a variable or parameter as a raw pointer (T*) in the destination language.
+    /// In C++: int* x — stores the address of a T.
+    /// </summary>
+    public class AddressAttribute { }
+}

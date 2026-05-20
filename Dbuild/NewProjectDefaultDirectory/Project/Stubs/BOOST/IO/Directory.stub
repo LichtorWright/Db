@@ -1,0 +1,85 @@
+namespace Boost.IO {
+    /// <summary>
+    /// Static helpers for creating, querying, and traversing directories.
+    /// Maps to: free functions in boost::filesystem
+    /// </summary>
+    [Represents("boost::filesystem", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+    public static class Directory {
+        /// <summary>True if path refers to a directory that exists.</summary>
+        [Represents("boost::filesystem::is_directory", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static bool Exists(Path path);
+
+        /// <summary>
+        /// Creates the directory at path.
+        /// Returns true if the directory was newly created, false if it already existed.
+        /// Throws if a non-directory file exists at path.
+        /// </summary>
+        [Represents("boost::filesystem::create_directory", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static bool Create(Path path);
+
+        /// <summary>
+        /// Creates path and all missing parent directories.
+        /// Returns true if at least one directory was created.
+        /// </summary>
+        [Represents("boost::filesystem::create_directories", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static bool CreateAll(Path path);
+
+        /// <summary>
+        /// Deletes the directory at path (must be empty).
+        /// Returns true if the directory existed and was removed.
+        /// </summary>
+        [Represents("boost::filesystem::remove", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static bool Delete(Path path);
+
+        /// <summary>
+        /// Recursively deletes path and all of its contents.
+        /// Returns the number of files and directories removed.
+        /// </summary>
+        [Represents("boost::filesystem::remove_all", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static long DeleteAll(Path path);
+
+        /// <summary>
+        /// Returns a DirectoryIterator positioned at the first entry in path.
+        /// Iterate with foreach over the result.
+        /// </summary>
+        [Represents("boost::filesystem::directory_iterator", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static DirectoryIterator Entries(Path path);
+
+        /// <summary>
+        /// Returns a RecursiveDirectoryIterator that descends into sub-directories.
+        /// </summary>
+        [Represents("boost::filesystem::recursive_directory_iterator", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static RecursiveDirectoryIterator EntriesRecursive(Path path);
+    }
+
+    /// <summary>
+    /// Iterates over the direct children of a directory.
+    /// Use in a foreach loop; each element is a DirectoryEntry.
+    /// Maps to: C++ boost::filesystem::directory_iterator
+    /// </summary>
+    [Represents("boost::filesystem::directory_iterator", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/filesystem.hpp>")]
+    public class DirectoryIterator {
+        public DirectoryIterator(Path path);
+
+        /// <summary>Advances to the next entry.</summary>
+        [Represents("increment")]
+        public void MoveNext();
+    }
+
+    /// <summary>
+    /// Iterates recursively over all descendants of a directory.
+    /// Maps to: C++ boost::filesystem::recursive_directory_iterator
+    /// </summary>
+    [Represents("boost::filesystem::recursive_directory_iterator", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/filesystem.hpp>")]
+    public class RecursiveDirectoryIterator {
+        public RecursiveDirectoryIterator(Path path);
+
+        /// <summary>The recursion depth of the current entry (0 = direct child).</summary>
+        [Represents("depth")]
+        public int Depth { get; }
+
+        /// <summary>Skips recursing into the current directory entry.</summary>
+        [Represents("disable_recursion_pending")]
+        public void SkipSubdirectory();
+    }
+}

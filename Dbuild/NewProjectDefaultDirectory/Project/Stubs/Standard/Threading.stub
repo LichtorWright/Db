@@ -1,0 +1,202 @@
+namespace Standard {
+    /// <summary>
+    /// A managed thread of execution.  Pass an Action to the constructor and
+    /// call Start() (or use the auto-starting overload), then Join() to wait
+    /// for completion.
+    /// Maps to: C++ std::thread
+    /// </summary>
+    [Represents("std::thread", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<thread>")]
+    public class Thread {
+        /// <summary>Constructs a thread and immediately starts executing action.</summary>
+        public Thread(Action action);
+
+        /// <summary>Blocks the calling thread until this thread finishes.</summary>
+        [Represents("join")]
+        public void Join();
+
+        /// <summary>Detaches the thread so it runs independently; Join() may not be called after.</summary>
+        [Represents("detach")]
+        public void Detach();
+
+        /// <summary>True if the thread is joinable (started and not yet joined/detached).</summary>
+        [Represents("joinable")]
+        public bool IsJoinable { get; }
+
+        /// <summary>The OS thread identifier.</summary>
+        [Represents("get_id")]
+        public int Id { get; }
+
+        // ── Static helpers ────────────────────────────────────────────────────
+
+        /// <summary>Suspends the calling thread for at least the given milliseconds.</summary>
+        [Represents("std::this_thread::sleep_for", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<thread>")]
+        public static void Sleep(long milliseconds);
+
+        /// <summary>Hints to the scheduler that this thread is willing to yield its timeslice.</summary>
+        [Represents("std::this_thread::yield", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<thread>")]
+        public static void Yield();
+
+        /// <summary>Returns the OS identifier of the calling thread.</summary>
+        [Represents("std::this_thread::get_id", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<thread>")]
+        public static int CurrentId { get; }
+
+        /// <summary>Number of hardware threads (logical CPU cores) available.</summary>
+        [Represents("std::thread::hardware_concurrency", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<thread>")]
+        public static int ProcessorCount { get; }
+    }
+
+    /// <summary>
+    /// A non-recursive mutual exclusion lock.  Always use inside a Lock block
+    /// (which maps to std::lock_guard) rather than calling Lock/Unlock manually.
+    /// Maps to: C++ std::mutex
+    /// </summary>
+    [Represents("std::mutex", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<mutex>")]
+    public class Mutex {
+        public Mutex();
+
+        /// <summary>Acquires the lock, blocking until available.</summary>
+        [Represents("lock")]
+        public void Lock();
+
+        /// <summary>Releases the lock.</summary>
+        [Represents("unlock")]
+        public void Unlock();
+
+        /// <summary>Tries to acquire the lock without blocking.  Returns true if acquired.</summary>
+        [Represents("try_lock")]
+        public bool TryLock();
+    }
+
+    /// <summary>
+    /// Like Mutex but allows the same thread to lock it multiple times without deadlocking.
+    /// Maps to: C++ std::recursive_mutex
+    /// </summary>
+    [Represents("std::recursive_mutex", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<mutex>")]
+    public class RecursiveMutex {
+        public RecursiveMutex();
+
+        [Represents("lock")]     public void Lock();
+        [Represents("unlock")]   public void Unlock();
+        [Represents("try_lock")] public bool TryLock();
+    }
+
+    /// <summary>
+    /// RAII lock guard — locks the mutex on construction, unlocks on destruction.
+    /// In Db use this inside a using/lock block.
+    /// Maps to: C++ std::lock_guard&lt;std::mutex&gt;
+    /// </summary>
+    [Represents("std::lock_guard<std::mutex>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<mutex>")]
+    public class LockGuard {
+        /// <summary>Locks mutex immediately.</summary>
+        public LockGuard(Mutex mutex);
+    }
+
+    /// <summary>
+    /// A condition variable for coordinating threads: one thread waits, another notifies.
+    /// Must always be used together with a Mutex.
+    /// Maps to: C++ std::condition_variable
+    /// </summary>
+    [Represents("std::condition_variable", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<condition_variable>")]
+    public class ConditionVariable {
+        public ConditionVariable();
+
+        /// <summary>
+        /// Atomically releases lock and blocks until notified (or spuriously woken).
+        /// Re-acquires lock before returning.
+        /// </summary>
+        [Represents("wait")]
+        public void Wait(LockGuard lock);
+
+        /// <summary>Blocks until notified AND predicate returns true.</summary>
+        [Represents("wait")]
+        public void Wait(LockGuard lock, Func<bool> predicate);
+
+        /// <summary>Wakes one waiting thread.</summary>
+        [Represents("notify_one")]
+        public void NotifyOne();
+
+        /// <summary>Wakes all waiting threads.</summary>
+        [Represents("notify_all")]
+        public void NotifyAll();
+    }
+
+    /// <summary>
+    /// A thread-safe integer or pointer that supports lock-free read-modify-write.
+    /// Maps to: C++ std::atomic&lt;T&gt;
+    /// </summary>
+    [Represents("std::atomic", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<atomic>")]
+    public class Atomic<T> {
+        public Atomic();
+        public Atomic(T value);
+
+        /// <summary>Atomically loads the current value.</summary>
+        [Represents("load")]
+        public T Load();
+
+        /// <summary>Atomically stores a new value.</summary>
+        [Represents("store")]
+        public void Store(T value);
+
+        /// <summary>Atomically replaces the value and returns the old one.</summary>
+        [Represents("exchange")]
+        public T Exchange(T newValue);
+
+        /// <summary>
+        /// If the current value equals expected, stores desired and returns true.
+        /// Otherwise loads the current value into expected and returns false.
+        /// </summary>
+        [Represents("compare_exchange_strong")]
+        public bool CompareExchange(ref T expected, T desired);
+
+        /// <summary>Atomically adds delta and returns the previous value.  Integer types only.</summary>
+        [Represents("fetch_add")]
+        public T FetchAdd(T delta);
+
+        /// <summary>Atomically subtracts delta and returns the previous value.</summary>
+        [Represents("fetch_sub")]
+        public T FetchSub(T delta);
+
+        /// <summary>True if operations on this type are always lock-free on this platform.</summary>
+        [Represents("is_lock_free")]
+        public bool IsLockFree { get; }
+    }
+
+    /// <summary>
+    /// Executes a callable exactly once across all threads, even if called concurrently.
+    /// Maps to: C++ std::call_once + std::once_flag
+    /// </summary>
+    [Represents("std::once_flag", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<mutex>")]
+    public class OnceFlag {
+        public OnceFlag();
+
+        /// <summary>Calls action exactly once, regardless of how many threads call this.</summary>
+        [Represents("std::call_once")]
+        public void CallOnce(Action action);
+    }
+
+    /// <summary>
+    /// A counting semaphore that blocks threads when the count reaches zero.
+    /// Maps to: C++ std::counting_semaphore (C++20)
+    /// </summary>
+    [Represents("std::counting_semaphore", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<semaphore>")]
+    public class Semaphore {
+        /// <summary>Constructs a semaphore with the given initial count.</summary>
+        public Semaphore(int initialCount);
+
+        /// <summary>Decrements the count, blocking if it is zero.</summary>
+        [Represents("acquire")]
+        public void Acquire();
+
+        /// <summary>Tries to decrement without blocking.  Returns true if successful.</summary>
+        [Represents("try_acquire")]
+        public bool TryAcquire();
+
+        /// <summary>Increments the count, potentially unblocking a waiting thread.</summary>
+        [Represents("release")]
+        public void Release();
+
+        /// <summary>Releases count permits at once.</summary>
+        [Represents("release")]
+        public void Release(int count);
+    }
+}

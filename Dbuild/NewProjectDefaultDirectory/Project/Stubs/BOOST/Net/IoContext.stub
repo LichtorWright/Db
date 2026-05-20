@@ -1,0 +1,49 @@
+namespace Boost.Net {
+    /// <summary>
+    /// Owns and drives the async I/O event loop.  Create one per thread group
+    /// and pass it to every socket, timer, and resolver you construct.
+    /// Maps to: C++ boost::asio::io_context
+    /// </summary>
+    [Represents("boost::asio::io_context", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/asio.hpp>")]
+    public class IoContext {
+        /// <summary>Constructs an IoContext with the default concurrency hint.</summary>
+        public IoContext();
+
+        /// <summary>Constructs an IoContext with the given concurrency hint (thread count).</summary>
+        public IoContext(int concurrencyHint);
+
+        /// <summary>
+        /// Runs the event loop until there is no more work to do.
+        /// Returns the number of handlers that were executed.
+        /// </summary>
+        [Represents("run")]
+        public int Run();
+
+        /// <summary>Runs the event loop and executes exactly one ready handler, then returns.</summary>
+        [Represents("run_one")]
+        public int RunOne();
+
+        /// <summary>Dispatches all currently-ready handlers without blocking.</summary>
+        [Represents("poll")]
+        public int Poll();
+
+        /// <summary>Dispatches at most one currently-ready handler without blocking.</summary>
+        [Represents("poll_one")]
+        public int PollOne();
+
+        /// <summary>Signals the event loop to exit as soon as possible.</summary>
+        [Represents("stop")]
+        public void Stop();
+
+        /// <summary>
+        /// Resets the stopped flag so the context can be run again after Stop()
+        /// has been called.
+        /// </summary>
+        [Represents("restart")]
+        public void Restart();
+
+        /// <summary>True if Stop() has been called and the loop has not yet been restarted.</summary>
+        [Represents("stopped")]
+        public bool Stopped { get; }
+    }
+}

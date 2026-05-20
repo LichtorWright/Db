@@ -1,0 +1,127 @@
+namespace Standard {
+    /// <summary>
+    /// Represents a double-precision floating-point number.
+    /// Maps to: C++ double
+    /// </summary>
+    [Represents("double")]
+    public class Double {
+        /// <summary>Default constructor (initializes to 0.0).</summary>
+        public Double();
+
+        /// <summary>Constructs from a double value.</summary>
+        public Double(double value);
+
+        /// <summary>The smallest positive normal value.</summary>
+        [Represents("std::numeric_limits<double>::min()")]
+        public static double MinValue { get; }
+
+        /// <summary>The largest finite value.</summary>
+        [Represents("std::numeric_limits<double>::max()")]
+        public static double MaxValue { get; }
+
+        /// <summary>The smallest positive value such that 1 + Epsilon != 1.</summary>
+        [Represents("std::numeric_limits<double>::epsilon()")]
+        public static double Epsilon { get; }
+
+        /// <summary>Not a Number.</summary>
+        [Represents("std::numeric_limits<double>::quiet_NaN()")]
+        public static double NaN { get; }
+
+        /// <summary>Positive infinity.</summary>
+        [Represents("std::numeric_limits<double>::infinity()")]
+        public static double PositiveInfinity { get; }
+
+        /// <summary>Negative infinity.</summary>
+        [Represents("-std::numeric_limits<double>::infinity()")]
+        public static double NegativeInfinity { get; }
+
+        /// <summary>Compares this to another Double.</summary>
+        public int CompareTo(Double other);
+
+        /// <summary>Tests equality with another Double.</summary>
+        public bool Equals(Double other);
+
+        /// <summary>Gets a hash code.</summary>
+        public override int GetHashCode();
+
+        /// <summary>Converts to string.</summary>
+        public override string ToString();
+
+        /// <summary>Converts to string with format.</summary>
+        public string ToString(string format);
+
+        /// <summary>Parses a string to a Double.</summary>
+        public static Double Parse(string s);
+
+        /// <summary>Safely parses a string to a Double.</summary>
+        public static bool TryParse(string s, out Double result);
+
+        /// <summary>Whether the value is Not a Number.</summary>
+        [Represents("std::isnan")]
+        public static bool IsNaN(double value);
+
+        /// <summary>Whether the value is infinite.</summary>
+        [Represents("std::isinf")]
+        public static bool IsInfinity(double value);
+
+        /// <summary>Whether the value is positive infinity.</summary>
+        [Represents("std::isinf")]
+        public static bool IsPositiveInfinity(double value);
+
+        /// <summary>Whether the value is negative infinity.</summary>
+        [Represents("std::isinf")]
+        public static bool IsNegativeInfinity(double value);
+
+        /// <summary>Addition.</summary>
+        [Represents("operator+")]
+        public static Double operator+(Double left, Double right);
+
+        /// <summary>Subtraction.</summary>
+        [Represents("operator-")]
+        public static Double operator-(Double left, Double right);
+
+        /// <summary>Multiplication.</summary>
+        [Represents("operator*")]
+        public static Double operator*(Double left, Double right);
+
+        /// <summary>Division.</summary>
+        [Represents("operator/")]
+        public static Double operator/(Double left, Double right);
+
+        /// <summary>Modulus.</summary>
+        [Represents("operator%")]
+        public static Double operator%(Double left, Double right);
+
+        /// <summary>Increments by one.</summary>
+        [Represents("operator++")]
+        public Double Increment();
+
+        /// <summary>Decrements by one.</summary>
+        [Represents("operator--")]
+        public Double Decrement();
+
+        /// <summary>Less than.</summary>
+        [Represents("operator<")]
+        public static bool operator<(Double left, Double right);
+
+        /// <summary>Greater than.</summary>
+        [Represents("operator>")]
+        public static bool operator>(Double left, Double right);
+
+        /// <summary>Less than or equal.</summary>
+        [Represents("operator<=")]
+        public static bool operator<=(Double left, Double right);
+
+        /// <summary>Greater than or equal.</summary>
+        [Represents("operator>=")]
+        public static bool operator>=(Double left, Double right);
+
+        /// <summary>Equality.</summary>
+        [Represents("operator==")]
+        public static bool operator==(Double left, Double right);
+
+        /// <summary>Inequality.</summary>
+        [Represents("operator!=")]
+        public static bool operator!=(Double left, Double right);
+    }
+}

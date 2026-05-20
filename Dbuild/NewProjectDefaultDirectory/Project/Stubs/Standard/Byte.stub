@@ -1,0 +1,97 @@
+namespace Standard {
+    /// <summary>
+    /// Represents an unsigned 8-bit integer.
+    /// Maps to: C++ unsigned char
+    /// </summary>
+    [Represents("unsigned char")]
+    public class Byte {
+        /// <summary>Default constructor (initializes to 0).</summary>
+        public Byte();
+
+        /// <summary>Constructs from a byte value.</summary>
+        public Byte(byte value);
+
+        /// <summary>The minimum value (0).</summary>
+        public static byte MinValue { get; }
+
+        /// <summary>The maximum value (255).</summary>
+        public static byte MaxValue { get; }
+
+        /// <summary>Converts to string.</summary>
+        public override string ToString();
+
+        /// <summary>Parses a string to a Byte.</summary>
+        public static Byte Parse(string s);
+
+        /// <summary>Safely parses a string to a Byte.</summary>
+        public static bool TryParse(string s, out Byte result);
+
+        /// <summary>Addition.</summary>
+        [Represents("operator+")]
+        public static Byte operator+(Byte left, Byte right);
+
+        /// <summary>Subtraction.</summary>
+        [Represents("operator-")]
+        public static Byte operator-(Byte left, Byte right);
+
+        /// <summary>Multiplication.</summary>
+        [Represents("operator*")]
+        public static Byte operator*(Byte left, Byte right);
+
+        /// <summary>Division.</summary>
+        [Represents("operator/")]
+        public static Byte operator/(Byte left, Byte right);
+
+        /// <summary>Modulus.</summary>
+        [Represents("operator%")]
+        public static Byte operator%(Byte left, Byte right);
+
+        /// <summary>Bitwise AND.</summary>
+        [Represents("operator&")]
+        public static Byte operator&(Byte left, Byte right);
+
+        /// <summary>Bitwise OR.</summary>
+        [Represents("operator|")]
+        public static Byte operator|(Byte left, Byte right);
+
+        /// <summary>Bitwise XOR.</summary>
+        [Represents("operator^")]
+        public static Byte operator^(Byte left, Byte right);
+
+        /// <summary>Bitwise NOT.</summary>
+        [Represents("operator~")]
+        public static Byte operator~(Byte value);
+
+        /// <summary>Left shift.</summary>
+        [Represents("operator<<")]
+        public static Byte operator<<(Byte left, int shift);
+
+        /// <summary>Right shift.</summary>
+        [Represents("operator>>")]
+        public static Byte operator>>(Byte left, int shift);
+
+        /// <summary>Less than.</summary>
+        [Represents("operator<")]
+        public static bool operator<(Byte left, Byte right);
+
+        /// <summary>Greater than.</summary>
+        [Represents("operator>")]
+        public static bool operator>(Byte left, Byte right);
+
+        /// <summary>Less than or equal.</summary>
+        [Represents("operator<=")]
+        public static bool operator<=(Byte left, Byte right);
+
+        /// <summary>Greater than or equal.</summary>
+        [Represents("operator>=")]
+        public static bool operator>=(Byte left, Byte right);
+
+        /// <summary>Equality.</summary>
+        [Represents("operator==")]
+        public static bool operator==(Byte left, Byte right);
+
+        /// <summary>Inequality.</summary>
+        [Represents("operator!=")]
+        public static bool operator!=(Byte left, Byte right);
+    }
+}

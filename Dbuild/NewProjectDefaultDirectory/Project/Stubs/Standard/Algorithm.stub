@@ -1,0 +1,187 @@
+namespace Standard {
+    /// <summary>
+    /// General-purpose algorithms that operate on ranges / collections.
+    /// All methods are static; pass begin/end iterators implicitly through
+    /// the Db runtime or pass a Standard.List / Standard.Vector directly.
+    /// Maps to: C++ &lt;algorithm&gt;
+    /// </summary>
+    [Represents("", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<algorithm>")]
+    public static class Algorithm {
+        // ── Sorting ───────────────────────────────────────────────────────────
+
+        /// <summary>Sorts the collection in ascending order (unstable).</summary>
+        [Represents("std::sort")]
+        public static void Sort<T>(List<T> collection);
+
+        /// <summary>Sorts using a custom comparator function.</summary>
+        [Represents("std::sort")]
+        public static void Sort<T>(List<T> collection, Func<T, T, int> compare);
+
+        /// <summary>Sorts preserving relative order of equal elements (stable).</summary>
+        [Represents("std::stable_sort")]
+        public static void StableSort<T>(List<T> collection);
+
+        [Represents("std::stable_sort")]
+        public static void StableSort<T>(List<T> collection, Func<T, T, int> compare);
+
+        /// <summary>Partially sorts so the first n elements are the n smallest.</summary>
+        [Represents("std::partial_sort")]
+        public static void PartialSort<T>(List<T> collection, int n);
+
+        /// <summary>Reverses the collection in place.</summary>
+        [Represents("std::reverse")]
+        public static void Reverse<T>(List<T> collection);
+
+        // ── Searching ─────────────────────────────────────────────────────────
+
+        /// <summary>Returns the index of the first element equal to value, or -1.</summary>
+        [Represents("std::find")]
+        public static int Find<T>(List<T> collection, T value);
+
+        /// <summary>Returns the index of the first element satisfying the predicate, or -1.</summary>
+        [Represents("std::find_if")]
+        public static int FindIf<T>(List<T> collection, Func<T, bool> predicate);
+
+        /// <summary>Binary search on a sorted collection.  Returns true if found.</summary>
+        [Represents("std::binary_search")]
+        public static bool BinarySearch<T>(List<T> sortedCollection, T value);
+
+        /// <summary>Returns the smallest element.  Collection must be non-empty.</summary>
+        [Represents("std::min_element")]
+        public static T Min<T>(List<T> collection);
+
+        /// <summary>Returns the largest element.</summary>
+        [Represents("std::max_element")]
+        public static T Max<T>(List<T> collection);
+
+        /// <summary>Returns the index of the smallest element.</summary>
+        [Represents("std::min_element")]
+        public static int MinIndex<T>(List<T> collection);
+
+        /// <summary>Returns the index of the largest element.</summary>
+        [Represents("std::max_element")]
+        public static int MaxIndex<T>(List<T> collection);
+
+        // ── Predicates ────────────────────────────────────────────────────────
+
+        /// <summary>True if all elements satisfy the predicate.</summary>
+        [Represents("std::all_of")]
+        public static bool All<T>(List<T> collection, Func<T, bool> predicate);
+
+        /// <summary>True if any element satisfies the predicate.</summary>
+        [Represents("std::any_of")]
+        public static bool Any<T>(List<T> collection, Func<T, bool> predicate);
+
+        /// <summary>True if no element satisfies the predicate.</summary>
+        [Represents("std::none_of")]
+        public static bool None<T>(List<T> collection, Func<T, bool> predicate);
+
+        // ── Counting / Accumulation ───────────────────────────────────────────
+
+        /// <summary>Counts occurrences of value.</summary>
+        [Represents("std::count")]
+        public static int Count<T>(List<T> collection, T value);
+
+        /// <summary>Counts elements satisfying the predicate.</summary>
+        [Represents("std::count_if")]
+        public static int CountIf<T>(List<T> collection, Func<T, bool> predicate);
+
+        /// <summary>Sums all elements using operator+, starting from zero.</summary>
+        [Represents("std::accumulate")]
+        public static T Sum<T>(List<T> collection);
+
+        /// <summary>Reduces with a custom binary operation and initial seed.</summary>
+        [Represents("std::accumulate")]
+        public static T Reduce<T>(List<T> collection, T seed, Func<T, T, T> reducer);
+
+        // ── Transformation ────────────────────────────────────────────────────
+
+        /// <summary>Applies transform to every element in-place.</summary>
+        [Represents("std::transform")]
+        public static void Transform<T>(List<T> collection, Func<T, T> transform);
+
+        /// <summary>Applies transform and writes results to destination.</summary>
+        [Represents("std::transform")]
+        public static void Transform<TIn, TOut>(List<TIn> source, List<TOut> destination, Func<TIn, TOut> transform);
+
+        /// <summary>Copies elements satisfying predicate to destination.</summary>
+        [Represents("std::copy_if")]
+        public static void CopyIf<T>(List<T> source, List<T> destination, Func<T, bool> predicate);
+
+        /// <summary>Removes consecutive duplicate elements (modifies in place).</summary>
+        [Represents("std::unique")]
+        public static void RemoveDuplicates<T>(List<T> collection);
+
+        /// <summary>Removes all elements equal to value.</summary>
+        [Represents("std::remove")]
+        public static void Remove<T>(List<T> collection, T value);
+
+        /// <summary>Removes all elements satisfying the predicate.</summary>
+        [Represents("std::remove_if")]
+        public static void RemoveIf<T>(List<T> collection, Func<T, bool> predicate);
+
+        /// <summary>Replaces every occurrence of oldValue with newValue.</summary>
+        [Represents("std::replace")]
+        public static void Replace<T>(List<T> collection, T oldValue, T newValue);
+
+        /// <summary>Fills all positions with the given value.</summary>
+        [Represents("std::fill")]
+        public static void Fill<T>(List<T> collection, T value);
+
+        /// <summary>Populates each position by calling generator() in order.</summary>
+        [Represents("std::generate")]
+        public static void Generate<T>(List<T> collection, Func<T> generator);
+
+        // ── Set operations (on sorted collections) ────────────────────────────
+
+        /// <summary>Merges two sorted collections into destination.</summary>
+        [Represents("std::merge")]
+        public static void Merge<T>(List<T> a, List<T> b, List<T> destination);
+
+        /// <summary>Intersection of two sorted collections.</summary>
+        [Represents("std::set_intersection")]
+        public static void Intersection<T>(List<T> a, List<T> b, List<T> destination);
+
+        /// <summary>Union of two sorted collections.</summary>
+        [Represents("std::set_union")]
+        public static void Union<T>(List<T> a, List<T> b, List<T> destination);
+
+        /// <summary>Elements in a that are not in b.</summary>
+        [Represents("std::set_difference")]
+        public static void Difference<T>(List<T> a, List<T> b, List<T> destination);
+
+        // ── Permutations / Shuffles ───────────────────────────────────────────
+
+        /// <summary>Randomly reorders the collection using the provided RNG.</summary>
+        [Represents("std::shuffle")]
+        public static void Shuffle<T>(List<T> collection, Rng rng);
+
+        /// <summary>Advances to the next lexicographic permutation.  Returns false if wrapped.</summary>
+        [Represents("std::next_permutation")]
+        public static bool NextPermutation<T>(List<T> collection);
+
+        // ── Numeric ───────────────────────────────────────────────────────────
+
+        /// <summary>Inner (dot) product of two sequences.</summary>
+        [Represents("std::inner_product")]
+        public static T InnerProduct<T>(List<T> a, List<T> b);
+
+        /// <summary>Computes prefix sums in place.</summary>
+        [Represents("std::partial_sum")]
+        public static void PrefixSum<T>(List<T> collection);
+
+        // ── Clamp / min / max ─────────────────────────────────────────────────
+
+        /// <summary>Returns value clamped to [lo, hi].</summary>
+        [Represents("std::clamp")]
+        public static T Clamp<T>(T value, T lo, T hi);
+
+        /// <summary>Returns the smaller of two values.</summary>
+        [Represents("std::min")]
+        public static T Min<T>(T a, T b);
+
+        /// <summary>Returns the larger of two values.</summary>
+        [Represents("std::max")]
+        public static T Max<T>(T a, T b);
+    }
+}

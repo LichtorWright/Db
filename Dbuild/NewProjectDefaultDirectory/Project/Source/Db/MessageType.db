@@ -1,0 +1,36 @@
+namespace Db {
+
+    /// <summary>
+    /// Log message severity / channel classification.
+    /// Used with: log stream for MessageType.Debug payload;
+    /// </summary>
+    public enum MessageType
+    {
+        /// <summary>Verbose diagnostic output. Compiled out in release builds.</summary>
+        Debug,
+
+        /// <summary>General informational messages.</summary>
+        Info,
+
+        /// <summary>General-purpose output / announcements.</summary>
+        Message,
+
+        /// <summary>Potential problems that don't prevent execution.</summary>
+        Warning,
+
+        /// <summary>Errors that prevent normal operation.</summary>
+        Error,
+
+        /// <summary>Critical failures requiring immediate attention.</summary>
+        Critical,
+
+        /// <summary>Performance metrics and timing data.</summary>
+        Perf,
+
+        /// <summary>Operational audit trail.</summary>
+        Audit,
+
+        /// <summary>Telemetry / analytics data.</summary>
+        Telemetry
+    }
+}

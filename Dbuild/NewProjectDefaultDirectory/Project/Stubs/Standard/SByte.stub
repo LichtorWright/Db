@@ -1,0 +1,97 @@
+namespace Standard {
+    /// <summary>
+    /// Represents an 8-bit signed integer.
+    /// Maps to: C++ signed char
+    /// </summary>
+    [Represents("signed char")]
+    public class SByte {
+        /// <summary>Default constructor (initializes to 0).</summary>
+        public SByte();
+
+        /// <summary>Constructs from an sbyte value.</summary>
+        public SByte(sbyte value);
+
+        /// <summary>The minimum value (-128).</summary>
+        public static sbyte MinValue { get; }
+
+        /// <summary>The maximum value (127).</summary>
+        public static sbyte MaxValue { get; }
+
+        /// <summary>Converts to string.</summary>
+        public override string ToString();
+
+        /// <summary>Parses a string to an SByte.</summary>
+        public static SByte Parse(string s);
+
+        /// <summary>Safely parses a string to an SByte.</summary>
+        public static bool TryParse(string s, out SByte result);
+
+        /// <summary>Addition.</summary>
+        [Represents("operator+")]
+        public static SByte operator+(SByte left, SByte right);
+
+        /// <summary>Subtraction.</summary>
+        [Represents("operator-")]
+        public static SByte operator-(SByte left, SByte right);
+
+        /// <summary>Multiplication.</summary>
+        [Represents("operator*")]
+        public static SByte operator*(SByte left, SByte right);
+
+        /// <summary>Division.</summary>
+        [Represents("operator/")]
+        public static SByte operator/(SByte left, SByte right);
+
+        /// <summary>Modulus.</summary>
+        [Represents("operator%")]
+        public static SByte operator%(SByte left, SByte right);
+
+        /// <summary>Bitwise AND.</summary>
+        [Represents("operator&")]
+        public static SByte operator&(SByte left, SByte right);
+
+        /// <summary>Bitwise OR.</summary>
+        [Represents("operator|")]
+        public static SByte operator|(SByte left, SByte right);
+
+        /// <summary>Bitwise XOR.</summary>
+        [Represents("operator^")]
+        public static SByte operator^(SByte left, SByte right);
+
+        /// <summary>Bitwise NOT.</summary>
+        [Represents("operator~")]
+        public static SByte operator~(SByte value);
+
+        /// <summary>Left shift.</summary>
+        [Represents("operator<<")]
+        public static SByte operator<<(SByte left, int shift);
+
+        /// <summary>Right shift.</summary>
+        [Represents("operator>>")]
+        public static SByte operator>>(SByte left, int shift);
+
+        /// <summary>Less than.</summary>
+        [Represents("operator<")]
+        public static bool operator<(SByte left, SByte right);
+
+        /// <summary>Greater than.</summary>
+        [Represents("operator>")]
+        public static bool operator>(SByte left, SByte right);
+
+        /// <summary>Less than or equal.</summary>
+        [Represents("operator<=")]
+        public static bool operator<=(SByte left, SByte right);
+
+        /// <summary>Greater than or equal.</summary>
+        [Represents("operator>=")]
+        public static bool operator>=(SByte left, SByte right);
+
+        /// <summary>Equality.</summary>
+        [Represents("operator==")]
+        public static bool operator==(SByte left, SByte right);
+
+        /// <summary>Inequality.</summary>
+        [Represents("operator!=")]
+        public static bool operator!=(SByte left, SByte right);
+    }
+}

@@ -1,0 +1,87 @@
+namespace Standard {
+    /// <summary>
+    /// Sorted key-value dictionary backed by a red-black tree.
+    /// Maps to: C++ std::map&lt;TKey, TValue&gt;
+    /// </summary>
+    [Represents("std::map", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<map>")]
+    public class Map<TKey, TValue> {
+        /// <summary>Constructs an empty map.</summary>
+        public Map();
+
+        /// <summary>The number of entries.</summary>
+        [Represents("size")]
+        public int Count { get; }
+
+        /// <summary>Whether the map is empty.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>Accesses or inserts the value for the given key.</summary>
+        [Represents("operator[]")]
+        public TValue this[TKey key] { get; set; }
+
+        /// <summary>Accesses the value for the given key with bounds checking.</summary>
+        [Represents("at")]
+        public TValue GetAt(TKey key);
+
+        /// <summary>Adds a key-value pair.</summary>
+        [Represents("insert")]
+        public void Add(TKey key, TValue value);
+
+        /// <summary>Removes the entry with the given key. Returns whether removed.</summary>
+        [Represents("erase")]
+        public bool Remove(TKey key);
+
+        /// <summary>Removes all entries.</summary>
+        [Represents("clear")]
+        public void Clear();
+
+        /// <summary>Whether the map contains the given key.</summary>
+        [Represents("contains")]
+        public bool ContainsKey(TKey key);
+
+        /// <summary>Whether the map contains the given value.</summary>
+        public bool ContainsValue(TValue value);
+
+        /// <summary>A collection of all keys in the map.</summary>
+        [Represents("keys")]
+        public List<TKey> Keys { get; }
+
+        /// <summary>A collection of all values in the map.</summary>
+        [Represents("values")]
+        public List<TValue> Values { get; }
+
+        /// <summary>Tries to get the value for the given key.</summary>
+        public bool TryGetValue(TKey key, out TValue value);
+
+        /// <summary>The number of entries matching the given key (always 0 or 1 for map).</summary>
+        [Represents("count")]
+        public int CountOf(TKey key);
+
+        /// <summary>Returns an iterator to the first element not less than key.</summary>
+        [Represents("lower_bound")]
+        public KeyValuePair LowerBound(TKey key);
+
+        /// <summary>Returns an iterator to the first element greater than key.</summary>
+        [Represents("upper_bound")]
+        public KeyValuePair UpperBound(TKey key);
+
+        /// <summary>Returns the range of elements matching key.</summary>
+        [Represents("equal_range")]
+        public void EqualRange(TKey key);
+
+        /// <summary>Swaps contents with another map.</summary>
+        [Represents("swap")]
+        public void Swap(Map<TKey, TValue> other);
+
+        /// <summary>Supports foreach iteration over the map.</summary>
+        public class Enumerator {
+            public TKey Key { get; }
+            public TValue Value { get; set; }
+            public bool MoveNext();
+            public void Reset();
+        }
+
+        public Enumerator GetEnumerator();
+    }
+}

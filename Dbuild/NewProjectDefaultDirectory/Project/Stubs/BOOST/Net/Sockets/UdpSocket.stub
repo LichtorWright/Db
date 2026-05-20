@@ -1,0 +1,77 @@
+namespace Boost.Net.Sockets {
+    /// <summary>
+    /// A connectionless UDP socket.  Bind to a local endpoint to receive datagrams,
+    /// or just SendTo() to transmit without binding.
+    /// Maps to: C++ boost::asio::ip::udp::socket
+    /// </summary>
+    [Represents("boost::asio::ip::udp::socket", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/asio.hpp>")]
+    public class UdpSocket {
+        /// <summary>Constructs an unbound UDP socket.</summary>
+        public UdpSocket(IoContext context);
+
+        /// <summary>Constructs and immediately binds to the given endpoint.</summary>
+        public UdpSocket(IoContext context, UdpEndpoint endpoint);
+
+        // ── Setup ─────────────────────────────────────────────────────────────
+
+        /// <summary>Opens the socket using IPv4 or IPv6 depending on the endpoint.</summary>
+        [Represents("open")]
+        public void Open();
+
+        /// <summary>Binds to the given local endpoint (required to receive datagrams).</summary>
+        [Represents("bind")]
+        public void Bind(UdpEndpoint endpoint);
+
+        // ── Sending ───────────────────────────────────────────────────────────
+
+        /// <summary>Synchronously sends buffer to destination.  Returns bytes sent.</summary>
+        [Represents("send_to")]
+        public int SendTo(byte[] buffer, UdpEndpoint destination);
+
+        /// <summary>Sends; sets ec instead of throwing.</summary>
+        [Represents("send_to")]
+        public int SendTo(byte[] buffer, UdpEndpoint destination, out ErrorCode ec);
+
+        /// <summary>Asynchronously sends buffer to destination.  Handler receives (ErrorCode, bytesSent).</summary>
+        [Represents("async_send_to")]
+        public void SendToAsync(byte[] buffer, UdpEndpoint destination, Action<ErrorCode, int> handler);
+
+        // ── Receiving ─────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Synchronously receives a datagram into buffer.
+        /// Fills sender with the remote endpoint.  Returns bytes received.
+        /// </summary>
+        [Represents("receive_from")]
+        public int ReceiveFrom(byte[] buffer, out UdpEndpoint sender);
+
+        /// <summary>Receives; sets ec instead of throwing.</summary>
+        [Represents("receive_from")]
+        public int ReceiveFrom(byte[] buffer, out UdpEndpoint sender, out ErrorCode ec);
+
+        /// <summary>
+        /// Asynchronously receives a datagram.
+        /// Handler receives (ErrorCode, bytesReceived).  sender is filled on completion.
+        /// </summary>
+        [Represents("async_receive_from")]
+        public void ReceiveFromAsync(byte[] buffer, out UdpEndpoint sender, Action<ErrorCode, int> handler);
+
+        // ── Lifecycle ─────────────────────────────────────────────────────────
+
+        /// <summary>Closes the socket and cancels pending async operations.</summary>
+        [Represents("close")]
+        public void Close();
+
+        /// <summary>Cancels all pending async operations without closing.</summary>
+        [Represents("cancel")]
+        public void Cancel();
+
+        /// <summary>True if the socket is open.</summary>
+        [Represents("is_open")]
+        public bool IsOpen { get; }
+
+        /// <summary>The local endpoint this socket is bound to.</summary>
+        [Represents("local_endpoint")]
+        public UdpEndpoint LocalEndpoint { get; }
+    }
+}

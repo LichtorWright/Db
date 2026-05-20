@@ -1,0 +1,93 @@
+namespace Standard {
+    /// <summary>
+    /// Singly-linked list supporting fast insertion/removal at the front.
+    /// Maps to: C++ std::forward_list&lt;T&gt;
+    /// </summary>
+    [Represents("std::forward_list", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<forward_list>")]
+    public class ForwardList<T> {
+        /// <summary>Constructs an empty forward list.</summary>
+        public ForwardList();
+
+        /// <summary>Constructs a forward list with count default elements.</summary>
+        public ForwardList(int count);
+
+        /// <summary>Constructs a forward list with count copies of value.</summary>
+        public ForwardList(int count, T value);
+
+        /// <summary>Whether the list is empty.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>The number of elements (O(n) — must traverse the entire list).</summary>
+        public int Count { get; }
+
+        /// <summary>The first element.</summary>
+        [Represents("front")]
+        public T First { get; }
+
+        /// <summary>Adds an element to the front.</summary>
+        [Represents("push_front")]
+        public void AddFirst(T item);
+
+        /// <summary>Removes and returns the first element.</summary>
+        [Represents("pop_front")]
+        public T RemoveFirst();
+
+        /// <summary>Inserts an element after the given index.</summary>
+        [Represents("insert_after")]
+        public void InsertAfter(int index, T item);
+
+        /// <summary>Removes the element after the given index.</summary>
+        [Represents("erase_after")]
+        public void RemoveAfter(int index);
+
+        /// <summary>Removes all elements.</summary>
+        [Represents("clear")]
+        public void Clear();
+
+        /// <summary>Removes all elements equal to item.</summary>
+        [Represents("remove")]
+        public void Remove(T item);
+
+        /// <summary>Removes all elements satisfying the predicate.</summary>
+        [Represents("remove_if")]
+        public void RemoveIf(Predicate<T> predicate);
+
+        /// <summary>Sorts the list in ascending order.</summary>
+        [Represents("sort")]
+        public void Sort();
+
+        /// <summary>Reverses the list.</summary>
+        [Represents("reverse")]
+        public void Reverse();
+
+        /// <summary>Removes consecutive duplicate elements.</summary>
+        [Represents("unique")]
+        public void RemoveDuplicates();
+
+        /// <summary>Merges another sorted list into this one.</summary>
+        [Represents("merge")]
+        public void Merge(ForwardList<T> other);
+
+        /// <summary>Transfers elements after the given index from another list.</summary>
+        [Represents("splice_after")]
+        public void SpliceAfter(int index, ForwardList<T> other);
+
+        /// <summary>Resizes to the given size.</summary>
+        [Represents("resize")]
+        public void Resize(int count);
+
+        /// <summary>Resizes to the given size, filling new elements with value.</summary>
+        [Represents("resize")]
+        public void Resize(int count, T value);
+
+        /// <summary>Supports foreach iteration over the list.</summary>
+        public class Enumerator {
+            public T Current { get; }
+            public bool MoveNext();
+            public void Reset();
+        }
+
+        public Enumerator GetEnumerator();
+    }
+}

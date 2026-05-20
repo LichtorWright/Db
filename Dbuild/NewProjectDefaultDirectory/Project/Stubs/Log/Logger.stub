@@ -1,0 +1,106 @@
+namespace Log {
+    /// <summary>
+    /// Log severity levels, from finest to most critical.
+    /// Maps to: C++ spdlog::level::level_enum
+    /// </summary>
+    [Represents("spdlog::level::level_enum", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<spdlog/spdlog.h>")]
+    public enum Level {
+        [Represents("spdlog::level::trace")]    Trace    = 0,
+        [Represents("spdlog::level::debug")]    Debug    = 1,
+        [Represents("spdlog::level::info")]     Info     = 2,
+        [Represents("spdlog::level::warn")]     Warning  = 3,
+        [Represents("spdlog::level::err")]      Error    = 4,
+        [Represents("spdlog::level::critical")] Critical = 5,
+        [Represents("spdlog::level::off")]      Off      = 6,
+    }
+
+    /// <summary>
+    /// A named logger that writes structured, levelled log messages.
+    /// Obtain instances from the Logger factory methods rather than constructing directly.
+    /// Maps to: C++ std::shared_ptr&lt;spdlog::logger&gt;
+    /// </summary>
+    [Represents("std::shared_ptr<spdlog::logger>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<spdlog/spdlog.h>")]
+    public class Logger {
+        // ── Factory ───────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Creates (or retrieves) a logger that writes to stdout with coloured output.
+        /// Maps to: spdlog::stdout_color_mt
+        /// </summary>
+        [Represents("spdlog::stdout_color_mt", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<spdlog/sinks/stdout_color_sinks.h>")]
+        public static Logger Console(string name);
+
+        /// <summary>
+        /// Creates a logger that appends to a rotating set of log files.
+        /// Maps to: spdlog::rotating_logger_mt
+        /// </summary>
+        [Represents("spdlog::rotating_logger_mt", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<spdlog/sinks/rotating_file_sink.h>")]
+        public static Logger RotatingFile(string name, string filePath, long maxBytes, int maxFiles);
+
+        /// <summary>
+        /// Creates a logger that rolls over to a new file each day at the given hour:minute.
+        /// Maps to: spdlog::daily_logger_mt
+        /// </summary>
+        [Represents("spdlog::daily_logger_mt", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<spdlog/sinks/daily_file_sink.h>")]
+        public static Logger DailyFile(string name, string filePath, int hour, int minute);
+
+        /// <summary>Retrieves an existing registered logger by name, or null.</summary>
+        [Represents("spdlog::get", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<spdlog/spdlog.h>")]
+        public static Logger Get(string name);
+
+        /// <summary>Returns the default logger (created by spdlog internally).</summary>
+        [Represents("spdlog::default_logger", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<spdlog/spdlog.h>")]
+        public static Logger Default();
+
+        // ── Logging ───────────────────────────────────────────────────────────
+
+        [Represents("trace")]    public void Trace(string message);
+        [Represents("debug")]    public void Debug(string message);
+        [Represents("info")]     public void Info(string message);
+        [Represents("warn")]     public void Warn(string message);
+        [Represents("error")]    public void Error(string message);
+        [Represents("critical")] public void Critical(string message);
+
+        /// <summary>Logs at the given level.  Useful when the level is a variable.</summary>
+        [Represents("log")]
+        public void Log(Level level, string message);
+
+        // ── Configuration ─────────────────────────────────────────────────────
+
+        /// <summary>Sets the minimum level; messages below this level are silently dropped.</summary>
+        [Represents("set_level")]
+        public void SetLevel(Level level);
+
+        /// <summary>Current minimum level.</summary>
+        [Represents("level")]
+        public Level MinLevel { get; }
+
+        /// <summary>True if messages at level would be emitted.</summary>
+        [Represents("should_log")]
+        public bool IsEnabled(Level level);
+
+        /// <summary>
+        /// Sets the log pattern (spdlog pattern syntax, e.g. "[%H:%M:%S] [%n] [%^%l%$] %v").
+        /// </summary>
+        [Represents("set_pattern")]
+        public void SetPattern(string pattern);
+
+        /// <summary>Flushes all buffered messages to the underlying sinks.</summary>
+        [Represents("flush")]
+        public void Flush();
+
+        /// <summary>The logger's registered name.</summary>
+        [Represents("name")]
+        public string Name { get; }
+
+        // ── Global helpers ────────────────────────────────────────────────────
+
+        /// <summary>Flushes all registered loggers.</summary>
+        [Represents("spdlog::apply_all", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<spdlog/spdlog.h>")]
+        public static void FlushAll();
+
+        /// <summary>Shuts down the spdlog thread pool and drops all loggers.</summary>
+        [Represents("spdlog::shutdown", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<spdlog/spdlog.h>")]
+        public static void Shutdown();
+    }
+}

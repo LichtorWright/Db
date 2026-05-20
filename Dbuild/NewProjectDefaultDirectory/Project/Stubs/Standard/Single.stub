@@ -1,0 +1,127 @@
+namespace Standard {
+    /// <summary>
+    /// Represents a single-precision floating-point number.
+    /// Maps to: C++ float
+    /// </summary>
+    [Represents("float")]
+    public class Single {
+        /// <summary>Default constructor (initializes to 0.0f).</summary>
+        public Single();
+
+        /// <summary>Constructs from a float value.</summary>
+        public Single(float value);
+
+        /// <summary>The smallest positive normal value.</summary>
+        [Represents("std::numeric_limits<float>::min()")]
+        public static float MinValue { get; }
+
+        /// <summary>The largest finite value.</summary>
+        [Represents("std::numeric_limits<float>::max()")]
+        public static float MaxValue { get; }
+
+        /// <summary>The smallest positive value such that 1 + Epsilon != 1.</summary>
+        [Represents("std::numeric_limits<float>::epsilon()")]
+        public static float Epsilon { get; }
+
+        /// <summary>Not a Number.</summary>
+        [Represents("std::numeric_limits<float>::quiet_NaN()")]
+        public static float NaN { get; }
+
+        /// <summary>Positive infinity.</summary>
+        [Represents("std::numeric_limits<float>::infinity()")]
+        public static float PositiveInfinity { get; }
+
+        /// <summary>Negative infinity.</summary>
+        [Represents("-std::numeric_limits<float>::infinity()")]
+        public static float NegativeInfinity { get; }
+
+        /// <summary>Compares this to another Single.</summary>
+        public int CompareTo(Single other);
+
+        /// <summary>Tests equality with another Single.</summary>
+        public bool Equals(Single other);
+
+        /// <summary>Gets a hash code.</summary>
+        public override int GetHashCode();
+
+        /// <summary>Converts to string.</summary>
+        public override string ToString();
+
+        /// <summary>Converts to string with format.</summary>
+        public string ToString(string format);
+
+        /// <summary>Parses a string to a Single.</summary>
+        public static Single Parse(string s);
+
+        /// <summary>Safely parses a string to a Single.</summary>
+        public static bool TryParse(string s, out Single result);
+
+        /// <summary>Whether the value is Not a Number.</summary>
+        [Represents("std::isnan")]
+        public static bool IsNaN(float value);
+
+        /// <summary>Whether the value is infinite.</summary>
+        [Represents("std::isinf")]
+        public static bool IsInfinity(float value);
+
+        /// <summary>Whether the value is positive infinity.</summary>
+        [Represents("std::isinf")]
+        public static bool IsPositiveInfinity(float value);
+
+        /// <summary>Whether the value is negative infinity.</summary>
+        [Represents("std::isinf")]
+        public static bool IsNegativeInfinity(float value);
+
+        /// <summary>Addition.</summary>
+        [Represents("operator+")]
+        public static Single operator+(Single left, Single right);
+
+        /// <summary>Subtraction.</summary>
+        [Represents("operator-")]
+        public static Single operator-(Single left, Single right);
+
+        /// <summary>Multiplication.</summary>
+        [Represents("operator*")]
+        public static Single operator*(Single left, Single right);
+
+        /// <summary>Division.</summary>
+        [Represents("operator/")]
+        public static Single operator/(Single left, Single right);
+
+        /// <summary>Modulus.</summary>
+        [Represents("operator%")]
+        public static Single operator%(Single left, Single right);
+
+        /// <summary>Increments by one.</summary>
+        [Represents("operator++")]
+        public Single Increment();
+
+        /// <summary>Decrements by one.</summary>
+        [Represents("operator--")]
+        public Single Decrement();
+
+        /// <summary>Less than.</summary>
+        [Represents("operator<")]
+        public static bool operator<(Single left, Single right);
+
+        /// <summary>Greater than.</summary>
+        [Represents("operator>")]
+        public static bool operator>(Single left, Single right);
+
+        /// <summary>Less than or equal.</summary>
+        [Represents("operator<=")]
+        public static bool operator<=(Single left, Single right);
+
+        /// <summary>Greater than or equal.</summary>
+        [Represents("operator>=")]
+        public static bool operator>=(Single left, Single right);
+
+        /// <summary>Equality.</summary>
+        [Represents("operator==")]
+        public static bool operator==(Single left, Single right);
+
+        /// <summary>Inequality.</summary>
+        [Represents("operator!=")]
+        public static bool operator!=(Single left, Single right);
+    }
+}

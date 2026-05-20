@@ -1,0 +1,153 @@
+namespace Standard {
+    /// <summary>
+    /// A non-deterministic entropy source used to seed a pseudo-random engine.
+    /// Maps to: C++ std::random_device
+    /// </summary>
+    [Represents("std::random_device", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<random>")]
+    public class RandomDevice {
+        public RandomDevice();
+
+        /// <summary>Returns a single non-deterministic random unsigned int.</summary>
+        [Represents("operator()")]
+        public int Next();
+
+        /// <summary>Entropy estimate in bits per integer; 0.0 means pseudo-random.</summary>
+        [Represents("entropy")]
+        public double Entropy { get; }
+    }
+
+    /// <summary>
+    /// Mersenne Twister 64-bit pseudo-random number engine.
+    /// Extremely fast after the initial seed; seed from RandomDevice for
+    /// cryptographically unpredictable sequences.
+    /// Maps to: C++ std::mt19937_64
+    /// </summary>
+    [Represents("std::mt19937_64", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<random>")]
+    public class Rng {
+        /// <summary>Constructs with a fixed seed (reproducible).</summary>
+        public Rng(ulong seed);
+
+        /// <summary>Constructs seeded from the system entropy source.</summary>
+        public Rng();
+
+        /// <summary>Generates the next raw 64-bit value.</summary>
+        [Represents("operator()")]
+        public ulong NextRaw();
+
+        /// <summary>Returns a uniformly distributed integer in [min, max].</summary>
+        [Represents("std::uniform_int_distribution<int64_t>")]
+        public long NextInt(long min, long max);
+
+        /// <summary>Returns a uniformly distributed double in [min, max).</summary>
+        [Represents("std::uniform_real_distribution<double>")]
+        public double NextDouble(double min, double max);
+
+        /// <summary>Returns a uniformly distributed double in [0.0, 1.0).</summary>
+        [Represents("std::uniform_real_distribution<double>")]
+        public double NextDouble();
+
+        /// <summary>Returns a sample from a Normal distribution with given mean and stddev.</summary>
+        [Represents("std::normal_distribution<double>")]
+        public double NextNormal(double mean, double stddev);
+
+        /// <summary>Returns a sample from an Exponential distribution with rate lambda.</summary>
+        [Represents("std::exponential_distribution<double>")]
+        public double NextExponential(double lambda);
+
+        /// <summary>Returns a sample from a Bernoulli distribution with probability p.</summary>
+        [Represents("std::bernoulli_distribution")]
+        public bool NextBool(double probability);
+
+        /// <summary>Reseeds the engine with the given value.</summary>
+        [Represents("seed")]
+        public void Reseed(ulong seed);
+
+        /// <summary>Advances the engine state by 2^128 steps without producing values.</summary>
+        [Represents("discard")]
+        public void Discard(ulong steps);
+    }
+
+    /// <summary>
+    /// Uniform distribution over integers in [a, b] inclusive.
+    /// Construct once, call Sample(rng) many times for efficiency.
+    /// Maps to: C++ std::uniform_int_distribution&lt;int64_t&gt;
+    /// </summary>
+    [Represents("std::uniform_int_distribution<int64_t>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<random>")]
+    public class UniformInt {
+        public UniformInt(long min, long max);
+
+        [Represents("operator()")] public long Sample(Rng rng);
+        [Represents("a")]          public long Min { get; }
+        [Represents("b")]          public long Max { get; }
+        [Represents("reset")]      public void Reset();
+    }
+
+    /// <summary>
+    /// Uniform distribution over doubles in [a, b).
+    /// Maps to: C++ std::uniform_real_distribution&lt;double&gt;
+    /// </summary>
+    [Represents("std::uniform_real_distribution<double>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<random>")]
+    public class UniformReal {
+        public UniformReal(double min, double max);
+        public UniformReal();  // [0, 1)
+
+        [Represents("operator()")] public double Sample(Rng rng);
+        [Represents("a")]          public double Min { get; }
+        [Represents("b")]          public double Max { get; }
+        [Represents("reset")]      public void Reset();
+    }
+
+    /// <summary>
+    /// Normal (Gaussian) distribution with specified mean and standard deviation.
+    /// Maps to: C++ std::normal_distribution&lt;double&gt;
+    /// </summary>
+    [Represents("std::normal_distribution<double>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<random>")]
+    public class NormalDistribution {
+        public NormalDistribution(double mean, double stddev);
+        public NormalDistribution();  // mean=0, stddev=1
+
+        [Represents("operator()")] public double Sample(Rng rng);
+        [Represents("mean")]       public double Mean   { get; }
+        [Represents("stddev")]     public double Stddev { get; }
+        [Represents("reset")]      public void Reset();
+    }
+
+    /// <summary>
+    /// Bernoulli distribution: returns true with probability p.
+    /// Maps to: C++ std::bernoulli_distribution
+    /// </summary>
+    [Represents("std::bernoulli_distribution", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<random>")]
+    public class BernoulliDistribution {
+        public BernoulliDistribution(double probability);
+
+        [Represents("operator()")] public bool   Sample(Rng rng);
+        [Represents("p")]          public double Probability { get; }
+        [Represents("reset")]      public void Reset();
+    }
+
+    /// <summary>
+    /// Poisson distribution: counts events in a fixed interval with rate lambda.
+    /// Maps to: C++ std::poisson_distribution&lt;int&gt;
+    /// </summary>
+    [Represents("std::poisson_distribution<int>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<random>")]
+    public class PoissonDistribution {
+        public PoissonDistribution(double lambda);
+
+        [Represents("operator()")] public int    Sample(Rng rng);
+        [Represents("mean")]       public double Mean { get; }
+        [Represents("reset")]      public void Reset();
+    }
+
+    /// <summary>
+    /// Exponential distribution with rate parameter lambda.
+    /// Maps to: C++ std::exponential_distribution&lt;double&gt;
+    /// </summary>
+    [Represents("std::exponential_distribution<double>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<random>")]
+    public class ExponentialDistribution {
+        public ExponentialDistribution(double lambda);
+
+        [Represents("operator()")] public double Sample(Rng rng);
+        [Represents("lambda")]     public double Lambda { get; }
+        [Represents("reset")]      public void Reset();
+    }
+}

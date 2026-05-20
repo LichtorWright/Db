@@ -1,0 +1,5 @@
+namespace Db
+{
+    /// <summary>Emits the "noexcept" specifier on a method or function in the destination language.</summary>
+    public class NoexceptAttribute { }
+}

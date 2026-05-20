@@ -1,0 +1,14 @@
+namespace Db {
+    public enum MessageType
+    {
+        Debug,
+        Info,
+        Message,
+        Warning,
+        Error,
+        Critical,
+        Perf,
+        Audit,
+        Telemetry
+    }
+}

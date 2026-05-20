@@ -1,0 +1,107 @@
+namespace Boost.Net.WebSockets {
+    /// <summary>
+    /// A WebSocket stream layered over a TCP socket.  Perform the HTTP upgrade
+    /// handshake (Handshake / AcceptHandshake), then read and write frames.
+    /// Maps to: C++ boost::beast::websocket::stream&lt;boost::asio::ip::tcp::socket&gt;
+    /// </summary>
+    [Represents("boost::beast::websocket::stream<boost::asio::ip::tcp::socket>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/beast/websocket.hpp>")]
+    public class WebSocket {
+        /// <summary>Constructs a WebSocket stream that takes ownership of socket.</summary>
+        public WebSocket(Boost.Net.Sockets.TcpSocket socket);
+
+        // ── Handshake (client side) ────────────────────────────────────────────
+
+        /// <summary>
+        /// Synchronously performs the client-side WebSocket upgrade handshake.
+        /// host is the value for the "Host" header; target is the URL path (e.g. "/ws").
+        /// </summary>
+        [Represents("handshake")]
+        public void Handshake(string host, string target);
+
+        /// <summary>Asynchronously performs the client-side handshake.  Handler receives ErrorCode.</summary>
+        [Represents("async_handshake")]
+        public void HandshakeAsync(string host, string target, Action<Boost.Net.ErrorCode> handler);
+
+        // ── Handshake (server side) ────────────────────────────────────────────
+
+        /// <summary>
+        /// Synchronously accepts a client upgrade request already read into request.
+        /// Call this from a server after reading the HTTP upgrade request.
+        /// </summary>
+        [Represents("accept")]
+        public void AcceptHandshake(Boost.Net.Http.Request request);
+
+        /// <summary>Asynchronously accepts a client upgrade.  Handler receives ErrorCode.</summary>
+        [Represents("async_accept")]
+        public void AcceptHandshakeAsync(Boost.Net.Http.Request request, Action<Boost.Net.ErrorCode> handler);
+
+        // ── Reading ────────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Synchronously reads a complete message into buffer.
+        /// Returns the number of bytes placed in buffer.
+        /// </summary>
+        [Represents("read")]
+        public int Read(byte[] buffer);
+
+        /// <summary>
+        /// Asynchronously reads a complete message.
+        /// Handler receives (ErrorCode, bytesRead).
+        /// </summary>
+        [Represents("async_read")]
+        public void ReadAsync(byte[] buffer, Action<Boost.Net.ErrorCode, int> handler);
+
+        // ── Writing ────────────────────────────────────────────────────────────
+
+        /// <summary>Synchronously sends buffer as a single WebSocket message frame.</summary>
+        [Represents("write")]
+        public int Write(byte[] buffer);
+
+        /// <summary>
+        /// Asynchronously sends buffer.
+        /// Handler receives (ErrorCode, bytesWritten).
+        /// </summary>
+        [Represents("async_write")]
+        public void WriteAsync(byte[] buffer, Action<Boost.Net.ErrorCode, int> handler);
+
+        // ── Control ────────────────────────────────────────────────────────────
+
+        /// <summary>Sends a WebSocket close frame and shuts down the connection.</summary>
+        [Represents("close")]
+        public void Close(CloseCode code);
+
+        /// <summary>Asynchronously sends a close frame.  Handler receives ErrorCode.</summary>
+        [Represents("async_close")]
+        public void CloseAsync(CloseCode code, Action<Boost.Net.ErrorCode> handler);
+
+        /// <summary>
+        /// When true the next Write() sends binary frames;
+        /// when false it sends UTF-8 text frames.
+        /// </summary>
+        [Represents("binary")]
+        public bool BinaryMode { get; set; }
+
+        /// <summary>True if the WebSocket connection is currently open.</summary>
+        [Represents("is_open")]
+        public bool IsOpen { get; }
+    }
+
+    /// <summary>
+    /// Standard WebSocket close codes (RFC 6455 §7.4.1).
+    /// Maps to: C++ boost::beast::websocket::close_code
+    /// </summary>
+    [Represents("boost::beast::websocket::close_code", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<boost/beast/websocket.hpp>")]
+    public enum CloseCode {
+        [Represents("normal")]           Normal          = 1000,
+        [Represents("going_away")]       GoingAway       = 1001,
+        [Represents("protocol_error")]   ProtocolError   = 1002,
+        [Represents("unknown_data")]     UnknownData     = 1003,
+        [Represents("bad_payload")]      BadPayload      = 1007,
+        [Represents("policy_error")]     PolicyError     = 1008,
+        [Represents("too_big")]          TooBig          = 1009,
+        [Represents("needs_extension")]  NeedsExtension  = 1010,
+        [Represents("internal_error")]   InternalError   = 1011,
+        [Represents("service_restart")]  ServiceRestart  = 1012,
+        [Represents("try_again_later")]  TryAgainLater   = 1013
+    }
+}

@@ -1,0 +1,185 @@
+namespace Boost {
+/// <summary>
+/// Core mathematical constants and functions.
+/// No namespace — accessed directly as Math.Sin(), Math.Pi, etc.,
+/// mirroring System.Math in .NET.
+/// Maps to: C++ &lt;cmath&gt; and boost::math::constants
+/// </summary>
+[Represents("std", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<cmath>")]
+public static class Math {
+
+    // ── Constants ─────────────────────────────────────────────────────────────
+
+    /// <summary>π ≈ 3.14159265358979323846</summary>
+    [Represents("boost::math::constants::pi<double>()", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/math/constants/constants.hpp>")]
+    public static double Pi { get; }
+
+    /// <summary>e ≈ 2.71828182845904523536</summary>
+    [Represents("boost::math::constants::e<double>()", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/math/constants/constants.hpp>")]
+    public static double E { get; }
+
+    /// <summary>φ (golden ratio) ≈ 1.61803398874989484820</summary>
+    [Represents("boost::math::constants::phi<double>()", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/math/constants/constants.hpp>")]
+    public static double Phi { get; }
+
+    /// <summary>√2 ≈ 1.41421356237309504880</summary>
+    [Represents("boost::math::constants::root_two<double>()", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/math/constants/constants.hpp>")]
+    public static double Sqrt2 { get; }
+
+    /// <summary>ln(2) ≈ 0.69314718055994530942</summary>
+    [Represents("boost::math::constants::ln_two<double>()", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/math/constants/constants.hpp>")]
+    public static double Ln2 { get; }
+
+    /// <summary>Positive infinity.</summary>
+    [Represents("std::numeric_limits<double>::infinity()", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<limits>")]
+    public static double Infinity { get; }
+
+    /// <summary>Not-a-Number (quiet NaN).</summary>
+    [Represents("std::numeric_limits<double>::quiet_NaN()", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<limits>")]
+    public static double NaN { get; }
+
+    // ── Basic arithmetic ──────────────────────────────────────────────────────
+
+    /// <summary>Absolute value.</summary>
+    [Represents("std::abs")]
+    public static double Abs(double x);
+
+    /// <summary>Integer absolute value.</summary>
+    [Represents("std::abs")]
+    public static int Abs(int x);
+
+    /// <summary>Raises x to the power y.</summary>
+    [Represents("std::pow")]
+    public static double Pow(double x, double y);
+
+    /// <summary>Square root.</summary>
+    [Represents("std::sqrt")]
+    public static double Sqrt(double x);
+
+    /// <summary>Cube root.</summary>
+    [Represents("std::cbrt")]
+    public static double Cbrt(double x);
+
+    /// <summary>Hypotenuse — √(x² + y²) without overflow.</summary>
+    [Represents("std::hypot")]
+    public static double Hypot(double x, double y);
+
+    /// <summary>Natural logarithm.</summary>
+    [Represents("std::log")]
+    public static double Log(double x);
+
+    /// <summary>Logarithm with an arbitrary base.</summary>
+    [Represents("std::log")]
+    public static double Log(double x, double base);
+
+    /// <summary>Base-2 logarithm.</summary>
+    [Represents("std::log2")]
+    public static double Log2(double x);
+
+    /// <summary>Base-10 logarithm.</summary>
+    [Represents("std::log10")]
+    public static double Log10(double x);
+
+    /// <summary>e raised to x.</summary>
+    [Represents("std::exp")]
+    public static double Exp(double x);
+
+    /// <summary>2 raised to x.</summary>
+    [Represents("std::exp2")]
+    public static double Exp2(double x);
+
+    // ── Rounding ──────────────────────────────────────────────────────────────
+
+    /// <summary>Rounds toward positive infinity.</summary>
+    [Represents("std::ceil")]
+    public static double Ceiling(double x);
+
+    /// <summary>Rounds toward negative infinity.</summary>
+    [Represents("std::floor")]
+    public static double Floor(double x);
+
+    /// <summary>Rounds toward zero (truncates).</summary>
+    [Represents("std::trunc")]
+    public static double Truncate(double x);
+
+    /// <summary>Rounds to the nearest integer (half away from zero).</summary>
+    [Represents("std::round")]
+    public static double Round(double x);
+
+    /// <summary>Floating-point remainder of x/y with the same sign as x.</summary>
+    [Represents("std::fmod")]
+    public static double Remainder(double x, double y);
+
+    // ── Trig ──────────────────────────────────────────────────────────────────
+
+    /// <summary>Sine (radians).</summary>
+    [Represents("std::sin")]
+    public static double Sin(double radians);
+
+    /// <summary>Cosine (radians).</summary>
+    [Represents("std::cos")]
+    public static double Cos(double radians);
+
+    /// <summary>Tangent (radians).</summary>
+    [Represents("std::tan")]
+    public static double Tan(double radians);
+
+    /// <summary>Arcsine — returns radians in [-π/2, π/2].</summary>
+    [Represents("std::asin")]
+    public static double Asin(double x);
+
+    /// <summary>Arccosine — returns radians in [0, π].</summary>
+    [Represents("std::acos")]
+    public static double Acos(double x);
+
+    /// <summary>Arctangent — returns radians in (-π/2, π/2).</summary>
+    [Represents("std::atan")]
+    public static double Atan(double x);
+
+    /// <summary>Two-argument arctangent — returns radians in (-π, π].</summary>
+    [Represents("std::atan2")]
+    public static double Atan2(double y, double x);
+
+    // ── Hyperbolic ────────────────────────────────────────────────────────────
+
+    [Represents("std::sinh")]  public static double Sinh(double x);
+    [Represents("std::cosh")]  public static double Cosh(double x);
+    [Represents("std::tanh")]  public static double Tanh(double x);
+    [Represents("std::asinh")] public static double Asinh(double x);
+    [Represents("std::acosh")] public static double Acosh(double x);
+    [Represents("std::atanh")] public static double Atanh(double x);
+
+    // ── Clamp / Min / Max ─────────────────────────────────────────────────────
+
+    [Represents("std::min")]   public static double Min(double a, double b);
+    [Represents("std::max")]   public static double Max(double a, double b);
+    [Represents("std::min")]   public static int    Min(int a, int b);
+    [Represents("std::max")]   public static int    Max(int a, int b);
+
+    /// <summary>Clamps value to [min, max].</summary>
+    [Represents("std::clamp")]
+    public static double Clamp(double value, double min, double max);
+
+    /// <summary>Linear interpolation — returns a + t*(b-a).  t is not clamped.</summary>
+    [Represents("std::lerp")]
+    public static double Lerp(double a, double b, double t);
+
+    // ── Classification ────────────────────────────────────────────────────────
+
+    /// <summary>True if x is a NaN value.</summary>
+    [Represents("std::isnan")]
+    public static bool IsNaN(double x);
+
+    /// <summary>True if x is positive or negative infinity.</summary>
+    [Represents("std::isinf")]
+    public static bool IsInfinity(double x);
+
+    /// <summary>True if x is finite (not NaN and not infinite).</summary>
+    [Represents("std::isfinite")]
+    public static bool IsFinite(double x);
+
+    /// <summary>Returns the sign of x: -1, 0, or 1.</summary>
+    [Represents("boost::math::sign")]
+    public static int Sign(double x);
+}
+}

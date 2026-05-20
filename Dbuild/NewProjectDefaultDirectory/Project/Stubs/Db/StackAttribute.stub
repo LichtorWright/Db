@@ -1,0 +1,8 @@
+namespace Db
+{
+    /// <summary>
+    /// Marks a type or variable as stack-allocated in the destination language.
+    /// Informs the emitter to use value semantics rather than heap allocation.
+    /// </summary>
+    public class StackAttribute { }
+}

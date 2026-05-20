@@ -1,0 +1,39 @@
+namespace Db {
+
+    /// <summary>
+    /// Static entry point for the Db logging system.
+    /// Provides pre-built streams for common scenarios.
+    /// </summary>
+    public static class Log
+    {
+        /// <summary>Default console stream. Writes to stdout/stderr.</summary>
+        public static LogStream Console = LogStream.Console();
+
+        /// <summary>Default file stream. Writes to "app.log".</summary>
+        public static LogStream File = LogStream.File("file", "app.log", MessageType.Info);
+
+        /// <summary>
+        /// Creates a new console log stream with a custom name and minimum level.
+        /// </summary>
+        public static LogStream ToConsole(string name, MessageType minLevel = MessageType.Debug)
+        {
+            return LogStream.Console(name, minLevel);
+        }
+
+        /// <summary>
+        /// Creates a new file log stream.
+        /// </summary>
+        public static LogStream ToFile(string name, string path, MessageType minLevel = MessageType.Debug)
+        {
+            return LogStream.File(name, path, minLevel);
+        }
+
+        /// <summary>
+        /// Creates a new network log stream.
+        /// </summary>
+        public static LogStream ToNetwork(string name, string address, int port, MessageType minLevel = MessageType.Info)
+        {
+            return LogStream.Network(name, address, port, minLevel);
+        }
+    }
+}

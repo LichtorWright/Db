@@ -1,0 +1,49 @@
+namespace Boost.IO {
+    /// <summary>
+    /// Static helpers for querying and manipulating files on the filesystem.
+    /// All methods that accept paths also accept string literals implicitly.
+    /// Maps to: free functions in boost::filesystem
+    /// </summary>
+    [Represents("boost::filesystem", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+    public static class File {
+        /// <summary>True if path refers to a regular file that exists.</summary>
+        [Represents("boost::filesystem::is_regular_file", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static bool Exists(Path path);
+
+        /// <summary>Returns the size of the file in bytes.</summary>
+        [Represents("boost::filesystem::file_size", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static long Size(Path path);
+
+        /// <summary>
+        /// Copies the file at source to destination.
+        /// Throws if source does not exist.
+        /// </summary>
+        [Represents("boost::filesystem::copy_file", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static void Copy(Path source, Path destination);
+
+        /// <summary>
+        /// Moves (renames) a file or directory.
+        /// </summary>
+        [Represents("boost::filesystem::rename", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static void Move(Path source, Path destination);
+
+        /// <summary>
+        /// Deletes a file.  Returns true if the file existed and was deleted.
+        /// </summary>
+        [Represents("boost::filesystem::remove", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static bool Delete(Path path);
+
+        /// <summary>
+        /// Returns the last-write timestamp of the file as seconds since epoch.
+        /// </summary>
+        [Represents("boost::filesystem::last_write_time", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static long LastWriteTime(Path path);
+
+        /// <summary>
+        /// Creates an empty file at path, or updates its last-write time if it
+        /// already exists (analogous to the POSIX `touch` command).
+        /// </summary>
+        [Represents("boost::filesystem::last_write_time", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static void Touch(Path path);
+    }
+}

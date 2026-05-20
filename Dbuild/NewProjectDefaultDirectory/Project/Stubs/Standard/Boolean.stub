@@ -1,0 +1,43 @@
+namespace Standard {
+    /// <summary>
+    /// Represents a Boolean value.
+    /// Maps to: C++ bool
+    /// </summary>
+    [Represents("bool")]
+    public class Boolean {
+        /// <summary>Default constructor (initializes to false).</summary>
+        public Boolean();
+
+        /// <summary>Constructs from a bool value.</summary>
+        public Boolean(bool value);
+
+        /// <summary>Converts to "True" or "False".</summary>
+        public override string ToString();
+
+        /// <summary>Parses a string to a Boolean.</summary>
+        public static Boolean Parse(string s);
+
+        /// <summary>Safely parses a string to a Boolean.</summary>
+        public static bool TryParse(string s, out Boolean result);
+
+        /// <summary>Logical AND.</summary>
+        [Represents("operator&&")]
+        public static bool operator&&(Boolean left, Boolean right);
+
+        /// <summary>Logical OR.</summary>
+        [Represents("operator||")]
+        public static bool operator||(Boolean left, Boolean right);
+
+        /// <summary>Logical NOT.</summary>
+        [Represents("operator!")]
+        public static bool operator!(Boolean value);
+
+        /// <summary>Tests equality.</summary>
+        [Represents("operator==")]
+        public static bool operator==(Boolean left, Boolean right);
+
+        /// <summary>Tests inequality.</summary>
+        [Represents("operator!=")]
+        public static bool operator!=(Boolean left, Boolean right);
+    }
+}

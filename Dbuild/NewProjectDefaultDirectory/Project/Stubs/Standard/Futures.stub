@@ -1,0 +1,87 @@
+namespace Standard {
+    /// <summary>
+    /// Represents the eventual result of an asynchronous operation.
+    /// Obtain one from a Promise&lt;T&gt; or Task.Run().
+    /// Maps to: C++ std::future&lt;T&gt;
+    /// </summary>
+    [Represents("std::future", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<future>")]
+    public class Future<T> {
+        /// <summary>Blocks until the result is available, then returns it.</summary>
+        [Represents("get")]
+        public T Get();
+
+        /// <summary>Waits for the result without retrieving it.</summary>
+        [Represents("wait")]
+        public void Wait();
+
+        /// <summary>Waits at most the given duration.  Returns true if ready.</summary>
+        [Represents("wait_for")]
+        public bool WaitFor(TimeSpan timeout);
+
+        /// <summary>True if the result is ready (Get() will not block).</summary>
+        [Represents("valid")]
+        public bool IsReady { get; }
+    }
+
+    /// <summary>
+    /// Represents the eventual result of an async void operation.
+    /// Maps to: C++ std::future&lt;void&gt;
+    /// </summary>
+    [Represents("std::future<void>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<future>")]
+    public class Task {
+        [Represents("get")]      public void Wait();
+        [Represents("wait_for")] public bool WaitFor(TimeSpan timeout);
+        [Represents("valid")]    public bool IsReady { get; }
+
+        // ── Static launchers ──────────────────────────────────────────────────
+
+        /// <summary>
+        /// Runs action on a thread-pool thread and returns a Task that completes
+        /// when action returns.
+        /// Maps to: C++ std::async(std::launch::async, action)
+        /// </summary>
+        [Represents("std::async", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<future>")]
+        public static Task Run(Action action);
+
+        /// <summary>
+        /// Runs a function on a thread-pool thread and returns a Future&lt;T&gt;
+        /// that holds the return value.
+        /// </summary>
+        [Represents("std::async", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<future>")]
+        public static Future<T> Run<T>(Func<T> func);
+    }
+
+    /// <summary>
+    /// The write end of a Future&lt;T&gt; channel.  Set the value (or exception) once;
+    /// all threads waiting on the corresponding Future unblock.
+    /// Maps to: C++ std::promise&lt;T&gt;
+    /// </summary>
+    [Represents("std::promise", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<future>")]
+    public class Promise<T> {
+        public Promise();
+
+        /// <summary>Returns the Future paired with this Promise (call once).</summary>
+        [Represents("get_future")]
+        public Future<T> GetFuture();
+
+        /// <summary>Sets the result, unblocking any thread waiting on the Future.</summary>
+        [Represents("set_value")]
+        public void SetResult(T value);
+
+        /// <summary>Stores an exception, causing Future.Get() to rethrow it.</summary>
+        [Represents("set_exception")]
+        public void SetException(Exception ex);
+    }
+
+    /// <summary>
+    /// A shared future whose value can be retrieved by multiple threads.
+    /// Maps to: C++ std::shared_future&lt;T&gt;
+    /// </summary>
+    [Represents("std::shared_future", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<future>")]
+    public class SharedFuture<T> {
+        [Represents("get")]      public T    Get();
+        [Represents("wait")]     public void Wait();
+        [Represents("wait_for")] public bool WaitFor(TimeSpan timeout);
+        [Represents("valid")]    public bool IsReady { get; }
+    }
+}

@@ -1,0 +1,109 @@
+namespace Standard {
+    /// <summary>
+    /// Fixed-size sequence of bits with compile-time known length.
+    /// Maps to: C++ std::bitset&lt;N&gt;
+    /// </summary>
+    [Represents("std::bitset", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<bitset>")]
+    public class Bitset<int N> {
+        /// <summary>Constructs a bitset with all bits set to 0.</summary>
+        public Bitset();
+
+        /// <summary>Constructs a bitset from an unsigned long value.</summary>
+        public Bitset(ulong value);
+
+        /// <summary>Constructs a bitset from a string of '0' and '1' characters.</summary>
+        public Bitset(string str);
+
+        /// <summary>The number of bits in the bitset.</summary>
+        [Represents("size")]
+        public int Length { get; }
+
+        /// <summary>The number of bits set to 1.</summary>
+        [Represents("count")]
+        public int Count { get; }
+
+        /// <summary>Accesses the bit at the given index.</summary>
+        [Represents("operator[]")]
+        public bool this[int index] { get; set; }
+
+        /// <summary>Tests whether the bit at the given index is set.</summary>
+        [Represents("test")]
+        public bool Get(int index);
+
+        /// <summary>Sets all bits to 1.</summary>
+        [Represents("set")]
+        public void SetAll();
+
+        /// <summary>Sets or clears the bit at the given index.</summary>
+        [Represents("set")]
+        public void Set(int index, bool value = true);
+
+        /// <summary>Resets all bits to 0.</summary>
+        [Represents("reset")]
+        public void ResetAll();
+
+        /// <summary>Resets the bit at the given index to 0.</summary>
+        [Represents("reset")]
+        public void Reset(int index);
+
+        /// <summary>Flips all bits.</summary>
+        [Represents("flip")]
+        public void FlipAll();
+
+        /// <summary>Flips the bit at the given index.</summary>
+        [Represents("flip")]
+        public void Flip(int index);
+
+        /// <summary>Whether all bits are set to 1.</summary>
+        [Represents("all")]
+        public bool AllSet();
+
+        /// <summary>Whether any bit is set to 1.</summary>
+        [Represents("any")]
+        public bool AnySet();
+
+        /// <summary>Whether no bits are set to 1.</summary>
+        [Represents("none")]
+        public bool NoneSet();
+
+        /// <summary>Converts the bitset to a string of '0' and '1' characters.</summary>
+        [Represents("to_string")]
+        public override string ToString();
+
+        /// <summary>Converts the bitset to an unsigned long.</summary>
+        [Represents("to_ulong")]
+        public ulong ToUInt32();
+
+        /// <summary>Converts the bitset to an unsigned long long.</summary>
+        [Represents("to_ullong")]
+        public ulong ToUInt64();
+
+        /// <summary>Bitwise AND of two bitsets.</summary>
+        [Represents("operator&")]
+        public static Bitset<N> operator&(Bitset<N> left, Bitset<N> right);
+
+        /// <summary>Bitwise OR of two bitsets.</summary>
+        [Represents("operator|")]
+        public static Bitset<N> operator|(Bitset<N> left, Bitset<N> right);
+
+        /// <summary>Bitwise XOR of two bitsets.</summary>
+        [Represents("operator^")]
+        public static Bitset<N> operator^(Bitset<N> left, Bitset<N> right);
+
+        /// <summary>Left-shifts all bits.</summary>
+        [Represents("operator<<")]
+        public static Bitset<N> operator<<(Bitset<N> left, int shift);
+
+        /// <summary>Right-shifts all bits.</summary>
+        [Represents("operator>>")]
+        public static Bitset<N> operator>>(Bitset<N> left, int shift);
+
+        /// <summary>Tests whether two bitsets are equal.</summary>
+        [Represents("operator==")]
+        public static bool operator==(Bitset<N> left, Bitset<N> right);
+
+        /// <summary>Tests whether two bitsets are not equal.</summary>
+        [Represents("operator!=")]
+        public static bool operator!=(Bitset<N> left, Bitset<N> right);
+    }
+}

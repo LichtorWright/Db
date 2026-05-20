@@ -1,0 +1,135 @@
+namespace Compress {
+    /// <summary>
+    /// Strategy hint for the deflate compressor's LZ77 stage.
+    /// Maps to: C++ zlib strategy constants (Z_DEFAULT_STRATEGY etc.)
+    /// </summary>
+    [Represents("int", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<zlib.h>")]
+    public enum Strategy {
+        [Represents("Z_DEFAULT_STRATEGY")] Default    = 0,
+        [Represents("Z_FILTERED")]         Filtered   = 1,
+        [Represents("Z_HUFFMAN_ONLY")]     HuffmanOnly = 2,
+        [Represents("Z_RLE")]              Rle        = 3,
+        [Represents("Z_FIXED")]            Fixed      = 4,
+    }
+
+    /// <summary>
+    /// Compression level: balance between speed and output size.
+    /// Maps to: C++ zlib level constants.
+    /// </summary>
+    [Represents("int", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<zlib.h>")]
+    public enum CompressionLevel {
+        [Represents("Z_NO_COMPRESSION")]      None    = 0,
+        [Represents("Z_BEST_SPEED")]          Fast    = 1,
+        [Represents("Z_BEST_COMPRESSION")]    Best    = 9,
+        [Represents("Z_DEFAULT_COMPRESSION")] Default = -1,
+    }
+
+    /// <summary>
+    /// One-shot deflate (zlib-format) compression and decompression.
+    /// For streaming, use DeflateStream / InflateStream.
+    /// Maps to: C++ zlib compress2 / uncompress
+    /// </summary>
+    [Represents("", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<zlib.h>")]
+    public static class Deflate {
+        /// <summary>
+        /// Compresses data into zlib format.  Returns the compressed bytes.
+        /// Maps to: ::compress2
+        /// </summary>
+        [Represents("compress2")]
+        public static byte[] Compress(byte[] data);
+
+        /// <summary>Compresses with an explicit level and strategy.</summary>
+        [Represents("compress2")]
+        public static byte[] Compress(byte[] data, CompressionLevel level, Strategy strategy);
+
+        /// <summary>
+        /// Decompresses zlib-formatted data.  Returns the original bytes.
+        /// Maps to: ::uncompress
+        /// </summary>
+        [Represents("uncompress")]
+        public static byte[] Decompress(byte[] data);
+
+        /// <summary>Decompresses into a pre-allocated destination buffer.</summary>
+        [Represents("uncompress")]
+        public static int Decompress(byte[] data, byte[] destination);
+
+        /// <summary>
+        /// Returns the worst-case (maximum) compressed size for input of length bytes.
+        /// Maps to: ::compressBound
+        /// </summary>
+        [Represents("compressBound")]
+        public static long MaxCompressedSize(long inputLength);
+
+        // ── GZip wrappers ─────────────────────────────────────────────────────
+
+        /// <summary>Compresses data into gzip format (includes gzip header).</summary>
+        [Represents("gzopen")]
+        public static byte[] GzipCompress(byte[] data);
+
+        /// <summary>Decompresses gzip-format data.</summary>
+        [Represents("gzopen")]
+        public static byte[] GzipDecompress(byte[] data);
+    }
+
+    /// <summary>
+    /// Streaming deflate compressor.  Write input in chunks; read compressed output.
+    /// Maps to: C++ z_stream with deflateInit2/deflate/deflateEnd
+    /// </summary>
+    [Represents("z_stream", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<zlib.h>")]
+    public class DeflateStream {
+        public DeflateStream();
+        public DeflateStream(CompressionLevel level);
+
+        /// <summary>Feeds a chunk of uncompressed bytes into the compressor.</summary>
+        [Represents("deflate")]
+        public void Write(byte[] data);
+
+        [Represents("deflate")] public void Write(byte[] data, int offset, int count);
+
+        /// <summary>Flushes compressed output so far without finishing the stream.</summary>
+        [Represents("deflate")]
+        public byte[] Flush();
+
+        /// <summary>Signals end-of-input and returns the final compressed block.</summary>
+        [Represents("deflate")]
+        public byte[] Finish();
+
+        /// <summary>Resets the compressor so it can be reused without re-allocating.</summary>
+        [Represents("deflateReset")]
+        public void Reset();
+
+        /// <summary>Total uncompressed bytes written so far.</summary>
+        [Represents("total_in")]
+        public long TotalIn { get; }
+
+        /// <summary>Total compressed bytes produced so far.</summary>
+        [Represents("total_out")]
+        public long TotalOut { get; }
+    }
+
+    /// <summary>
+    /// Streaming deflate decompressor.
+    /// Maps to: C++ z_stream with inflateInit/inflate/inflateEnd
+    /// </summary>
+    [Represents("z_stream", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<zlib.h>")]
+    public class InflateStream {
+        public InflateStream();
+
+        /// <summary>Feeds a chunk of compressed bytes; returns decompressed output.</summary>
+        [Represents("inflate")]
+        public byte[] Write(byte[] data);
+
+        [Represents("inflate")] public byte[] Write(byte[] data, int offset, int count);
+
+        /// <summary>True if the end-of-stream marker has been encountered.</summary>
+        [Represents("avail_in")]
+        public bool IsFinished { get; }
+
+        /// <summary>Resets the decompressor for a new stream.</summary>
+        [Represents("inflateReset")]
+        public void Reset();
+
+        [Represents("total_in")]  public long TotalIn  { get; }
+        [Represents("total_out")] public long TotalOut { get; }
+    }
+}

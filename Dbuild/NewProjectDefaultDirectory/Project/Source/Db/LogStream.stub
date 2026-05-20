@@ -1,0 +1,6 @@
+using Standard;
+
+namespace Db {
+    public class LogStream {
+    }
+}

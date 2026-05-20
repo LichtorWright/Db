@@ -1,0 +1,8 @@
+namespace Db
+{
+    /// <summary>
+    /// Marks a type or variable as heap-allocated in the destination language.
+    /// Informs the emitter to use pointer or reference semantics.
+    /// </summary>
+    public class HeapAttribute { }
+}

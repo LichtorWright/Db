@@ -1,0 +1,62 @@
+namespace Boost.Net.Sockets {
+    /// <summary>
+    /// An IPv4 or IPv6 address without port information.
+    /// Use Parse() to construct from a string literal.
+    /// Maps to: C++ boost::asio::ip::address
+    /// </summary>
+    [Represents("boost::asio::ip::address", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/asio.hpp>")]
+    public class IpAddress {
+        /// <summary>Constructs the unspecified (any) address.</summary>
+        public IpAddress();
+
+        /// <summary>
+        /// Parses an IP address from a dotted-decimal or colon-hex string.
+        /// Throws on invalid input.
+        /// </summary>
+        [Represents("boost::asio::ip::make_address", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/asio.hpp>")]
+        public static IpAddress Parse(string text);
+
+        /// <summary>
+        /// Tries to parse an IP address; sets the error code instead of throwing.
+        /// Returns the parsed address or a default on failure.
+        /// </summary>
+        [Represents("boost::asio::ip::make_address", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/asio.hpp>")]
+        public static IpAddress TryParse(string text, out ErrorCode error);
+
+        /// <summary>The IPv4 any-address (0.0.0.0).</summary>
+        [Represents("boost::asio::ip::address_v4::any()", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/asio.hpp>")]
+        public static IpAddress Any { get; }
+
+        /// <summary>The IPv4 loopback address (127.0.0.1).</summary>
+        [Represents("boost::asio::ip::address_v4::loopback()", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/asio.hpp>")]
+        public static IpAddress Loopback { get; }
+
+        /// <summary>The IPv6 loopback address (::1).</summary>
+        [Represents("boost::asio::ip::address_v6::loopback()", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/asio.hpp>")]
+        public static IpAddress LoopbackV6 { get; }
+
+        /// <summary>Returns the dotted-decimal or colon-hex string representation.</summary>
+        [Represents("to_string")]
+        public string ToString();
+
+        /// <summary>True if this is an IPv4 address.</summary>
+        [Represents("is_v4")]
+        public bool IsV4 { get; }
+
+        /// <summary>True if this is an IPv6 address.</summary>
+        [Represents("is_v6")]
+        public bool IsV6 { get; }
+
+        /// <summary>True if this is an unspecified (any) address.</summary>
+        [Represents("is_unspecified")]
+        public bool IsUnspecified { get; }
+
+        /// <summary>True if this is a loopback address.</summary>
+        [Represents("is_loopback")]
+        public bool IsLoopback { get; }
+
+        /// <summary>True if this is a multicast address.</summary>
+        [Represents("is_multicast")]
+        public bool IsMulticast { get; }
+    }
+}

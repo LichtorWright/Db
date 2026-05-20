@@ -1,0 +1,55 @@
+## Build outputs
+bin/
+obj/
+build/
+
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.cache
+
+## IDE
+.vscode/
+!.vscode/tasks.json
+!.vscode/settings.json
+.idea/
+
+## OS
+.DS_Store
+Thumbs.db
+
+## .NET
+*.dll
+*.exe
+*.pdb
+
+## Generated output (rebuilt by transpiler)
+Generated/
+
+## Transpiler intermediate output in Standard/
+
+## VS cache
+*.csproj.lscache
+
+## Working files
+*.old
+Standard/*.g.cpp
+Standard/*.g.h
+
+## Old pre-rename folder (kept for reference, not tracked)
+DbTranspiler/
+
+## C++ runtime (will be removed — Standard/ .db stubs replace it)
+Runtime/
+dbuild.h
+
+## VS cache files
+*.lscache
+
+## OS
+Thumbs.db
+.DS_Store
+
+## Local pilot
+.localpilot/

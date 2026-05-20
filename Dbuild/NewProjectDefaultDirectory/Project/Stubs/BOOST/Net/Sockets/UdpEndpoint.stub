@@ -1,0 +1,25 @@
+namespace Boost.Net.Sockets {
+    /// <summary>
+    /// Combines an IP address with a port number to identify a UDP endpoint.
+    /// Maps to: C++ boost::asio::ip::udp::endpoint
+    /// </summary>
+    [Represents("boost::asio::ip::udp::endpoint", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/asio.hpp>")]
+    public class UdpEndpoint {
+        /// <summary>Constructs a default (unspecified address, port 0) endpoint.</summary>
+        public UdpEndpoint();
+
+        /// <summary>Constructs an endpoint from an address and port.</summary>
+        public UdpEndpoint(IpAddress address, int port);
+
+        /// <summary>Constructs a server-side endpoint that receives on any local address at the given port.</summary>
+        public UdpEndpoint(int port);
+
+        /// <summary>The IP address component.</summary>
+        [Represents("address")]
+        public IpAddress Address { get; set; }
+
+        /// <summary>The port number.</summary>
+        [Represents("port")]
+        public int Port { get; set; }
+    }
+}

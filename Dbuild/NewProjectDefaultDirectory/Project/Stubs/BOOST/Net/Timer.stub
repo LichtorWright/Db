@@ -1,0 +1,42 @@
+namespace Boost.Net {
+    /// <summary>
+    /// A steady-clock timer for scheduling deferred or periodic callbacks.
+    /// Maps to: C++ boost::asio::steady_timer
+    /// </summary>
+    [Represents("boost::asio::steady_timer", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/asio.hpp>")]
+    public class Timer {
+        /// <summary>Constructs a timer associated with the given IoContext.</summary>
+        public Timer(IoContext context);
+
+        /// <summary>
+        /// Sets the timer to expire after the given number of milliseconds from now.
+        /// Cancels any pending async wait.
+        /// </summary>
+        [Represents("expires_after")]
+        public void ExpiresAfter(long milliseconds);
+
+        /// <summary>
+        /// Synchronously blocks the calling thread until the timer fires or is cancelled.
+        /// </summary>
+        [Represents("wait")]
+        public void Wait();
+
+        /// <summary>
+        /// Schedules an asynchronous wait.  The handler receives an ErrorCode —
+        /// check it for Net.ErrorCode.OperationAborted to detect cancellation.
+        /// </summary>
+        [Represents("async_wait")]
+        public void WaitAsync(Action<ErrorCode> handler);
+
+        /// <summary>
+        /// Cancels all pending async waits on this timer.
+        /// Returns the number of operations cancelled.
+        /// </summary>
+        [Represents("cancel")]
+        public int Cancel();
+
+        /// <summary>Cancels the most recently started async wait only.</summary>
+        [Represents("cancel_one")]
+        public int CancelOne();
+    }
+}

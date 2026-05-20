@@ -1,0 +1,9 @@
+namespace Standard {
+    /// <summary>
+    /// .NET-familiar alias for Standard.UnorderedMap.
+    /// Maps to: C++ std::unordered_map&lt;TKey, TValue&gt;
+    /// </summary>
+    public class UnorderedDict<TKey, TValue> : UnorderedMap<TKey, TValue> {
+        public UnorderedDict() : base() { }
+    }
+}

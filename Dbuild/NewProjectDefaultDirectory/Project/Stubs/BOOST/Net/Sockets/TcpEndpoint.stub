@@ -1,0 +1,32 @@
+namespace Boost.Net.Sockets {
+    /// <summary>
+    /// Combines an IP address with a port number to identify a network endpoint.
+    /// Maps to: C++ boost::asio::ip::tcp::endpoint
+    /// </summary>
+    [Represents("boost::asio::ip::tcp::endpoint", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/asio.hpp>")]
+    public class TcpEndpoint {
+        /// <summary>Constructs a default (unspecified address, port 0) endpoint.</summary>
+        public TcpEndpoint();
+
+        /// <summary>Constructs an endpoint from an address and port.</summary>
+        public TcpEndpoint(IpAddress address, int port);
+
+        /// <summary>
+        /// Constructs a server-style endpoint that accepts on any local address
+        /// at the given port (equivalent to IpAddress.Any + port).
+        /// </summary>
+        public TcpEndpoint(int port);
+
+        /// <summary>The IP address component of this endpoint.</summary>
+        [Represents("address")]
+        public IpAddress Address { get; set; }
+
+        /// <summary>The port number.</summary>
+        [Represents("port")]
+        public int Port { get; set; }
+
+        /// <summary>String form "address:port".</summary>
+        [Represents("")]
+        public string ToString();
+    }
+}

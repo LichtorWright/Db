@@ -1,0 +1,124 @@
+namespace Standard {
+    /// <summary>
+    /// Dynamic array supporting fast random access and insertion/removal at the end.
+    /// Maps to: C++ std::vector&lt;T&gt;
+    /// </summary>
+    [Represents("std::vector", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<vector>")]
+    public class List<T> {
+        /// <summary>Constructs an empty list.</summary>
+        public List();
+
+        /// <summary>Constructs a list from a collection of elements.</summary>
+        public List(IEnumerable<T> collection);
+
+        /// <summary>Constructs a list with the given capacity.</summary>
+        public List(int capacity);
+
+        /// <summary>Constructs a list with count copies of value.</summary>
+        public List(int count, T value);
+
+        /// <summary>The number of elements.</summary>
+        [Represents("size")]
+        public int Count { get; }
+
+        /// <summary>The current allocated capacity.</summary>
+        [Represents("capacity")]
+        public int Capacity { get; }
+
+        /// <summary>Accesses the element at the given index without bounds checking.</summary>
+        [Represents("operator[]")]
+        public T this[int index] { get; set; }
+
+        /// <summary>Accesses the element at the given index with bounds checking.</summary>
+        [Represents("at")]
+        public T GetAt(int index);
+
+        /// <summary>The first element.</summary>
+        [Represents("front")]
+        public T First { get; }
+
+        /// <summary>The last element.</summary>
+        [Represents("back")]
+        public T Last { get; }
+
+        /// <summary>Pointer to the underlying element storage.</summary>
+        [Represents("data")]
+        public T Data { get; }
+
+        /// <summary>Adds an element to the end.</summary>
+        [Represents("push_back")]
+        public void Add(T item);
+
+        /// <summary>Constructs an element in place at the end.</summary>
+        [Represents("emplace_back")]
+        public void AddInPlace(T item);
+
+        /// <summary>Adds all elements from another list.</summary>
+        [Represents("push_back")]
+        public void AddRange(List<T> items);
+
+        /// <summary>Inserts an element at the given index.</summary>
+        [Represents("insert")]
+        public void Insert(int index, T item);
+
+        /// <summary>Removes the element at the given index.</summary>
+        [Represents("erase")]
+        public void RemoveAt(int index);
+
+        /// <summary>Removes the first occurrence of item. Returns whether found.</summary>
+        public bool Remove(T item);
+
+        /// <summary>Removes the last element.</summary>
+        [Represents("pop_back")]
+        public void RemoveAtEnd();
+
+        /// <summary>Removes all elements.</summary>
+        [Represents("clear")]
+        public void Clear();
+
+        /// <summary>Pre-allocates capacity for at least the given number of elements.</summary>
+        [Represents("reserve")]
+        public void EnsureCapacity(int capacity);
+
+        /// <summary>Reduces capacity to match size.</summary>
+        [Represents("shrink_to_fit")]
+        public void TrimExcess();
+
+        /// <summary>Resizes to the given count.</summary>
+        [Represents("resize")]
+        public void Resize(int count);
+
+        /// <summary>Resizes to the given count, filling new elements with value.</summary>
+        [Represents("resize")]
+        public void Resize(int count, T value);
+
+        /// <summary>Swaps contents with another list.</summary>
+        [Represents("swap")]
+        public void Swap(List<T> other);
+
+        /// <summary>Whether the list contains the given item.</summary>
+        [Represents("std::find")]
+        public bool Contains(T item);
+
+        /// <summary>The index of the first occurrence of item, or -1.</summary>
+        [Represents("std::find")]
+        public int IndexOf(T item);
+
+        /// <summary>The maximum possible number of elements.</summary>
+        [Represents("max_size")]
+        public int MaxLength { get; }
+
+        /// <summary>The sentinel value for "not found" search results.</summary>
+        [Represents("npos")]
+        public static int NotFound { get; }
+
+        /// <summary>Supports foreach iteration over the list.</summary>
+        public class Enumerator {
+            public T Current { get; }
+            public bool MoveNext();
+            public void Reset();
+        }
+
+        public Enumerator GetEnumerator();
+    }
+}

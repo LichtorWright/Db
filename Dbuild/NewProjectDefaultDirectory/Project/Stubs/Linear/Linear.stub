@@ -1,0 +1,298 @@
+namespace Linear {
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Fixed-size vectors
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// 2D column vector of doubles.
+    /// Maps to: C++ Eigen::Vector2d
+    /// </summary>
+    [Represents("Eigen::Vector2d", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<Eigen/Dense>")]
+    public class Vector2 {
+        public Vector2();
+        public Vector2(double x, double y);
+
+        [Represents("x()")] public double X { get; set; }
+        [Represents("y()")] public double Y { get; set; }
+
+        [Represents("operator+")] public Vector2 Add(Vector2 other);
+        [Represents("operator-")] public Vector2 Subtract(Vector2 other);
+        [Represents("operator*")] public Vector2 Scale(double scalar);
+        [Represents("dot")]       public double  Dot(Vector2 other);
+        [Represents("cross")]     public double  Cross(Vector2 other);   // returns scalar for 2D
+        [Represents("norm")]      public double  Magnitude { get; }
+        [Represents("squaredNorm")] public double MagnitudeSquared { get; }
+        [Represents("normalized")] public Vector2 Normalized { get; }
+        [Represents("operator==")] public bool    Equals(Vector2 other);
+        [Represents("operator[]")] public double  Get(int index);
+        [Represents("operator[]")] public void    Set(int index, double value);
+
+        [Represents("Eigen::Vector2d::Zero",  CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Vector2 Zero  { get; }
+        [Represents("Eigen::Vector2d::Ones",  CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Vector2 Ones  { get; }
+        [Represents("Eigen::Vector2d::UnitX", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Vector2 UnitX { get; }
+        [Represents("Eigen::Vector2d::UnitY", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Vector2 UnitY { get; }
+    }
+
+    /// <summary>
+    /// 3D column vector of doubles.
+    /// Maps to: C++ Eigen::Vector3d
+    /// </summary>
+    [Represents("Eigen::Vector3d", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<Eigen/Dense>")]
+    public class Vector3 {
+        public Vector3();
+        public Vector3(double x, double y, double z);
+
+        [Represents("x()")] public double X { get; set; }
+        [Represents("y()")] public double Y { get; set; }
+        [Represents("z()")] public double Z { get; set; }
+
+        [Represents("operator+")] public Vector3 Add(Vector3 other);
+        [Represents("operator-")] public Vector3 Subtract(Vector3 other);
+        [Represents("operator*")] public Vector3 Scale(double scalar);
+        [Represents("dot")]       public double  Dot(Vector3 other);
+        [Represents("cross")]     public Vector3 Cross(Vector3 other);
+        [Represents("norm")]      public double  Magnitude { get; }
+        [Represents("squaredNorm")] public double MagnitudeSquared { get; }
+        [Represents("normalized")] public Vector3 Normalized { get; }
+        [Represents("operator==")] public bool    Equals(Vector3 other);
+        [Represents("operator[]")] public double  Get(int index);
+        [Represents("operator[]")] public void    Set(int index, double value);
+
+        [Represents("Eigen::Vector3d::Zero",  CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Vector3 Zero  { get; }
+        [Represents("Eigen::Vector3d::Ones",  CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Vector3 Ones  { get; }
+        [Represents("Eigen::Vector3d::UnitX", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Vector3 UnitX { get; }
+        [Represents("Eigen::Vector3d::UnitY", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Vector3 UnitY { get; }
+        [Represents("Eigen::Vector3d::UnitZ", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Vector3 UnitZ { get; }
+    }
+
+    /// <summary>
+    /// 4D column vector of doubles.
+    /// Maps to: C++ Eigen::Vector4d
+    /// </summary>
+    [Represents("Eigen::Vector4d", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<Eigen/Dense>")]
+    public class Vector4 {
+        public Vector4();
+        public Vector4(double x, double y, double z, double w);
+
+        [Represents("x()")] public double X { get; set; }
+        [Represents("y()")] public double Y { get; set; }
+        [Represents("z()")] public double Z { get; set; }
+        [Represents("w()")] public double W { get; set; }
+
+        [Represents("operator+")] public Vector4 Add(Vector4 other);
+        [Represents("operator-")] public Vector4 Subtract(Vector4 other);
+        [Represents("operator*")] public Vector4 Scale(double scalar);
+        [Represents("dot")]       public double  Dot(Vector4 other);
+        [Represents("norm")]      public double  Magnitude { get; }
+        [Represents("squaredNorm")] public double MagnitudeSquared { get; }
+        [Represents("normalized")] public Vector4 Normalized { get; }
+        [Represents("operator[]")] public double  Get(int index);
+        [Represents("operator[]")] public void    Set(int index, double value);
+
+        [Represents("Eigen::Vector4d::Zero", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Vector4 Zero { get; }
+        [Represents("Eigen::Vector4d::Ones", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Vector4 Ones { get; }
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Dynamic-size vector
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// A column vector of doubles with runtime-determined length.
+    /// Maps to: C++ Eigen::VectorXd
+    /// </summary>
+    [Represents("Eigen::VectorXd", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<Eigen/Dense>")]
+    public class VectorX {
+        public VectorX();
+        public VectorX(int size);
+
+        [Represents("size")]      public int    Size      { get; }
+        [Represents("operator[]")] public double Get(int index);
+        [Represents("operator[]")] public void   Set(int index, double value);
+        [Represents("norm")]       public double  Magnitude { get; }
+        [Represents("squaredNorm")] public double MagnitudeSquared { get; }
+        [Represents("normalized")] public VectorX Normalized { get; }
+        [Represents("sum")]        public double  Sum       { get; }
+        [Represents("mean")]       public double  Mean      { get; }
+        [Represents("minCoeff")]   public double  Min       { get; }
+        [Represents("maxCoeff")]   public double  Max       { get; }
+        [Represents("dot")]        public double  Dot(VectorX other);
+        [Represents("operator+")] public VectorX Add(VectorX other);
+        [Represents("operator-")] public VectorX Subtract(VectorX other);
+        [Represents("operator*")] public VectorX Scale(double scalar);
+        [Represents("cwiseProduct")] public VectorX ElementwiseMultiply(VectorX other);
+        [Represents("resize")]     public void   Resize(int size);
+        [Represents("setZero")]    public void   SetZero();
+        [Represents("setOnes")]    public void   SetOnes();
+        [Represents("setRandom")]  public void   SetRandom();
+
+        [Represents("Eigen::VectorXd::Zero",   CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static VectorX Zero(int size);
+        [Represents("Eigen::VectorXd::Ones",   CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static VectorX Ones(int size);
+        [Represents("Eigen::VectorXd::Random", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static VectorX Random(int size);
+        [Represents("Eigen::VectorXd::LinSpaced", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static VectorX LinSpace(int size, double start, double end);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Fixed-size matrices
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// 3×3 matrix of doubles.
+    /// Maps to: C++ Eigen::Matrix3d
+    /// </summary>
+    [Represents("Eigen::Matrix3d", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<Eigen/Dense>")]
+    public class Matrix3 {
+        public Matrix3();
+
+        [Represents("operator()")] public double Get(int row, int col);
+        [Represents("operator()")] public void   Set(int row, int col, double value);
+
+        [Represents("rows")]       public int Rows { get; }
+        [Represents("cols")]       public int Cols { get; }
+
+        [Represents("operator*")]  public Matrix3 Multiply(Matrix3 other);
+        [Represents("operator*")]  public Vector3 MultiplyVec(Vector3 v);
+        [Represents("operator+")] public Matrix3  Add(Matrix3 other);
+        [Represents("operator-")] public Matrix3  Subtract(Matrix3 other);
+        [Represents("transpose")] public Matrix3  Transpose { get; }
+        [Represents("inverse")]   public Matrix3  Inverse   { get; }
+        [Represents("determinant")] public double Determinant { get; }
+        [Represents("trace")]     public double   Trace      { get; }
+        [Represents("norm")]      public double   Norm       { get; }
+        [Represents("setZero")]   public void     SetZero();
+        [Represents("setIdentity")] public void   SetIdentity();
+        [Represents("setRandom")] public void     SetRandom();
+
+        [Represents("Eigen::Matrix3d::Zero",     CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Matrix3 Zero     { get; }
+        [Represents("Eigen::Matrix3d::Identity", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Matrix3 Identity { get; }
+        [Represents("Eigen::Matrix3d::Ones",     CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Matrix3 Ones     { get; }
+    }
+
+    /// <summary>
+    /// 4×4 matrix of doubles (commonly used for 3D transformations).
+    /// Maps to: C++ Eigen::Matrix4d
+    /// </summary>
+    [Represents("Eigen::Matrix4d", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<Eigen/Dense>")]
+    public class Matrix4 {
+        public Matrix4();
+
+        [Represents("operator()")] public double Get(int row, int col);
+        [Represents("operator()")] public void   Set(int row, int col, double value);
+
+        [Represents("rows")]       public int Rows { get; }
+        [Represents("cols")]       public int Cols { get; }
+
+        [Represents("operator*")]  public Matrix4 Multiply(Matrix4 other);
+        [Represents("operator*")]  public Vector4 MultiplyVec(Vector4 v);
+        [Represents("operator+")] public Matrix4  Add(Matrix4 other);
+        [Represents("transpose")] public Matrix4  Transpose { get; }
+        [Represents("inverse")]   public Matrix4  Inverse   { get; }
+        [Represents("determinant")] public double Determinant { get; }
+        [Represents("trace")]     public double   Trace      { get; }
+        [Represents("setZero")]   public void     SetZero();
+        [Represents("setIdentity")] public void   SetIdentity();
+
+        [Represents("Eigen::Matrix4d::Zero",     CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Matrix4 Zero     { get; }
+        [Represents("Eigen::Matrix4d::Identity", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Matrix4 Identity { get; }
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Dynamic-size matrix (general purpose)
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// A dynamically-sized matrix of doubles.
+    /// Maps to: C++ Eigen::MatrixXd
+    /// </summary>
+    [Represents("Eigen::MatrixXd", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<Eigen/Dense>")]
+    public class Matrix {
+        public Matrix();
+        public Matrix(int rows, int cols);
+
+        [Represents("rows")]       public int Rows { get; }
+        [Represents("cols")]       public int Cols { get; }
+        [Represents("size")]       public int Size { get; }
+
+        [Represents("operator()")] public double  Get(int row, int col);
+        [Represents("operator()")] public void    Set(int row, int col, double value);
+
+        [Represents("operator*")]  public Matrix  Multiply(Matrix other);
+        [Represents("operator*")]  public VectorX MultiplyVec(VectorX v);
+        [Represents("operator*")]  public Matrix  Scale(double scalar);
+        [Represents("operator+")] public Matrix   Add(Matrix other);
+        [Represents("operator-")] public Matrix   Subtract(Matrix other);
+        [Represents("transpose")] public Matrix   Transpose { get; }
+        [Represents("inverse")]   public Matrix   Inverse   { get; }
+        [Represents("determinant")] public double Determinant { get; }
+        [Represents("trace")]     public double   Trace      { get; }
+        [Represents("norm")]      public double   Norm       { get; }
+        [Represents("sum")]       public double   Sum        { get; }
+        [Represents("mean")]      public double   Mean       { get; }
+        [Represents("minCoeff")]  public double   Min        { get; }
+        [Represents("maxCoeff")]  public double   Max        { get; }
+
+        /// <summary>Returns a row as a VectorX.</summary>
+        [Represents("row")]       public VectorX Row(int index);
+        /// <summary>Returns a column as a VectorX.</summary>
+        [Represents("col")]       public VectorX Col(int index);
+
+        /// <summary>Extracts a rectangular sub-matrix.</summary>
+        [Represents("block")]     public Matrix  Block(int startRow, int startCol, int rows, int cols);
+
+        [Represents("setZero")]    public void SetZero();
+        [Represents("setOnes")]    public void SetOnes();
+        [Represents("setIdentity")] public void SetIdentity();
+        [Represents("setRandom")]  public void SetRandom();
+        [Represents("resize")]     public void Resize(int rows, int cols);
+        [Represents("conservativeResize")] public void ResizePreserve(int rows, int cols);
+
+        // ── Decompositions ────────────────────────────────────────────────────
+
+        /// <summary>Solves Ax = b using ColPivHouseholderQR decomposition.</summary>
+        [Represents("colPivHouseholderQr().solve")]
+        public VectorX Solve(VectorX b);
+
+        /// <summary>Computes the full SVD.</summary>
+        [Represents("jacobiSvd")]
+        public SvdResult Svd();
+
+        /// <summary>Computes eigenvalues and eigenvectors (self-adjoint matrices).</summary>
+        [Represents("selfadjointView<Eigen::Lower>().eigenvalues")]
+        public EigenResult EigenDecompose();
+
+        // ── Factories ─────────────────────────────────────────────────────────
+
+        [Represents("Eigen::MatrixXd::Zero",     CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Matrix Zero(int rows, int cols);
+        [Represents("Eigen::MatrixXd::Identity", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Matrix Identity(int rows, int cols);
+        [Represents("Eigen::MatrixXd::Ones",     CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Matrix Ones(int rows, int cols);
+        [Represents("Eigen::MatrixXd::Random",   CodePart.Member, Language.Cpp, MemberAccess.Colons, "<Eigen/Dense>")] public static Matrix Random(int rows, int cols);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Decomposition results
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Result of a Singular Value Decomposition: A = U * S * V^T.
+    /// Maps to: C++ Eigen::JacobiSVD
+    /// </summary>
+    [Represents("Eigen::JacobiSVD<Eigen::MatrixXd>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<Eigen/SVD>")]
+    public class SvdResult {
+        [Represents("matrixU")]        public Matrix  U               { get; }
+        [Represents("singularValues")] public VectorX SingularValues  { get; }
+        [Represents("matrixV")]        public Matrix  V               { get; }
+        [Represents("solve")]          public VectorX Solve(VectorX b);
+    }
+
+    /// <summary>
+    /// Result of an eigenvalue decomposition for self-adjoint (symmetric) matrices.
+    /// Maps to: C++ Eigen::SelfAdjointEigenSolver
+    /// </summary>
+    [Represents("Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<Eigen/Eigenvalues>")]
+    public class EigenResult {
+        /// <summary>Column i holds the eigenvector for eigenvalue i.</summary>
+        [Represents("eigenvectors")] public Matrix  Eigenvectors { get; }
+        /// <summary>Eigenvalues in ascending order.</summary>
+        [Represents("eigenvalues")]  public VectorX Eigenvalues  { get; }
+    }
+}

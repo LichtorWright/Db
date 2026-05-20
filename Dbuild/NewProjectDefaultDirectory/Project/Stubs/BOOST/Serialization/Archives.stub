@@ -1,0 +1,88 @@
+namespace Boost.Serialization {
+    /// <summary>
+    /// Serialises objects to a human-readable text stream.
+    /// Wrap an IO stream, then call Write() for each field you want to save.
+    /// Maps to: C++ boost::archive::text_oarchive
+    /// </summary>
+    [Represents("boost::archive::text_oarchive", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/archive/text_oarchive.hpp>")]
+    public class TextWriter {
+        /// <summary>Constructs a writer over the given output stream.</summary>
+        public TextWriter(Standard.Stream stream);
+
+        /// <summary>Serialises value into the archive.</summary>
+        [Represents("operator<<")]
+        public void Write<T>(T value);
+    }
+
+    /// <summary>
+    /// Deserialises objects from a human-readable text stream previously written
+    /// by TextWriter.
+    /// Maps to: C++ boost::archive::text_iarchive
+    /// </summary>
+    [Represents("boost::archive::text_iarchive", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/archive/text_iarchive.hpp>")]
+    public class TextReader {
+        /// <summary>Constructs a reader over the given input stream.</summary>
+        public TextReader(Standard.Stream stream);
+
+        /// <summary>Deserialises the next value from the archive into value.</summary>
+        [Represents("operator>>")]
+        public void Read<T>(out T value);
+    }
+
+    /// <summary>
+    /// Serialises objects to a compact binary stream.
+    /// Maps to: C++ boost::archive::binary_oarchive
+    /// </summary>
+    [Represents("boost::archive::binary_oarchive", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/archive/binary_oarchive.hpp>")]
+    public class BinaryWriter {
+        /// <summary>Constructs a writer over the given output stream.</summary>
+        public BinaryWriter(Standard.Stream stream);
+
+        /// <summary>Serialises value into the archive.</summary>
+        [Represents("operator<<")]
+        public void Write<T>(T value);
+    }
+
+    /// <summary>
+    /// Deserialises objects from a binary stream written by BinaryWriter.
+    /// Maps to: C++ boost::archive::binary_iarchive
+    /// </summary>
+    [Represents("boost::archive::binary_iarchive", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/archive/binary_iarchive.hpp>")]
+    public class BinaryReader {
+        /// <summary>Constructs a reader over the given input stream.</summary>
+        public BinaryReader(Standard.Stream stream);
+
+        /// <summary>Deserialises the next value from the archive into value.</summary>
+        [Represents("operator>>")]
+        public void Read<T>(out T value);
+    }
+
+    /// <summary>
+    /// Serialises objects to an XML stream with named fields.
+    /// Use Standard.XmlNameValue() to tag each field with an attribute name.
+    /// Maps to: C++ boost::archive::xml_oarchive
+    /// </summary>
+    [Represents("boost::archive::xml_oarchive", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/archive/xml_oarchive.hpp>")]
+    public class XmlWriter {
+        /// <summary>Constructs a writer over the given output stream.</summary>
+        public XmlWriter(Standard.Stream stream);
+
+        /// <summary>Serialises a named field.  name becomes the XML attribute name.</summary>
+        [Represents("operator<<")]
+        public void Write<T>(string name, T value);
+    }
+
+    /// <summary>
+    /// Deserialises objects from an XML stream written by XmlWriter.
+    /// Maps to: C++ boost::archive::xml_iarchive
+    /// </summary>
+    [Represents("boost::archive::xml_iarchive", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/archive/xml_iarchive.hpp>")]
+    public class XmlReader {
+        /// <summary>Constructs a reader over the given input stream.</summary>
+        public XmlReader(Standard.Stream stream);
+
+        /// <summary>Deserialises the named field from the archive into value.</summary>
+        [Represents("operator>>")]
+        public void Read<T>(string name, out T value);
+    }
+}

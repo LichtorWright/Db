@@ -1,0 +1,102 @@
+namespace Standard {
+    /// <summary>
+    /// Double-ended queue supporting fast insertion/removal at both ends.
+    /// Maps to: C++ std::deque&lt;T&gt;
+    /// </summary>
+    [Represents("std::deque", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<deque>")]
+    public class Deque<T> {
+        /// <summary>Constructs an empty deque.</summary>
+        public Deque();
+
+        /// <summary>Constructs a deque with count default elements.</summary>
+        public Deque(int count);
+
+        /// <summary>Constructs a deque with count copies of value.</summary>
+        public Deque(int count, T value);
+
+        /// <summary>The number of elements.</summary>
+        [Represents("size")]
+        public int Count { get; }
+
+        /// <summary>Whether the deque is empty.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>Accesses the element at the given index without bounds checking.</summary>
+        [Represents("operator[]")]
+        public T this[int index] { get; set; }
+
+        /// <summary>Accesses the element at the given index with bounds checking.</summary>
+        [Represents("at")]
+        public T GetAt(int index);
+
+        /// <summary>The first element.</summary>
+        [Represents("front")]
+        public T First { get; }
+
+        /// <summary>The last element.</summary>
+        [Represents("back")]
+        public T Last { get; }
+
+        /// <summary>Adds an element to the front.</summary>
+        [Represents("push_front")]
+        public void AddFirst(T item);
+
+        /// <summary>Constructs an element in place at the front.</summary>
+        [Represents("emplace_front")]
+        public void AddFirstInPlace(T item);
+
+        /// <summary>Adds an element to the back.</summary>
+        [Represents("push_back")]
+        public void AddLast(T item);
+
+        /// <summary>Constructs an element in place at the back.</summary>
+        [Represents("emplace_back")]
+        public void AddLastInPlace(T item);
+
+        /// <summary>Removes and returns the first element.</summary>
+        [Represents("pop_front")]
+        public T RemoveFirst();
+
+        /// <summary>Removes and returns the last element.</summary>
+        [Represents("pop_back")]
+        public T RemoveLast();
+
+        /// <summary>Inserts an element at the given index.</summary>
+        [Represents("insert")]
+        public void InsertAt(int index, T item);
+
+        /// <summary>Removes the element at the given index.</summary>
+        [Represents("erase")]
+        public void RemoveAt(int index);
+
+        /// <summary>Removes all elements.</summary>
+        [Represents("clear")]
+        public void Clear();
+
+        /// <summary>Resizes to the given size.</summary>
+        [Represents("resize")]
+        public void Resize(int newSize);
+
+        /// <summary>Resizes to the given size, filling new elements with value.</summary>
+        [Represents("resize")]
+        public void Resize(int newSize, T value);
+
+        /// <summary>Swaps contents with another deque.</summary>
+        [Represents("swap")]
+        public void Swap(Deque<T> other);
+
+        /// <summary>Reduces capacity to match size.</summary>
+        [Represents("shrink_to_fit")]
+        public void TrimExcess();
+
+        /// <summary>Supports foreach iteration over the deque.</summary>
+        public class Enumerator {
+            public T Current { get; }
+            public bool MoveNext();
+            public void Reset();
+        }
+
+        public Enumerator GetEnumerator();
+    }
+}

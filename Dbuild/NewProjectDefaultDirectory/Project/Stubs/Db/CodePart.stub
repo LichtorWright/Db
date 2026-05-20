@@ -1,0 +1,122 @@
+namespace Db
+{
+    /// <summary>
+    /// Every structural element that can appear in source code.
+    /// Maps 1:1 to AST node types but is language-agnostic — each LanguageProfile
+    /// defines how a given CodePart is represented in its target language.
+    /// </summary>
+    public enum CodePart
+    {
+        // ── Structural / Module ───────────────────────────────────────────
+        CompilationUnit,        // The root file node
+        Namespace,              // namespace / module / package
+        UsingDirective,         // using / import / include / use
+        FileScopeDirective,     // #include / mod / require at file level
+
+        // ── Type Declarations ─────────────────────────────────────────────
+        Class,                  // class / struct / type
+        Struct,                 // struct (value type)
+        Interface,              // interface / protocol / trait
+        Enum,                   // enum (simple)
+        EnumClass,              // enum class / strongly-typed enum
+        EnumMember,             // individual enum value
+        SumType,                // enum (discriminated union / Rust enum / Swift enum)
+        Mixin,                  // impl block / extension / category
+        TypeAlias,              // typedef / using / type / typealias
+        Delegate,               // delegate / std::function / fn type
+
+        // ── Class Members ──────────────────────────────────────────────────
+        Field,                  // member variable
+        Property,               // getter/setter accessor pair
+        Method,                 // function / method / fn
+        Constructor,            // init / ctor / new
+        Destructor,             // dtor / drop / deinit
+        Finalizer,              // ~Object() / non-deterministic cleanup
+        OperatorOverload,       // operator+ / __add__ / func +
+        Indexer,                // this[] / operator[] / __getitem__
+        Event,                  // event / pub-sub callback
+        Constant,               // const / constexpr / static final
+        FreeFunction,           // free-standing function (not a method)
+        ExternVariable,         // extern variable declaration
+        CompanionObject,        // companion object / static class
+
+        // ── Access Levels ──────────────────────────────────────────────────
+        AccessPublic,           // public / pub / +
+        AccessPrivate,          // private / - / fileprivate
+        AccessProtected,        // protected / internal visibility
+        AccessInternal,         // internal / module-internal
+
+        // ── Modifiers ──────────────────────────────────────────────────────
+        StaticModifier,          // static
+        AbstractModifier,        // abstract / pure virtual
+        VirtualModifier,         // virtual
+        OverrideModifier,        // override
+        SealedModifier,          // sealed / final
+        AsyncModifier,           // async
+        ConstModifier,           // const / constexpr / let
+        MutableModifier,         // mutable / mut
+        VolatileModifier,        // volatile
+        ReadOnlyModifier,        // readonly / let
+        ExplicitModifier,        // explicit (C++ constructors)
+        NoexceptModifier,        // noexcept / throws
+        InlineModifier,          // inline / #[inline]
+
+        // ── Statements ─────────────────────────────────────────────────────
+        IfStatement,             // if
+        ElseIfClause,            // else if / elif
+        ElseClause,              // else
+        SwitchStatement,          // switch / case / match
+        MatchStatement,           // match (Rust/Swift pattern matching)
+        ForStatement,             // for (init; cond; incr)
+        ForEachStatement,         // for..in / for..of / foreach
+        WhileStatement,           // while
+        DoWhileStatement,         // do..while / repeat..while
+        TryStatement,             // try / do
+        CatchClause,              // catch / except / rescue
+        FinallyClause,            // finally / ensure
+        ReturnStatement,           // return
+        ThrowStatement,            // throw / raise / panic
+        YieldStatement,            // yield return / co_yield
+        BreakStatement,            // break
+        ContinueStatement,         // continue
+        BlockStatement,             // { } / begin..end / do..end
+        UsingStatement,             // using / with / RAII scope
+        LockStatement,              // lock / synchronized / @synchronized
+        CheckedStatement,            // checked / unchecked
+
+        // ── Expressions ────────────────────────────────────────────────────
+        Literal,                    // 42, "hello", true, null
+        Identifier,                 // variable / type name
+        BinaryExpression,           // a + b, a && b
+        UnaryExpression,            // !a, -a, i++
+        AssignmentExpression,       // a = b, a += b
+        MemberAccessExpression,     // a.b, a->b, A::b
+        InvocationExpression,       // func(args)
+        ObjectCreationExpression,   // new T() / T{} / make()
+        CastExpression,             // (T)expr / as / static_cast
+        IsTypeExpression,           // is / instanceof / typeof
+        ParenthesizedExpression,    // (a + b)
+        TernaryExpression,          // cond ? a : b
+        RangeExpression,             // start..end / start..=end
+        LambdaExpression,            // => / -> / lambda
+        AwaitExpression,             // await / co_await
+        ArrayCreationExpression,     // [1, 2, 3] / {1, 2, 3}
+        TupleExpression,             // (1, "hi") / tuple
+
+        // ── Type Decorations ───────────────────────────────────────────────
+        PointerDecoration,          // T* / *mut T / &T (C++)
+        ReferenceDecoration,        // T& / &T (Rust)
+        NakedDecoration,             // plain T (strip default decoration)
+
+        // ── Special ────────────────────────────────────────────────────────
+        FriendDeclaration,          // friend class / friend function
+        ConstructorInitializer,     // : member(expr) / base(args)
+        DestructorCall,              // ~T() / drop / deinit
+        NewObject,                   // new T() / make_shared / T{}
+        NullLiteral,                 // null / nullptr / nil / None
+        ThisReference,               // this / self / Me
+        BaseReference,               // base / super / __super
+        StringInterpolation,         // $"..." / f"..." / format!
+        ArrayIndexer,                // arr[i] / arr.get(i)
+    }
+}

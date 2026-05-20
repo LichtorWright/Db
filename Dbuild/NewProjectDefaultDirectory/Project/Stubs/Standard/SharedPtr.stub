@@ -1,0 +1,47 @@
+namespace Standard {
+    /// <summary>
+    /// Reference-counted smart pointer for shared ownership.
+    /// Maps to: C++ std::shared_ptr&lt;T&gt;
+    /// </summary>
+    [Represents("std::shared_ptr", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<memory>")]
+    public class SharedPtr<T> where T : class {
+        /// <summary>Constructs an empty shared pointer (null).</summary>
+        public SharedPtr();
+
+        /// <summary>Constructs from a raw pointer.</summary>
+        public SharedPtr(T ptr);
+
+        /// <summary>The number of shared pointers sharing ownership.</summary>
+        [Represents("use_count")]
+        public int UseCount { get; }
+
+        /// <summary>Whether this is the sole owner (use_count == 1).</summary>
+        [Represents("unique")]
+        public bool IsUnique { get; }
+
+        /// <summary>The raw pointer.</summary>
+        [Represents("get")]
+        public T Target { get; }
+
+        /// <summary>Dereferences the stored pointer.</summary>
+        [Represents("operator*")]
+        public T Dereference();
+
+        /// <summary>Accesses the stored pointer via arrow operator.</summary>
+        [Represents("operator->")]
+        public T Arrow();
+
+        /// <summary>Releases ownership (sets to null with no managed object).</summary>
+        public void Reset();
+
+        /// <summary>Releases ownership and takes ownership of ptr.</summary>
+        public void Reset(T ptr);
+
+        /// <summary>Swaps contents with another shared pointer.</summary>
+        [Represents("swap")]
+        public void Swap(SharedPtr<T> other);
+
+        /// <summary>Whether the shared pointer holds a non-null value.</summary>
+        public static implicit operator bool(SharedPtr<T> ptr);
+    }
+}

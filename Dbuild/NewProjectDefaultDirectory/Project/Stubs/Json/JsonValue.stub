@@ -1,0 +1,105 @@
+namespace Json {
+    /// <summary>
+    /// A dynamic JSON value — can hold an object, array, string, number, boolean, or null.
+    /// Use indexing to navigate, and explicit cast methods to extract typed values.
+    /// Maps to: C++ nlohmann::json
+    /// </summary>
+    [Represents("nlohmann::json", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<nlohmann/json.hpp>")]
+    public class JsonValue {
+        public JsonValue();
+
+        // ── Parsing ───────────────────────────────────────────────────────────
+
+        /// <summary>Parses a JSON string and returns the root value.</summary>
+        [Represents("nlohmann::json::parse", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<nlohmann/json.hpp>")]
+        public static JsonValue Parse(string json);
+
+        /// <summary>Like Parse but returns null instead of throwing on invalid input.</summary>
+        [Represents("nlohmann::json::accept", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<nlohmann/json.hpp>")]
+        public static JsonValue TryParse(string json);
+
+        // ── Serialization ─────────────────────────────────────────────────────
+
+        /// <summary>Serializes the value to a compact JSON string.</summary>
+        [Represents("dump")]
+        public string Serialize();
+
+        /// <summary>Serializes with indentation (spaces per level).</summary>
+        [Represents("dump")]
+        public string Serialize(int indent);
+
+        // ── Type queries ──────────────────────────────────────────────────────
+
+        [Represents("is_object")]  public bool IsObject  { get; }
+        [Represents("is_array")]   public bool IsArray   { get; }
+        [Represents("is_string")]  public bool IsString  { get; }
+        [Represents("is_number")]  public bool IsNumber  { get; }
+        [Represents("is_boolean")] public bool IsBoolean { get; }
+        [Represents("is_null")]    public bool IsNull    { get; }
+
+        /// <summary>Number of elements (for objects and arrays).</summary>
+        [Represents("size")]
+        public int Count { get; }
+
+        /// <summary>True if the array or object contains no elements.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        // ── Object access ─────────────────────────────────────────────────────
+
+        /// <summary>Gets the child value at key (object) or creates it.</summary>
+        [Represents("operator[]")]
+        public JsonValue this[string key] { get; set; }
+
+        /// <summary>Gets the child value at index (array).</summary>
+        [Represents("operator[]")]
+        public JsonValue this[int index] { get; set; }
+
+        /// <summary>Returns true and sets value if key exists; false otherwise.</summary>
+        [Represents("contains")]
+        public bool Contains(string key);
+
+        /// <summary>Removes the key from an object.</summary>
+        [Represents("erase")]
+        public void Remove(string key);
+
+        /// <summary>Returns all keys of a JSON object.</summary>
+        [Represents("items")]
+        public string[] Keys();
+
+        // ── Value extraction ──────────────────────────────────────────────────
+
+        [Represents("get<std::string>()")] public string  AsString();
+        [Represents("get<int64_t>()")]     public long    AsLong();
+        [Represents("get<double>()")]      public double  AsDouble();
+        [Represents("get<bool>()")]        public bool    AsBool();
+        [Represents("get<int>()")]         public int     AsInt();
+        [Represents("get<float>()")]       public float   AsFloat();
+
+        // ── Array helpers ─────────────────────────────────────────────────────
+
+        /// <summary>Appends a value to a JSON array.</summary>
+        [Represents("push_back")]
+        public void Add(JsonValue value);
+
+        [Represents("push_back")] public void Add(string value);
+        [Represents("push_back")] public void Add(long value);
+        [Represents("push_back")] public void Add(double value);
+        [Represents("push_back")] public void Add(bool value);
+
+        /// <summary>Removes the element at the given index from an array.</summary>
+        [Represents("erase")]
+        public void RemoveAt(int index);
+
+        // ── Factory methods ───────────────────────────────────────────────────
+
+        [Represents("nlohmann::json::object", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<nlohmann/json.hpp>")] public static JsonValue NewObject();
+        [Represents("nlohmann::json::array",  CodePart.Member, Language.Cpp, MemberAccess.Colons, "<nlohmann/json.hpp>")] public static JsonValue NewArray();
+
+        // ── Merge ─────────────────────────────────────────────────────────────
+
+        /// <summary>Merges other into this object (keys from other overwrite).</summary>
+        [Represents("merge_patch")]
+        public void Merge(JsonValue other);
+    }
+}

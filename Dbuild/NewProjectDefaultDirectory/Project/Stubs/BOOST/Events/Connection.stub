@@ -1,0 +1,54 @@
+namespace Boost.Events {
+    /// <summary>
+    /// A handle to a slot connected to a Signal.  Call Disconnect() to remove
+    /// the handler from its signal.  A default-constructed Connection is not
+    /// connected to anything.
+    /// Maps to: C++ boost::signals2::connection
+    /// </summary>
+    [Represents("boost::signals2::connection", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/signals2.hpp>")]
+    public class Connection {
+        /// <summary>Constructs a disconnected connection handle.</summary>
+        public Connection();
+
+        /// <summary>Removes the associated handler from its signal.</summary>
+        [Represents("disconnect")]
+        public void Disconnect();
+
+        /// <summary>True if the handler is still connected to its signal.</summary>
+        [Represents("connected")]
+        public bool IsConnected { get; }
+
+        /// <summary>
+        /// Temporarily prevents the handler from being called without disconnecting it.
+        /// Returns a ScopedBlocker — the block is lifted when the blocker is disposed.
+        /// </summary>
+        [Represents("block")]
+        public void Block();
+
+        /// <summary>Lifts a block previously applied via Block().</summary>
+        [Represents("unblock")]
+        public void Unblock();
+    }
+
+    /// <summary>
+    /// An RAII connection handle that automatically disconnects on destruction (end of scope).
+    /// Use when you want a handler whose lifetime is tied to an enclosing object.
+    /// Maps to: C++ boost::signals2::scoped_connection
+    /// </summary>
+    [Represents("boost::signals2::scoped_connection", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/signals2.hpp>")]
+    public class ScopedConnection {
+        /// <summary>Constructs from an existing Connection, taking ownership.</summary>
+        public ScopedConnection(Connection connection);
+
+        /// <summary>
+        /// Releases ownership without disconnecting.
+        /// Returns the underlying Connection for manual management.
+        /// </summary>
+        [Represents("release")]
+        public Connection Release();
+
+        /// <summary>True if the handler is still connected.</summary>
+        [Represents("connected")]
+        public bool IsConnected { get; }
+    }
+}

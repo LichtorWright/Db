@@ -1,0 +1,160 @@
+namespace GMP {
+    /// <summary>
+    /// Arbitrary-precision floating-point number backed by MPFR.
+    /// Provides correctly-rounded results for all basic operations and a full
+    /// set of transcendental functions, each accurate to the last bit.
+    /// Precision is specified in bits; 53 bits ≈ double, 113 bits ≈ quad.
+    /// Maps to: C++ mpfr::mpreal  (include mpreal.h, link -lmpfr -lgmp)
+    /// </summary>
+    [Represents("mpfr::mpreal", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<mpreal.h>")]
+    public class BigDecimal {
+
+        // ── Constructors ──────────────────────────────────────────────────────
+
+        /// <summary>Constructs zero at the default precision (initially 64 bits).</summary>
+        public BigDecimal();
+
+        /// <summary>Constructs from a double at the given precision in bits.</summary>
+        public BigDecimal(double value, int precisionBits);
+
+        /// <summary>Constructs from a double using the current default precision.</summary>
+        public BigDecimal(double value);
+
+        /// <summary>Constructs from a BigInteger.</summary>
+        public BigDecimal(BigInteger value, int precisionBits);
+
+        /// <summary>Parses a decimal or scientific-notation string at the given precision.</summary>
+        public BigDecimal(string text, int precisionBits);
+
+        /// <summary>Parses at the current default precision.</summary>
+        public BigDecimal(string text);
+
+        // ── Precision control ─────────────────────────────────────────────────
+
+        /// <summary>Precision of this value in bits.</summary>
+        [Represents("getPrecision")]
+        public int Precision { get; }
+
+        /// <summary>Returns a copy of this value at the new precision (rounded).</summary>
+        [Represents("mpfr::mpreal")]
+        public BigDecimal WithPrecision(int bits);
+
+        /// <summary>Sets the default precision for all newly constructed BigDecimals.</summary>
+        [Represents("mpfr::mpreal::set_default_prec", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<mpreal.h>")]
+        public static void SetDefaultPrecision(int bits);
+
+        /// <summary>Returns the current global default precision in bits.</summary>
+        [Represents("mpfr::mpreal::get_default_prec", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<mpreal.h>")]
+        public static int GetDefaultPrecision();
+
+        // ── Arithmetic ────────────────────────────────────────────────────────
+
+        [Represents("operator+")] public BigDecimal Add(BigDecimal other);
+        [Represents("operator-")] public BigDecimal Subtract(BigDecimal other);
+        [Represents("operator*")] public BigDecimal Multiply(BigDecimal other);
+        [Represents("operator/")] public BigDecimal Divide(BigDecimal other);
+        [Represents("operator-")] public BigDecimal Negate();
+
+        // ── Comparison ────────────────────────────────────────────────────────
+
+        [Represents("operator==")] public bool Equals(BigDecimal other);
+        [Represents("operator<")]  public bool LessThan(BigDecimal other);
+        [Represents("operator>")]  public bool GreaterThan(BigDecimal other);
+        [Represents("mpfr::cmp")]  public int  CompareTo(BigDecimal other);
+
+        /// <summary>The sign: -1, 0, or 1.</summary>
+        [Represents("mpfr::sgn")]
+        public int Sign { get; }
+
+        [Represents("mpfr::isnan")]    public bool IsNaN     { get; }
+        [Represents("mpfr::isinf")]    public bool IsInfinity { get; }
+        [Represents("mpfr::isfinite")] public bool IsFinite  { get; }
+        [Represents("mpfr::iszero")]   public bool IsZero    { get; }
+
+        // ── Math functions (all correctly rounded) ────────────────────────────
+
+        [Represents("mpfr::abs")]   public BigDecimal Abs();
+        [Represents("mpfr::sqrt")]  public BigDecimal Sqrt();
+        [Represents("mpfr::cbrt")]  public BigDecimal Cbrt();
+        [Represents("mpfr::pow")]   public BigDecimal Pow(BigDecimal exp);
+        [Represents("mpfr::pow")]   public BigDecimal Pow(long exp);
+        [Represents("mpfr::exp")]   public BigDecimal Exp();
+        [Represents("mpfr::exp2")]  public BigDecimal Exp2();
+        [Represents("mpfr::exp10")] public BigDecimal Exp10();
+        [Represents("mpfr::log")]   public BigDecimal Log();
+        [Represents("mpfr::log2")]  public BigDecimal Log2();
+        [Represents("mpfr::log10")] public BigDecimal Log10();
+
+        [Represents("mpfr::sin")]   public BigDecimal Sin();
+        [Represents("mpfr::cos")]   public BigDecimal Cos();
+        [Represents("mpfr::tan")]   public BigDecimal Tan();
+        [Represents("mpfr::asin")]  public BigDecimal Asin();
+        [Represents("mpfr::acos")]  public BigDecimal Acos();
+        [Represents("mpfr::atan")]  public BigDecimal Atan();
+        [Represents("mpfr::atan2")] public BigDecimal Atan2(BigDecimal x);
+
+        [Represents("mpfr::sinh")]  public BigDecimal Sinh();
+        [Represents("mpfr::cosh")]  public BigDecimal Cosh();
+        [Represents("mpfr::tanh")]  public BigDecimal Tanh();
+        [Represents("mpfr::asinh")] public BigDecimal Asinh();
+        [Represents("mpfr::acosh")] public BigDecimal Acosh();
+        [Represents("mpfr::atanh")] public BigDecimal Atanh();
+
+        [Represents("mpfr::ceil")]  public BigDecimal Ceiling();
+        [Represents("mpfr::floor")] public BigDecimal Floor();
+        [Represents("mpfr::trunc")] public BigDecimal Truncate();
+        [Represents("mpfr::round")] public BigDecimal Round();
+
+        [Represents("mpfr::gamma")] public BigDecimal Gamma();
+        [Represents("mpfr::lngamma")] public BigDecimal LogGamma();
+        [Represents("mpfr::erf")]   public BigDecimal Erf();
+        [Represents("mpfr::erfc")]  public BigDecimal Erfc();
+
+        // ── Correctly-rounded constants at any precision ──────────────────────
+
+        /// <summary>π at the current default precision.</summary>
+        [Represents("mpfr::const_pi()", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<mpreal.h>")]
+        public static BigDecimal Pi { get; }
+
+        /// <summary>Euler's number e at the current default precision.</summary>
+        [Represents("mpfr::exp(mpfr::mpreal(1))", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<mpreal.h>")]
+        public static BigDecimal E { get; }
+
+        /// <summary>Euler-Mascheroni constant γ ≈ 0.5772…</summary>
+        [Represents("mpfr::const_euler()", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<mpreal.h>")]
+        public static BigDecimal EulerGamma { get; }
+
+        /// <summary>Natural log of 2 at the current default precision.</summary>
+        [Represents("mpfr::const_log2()", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<mpreal.h>")]
+        public static BigDecimal Ln2 { get; }
+
+        [Represents("mpfr::mpreal(0)", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<mpreal.h>")]
+        public static BigDecimal Zero { get; }
+
+        [Represents("mpfr::mpreal(1)", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<mpreal.h>")]
+        public static BigDecimal One { get; }
+
+        [Represents("mpfr::const_infinity()", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<mpreal.h>")]
+        public static BigDecimal Infinity { get; }
+
+        // ── Conversion ────────────────────────────────────────────────────────
+
+        /// <summary>Returns the closest double (may lose precision).</summary>
+        [Represents("mpfr::toDouble")]
+        public double ToDouble();
+
+        /// <summary>Returns the truncated BigInteger part.</summary>
+        [Represents("mpfr::trunc")]
+        public BigInteger ToBigInteger();
+
+        /// <summary>
+        /// Returns a decimal string with the given number of significant digits.
+        /// </summary>
+        [Represents("mpfr::toString")]
+        public string ToString(int significantDigits);
+
+        /// <summary>Returns a decimal string with all significant digits.</summary>
+        [Represents("mpfr::toString")]
+        public string ToString();
+    }
+}

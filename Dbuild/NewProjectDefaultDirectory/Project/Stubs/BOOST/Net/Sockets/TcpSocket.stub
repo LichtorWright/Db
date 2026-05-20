@@ -1,0 +1,118 @@
+namespace Boost.Net.Sockets {
+    /// <summary>
+    /// A connected TCP stream socket.  Construct it with an IoContext, then
+    /// either Connect() synchronously or ConnectAsync() to establish a connection
+    /// before reading or writing.
+    /// Maps to: C++ boost::asio::ip::tcp::socket
+    /// </summary>
+    [Represents("boost::asio::ip::tcp::socket", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/asio.hpp>")]
+    public class TcpSocket {
+        /// <summary>Constructs an unconnected socket.</summary>
+        public TcpSocket(IoContext context);
+
+        // ── Connection ────────────────────────────────────────────────────────
+
+        /// <summary>Synchronously connects to the given endpoint.</summary>
+        [Represents("connect")]
+        public void Connect(TcpEndpoint endpoint);
+
+        /// <summary>Synchronously connects; sets ec instead of throwing.</summary>
+        [Represents("connect")]
+        public void Connect(TcpEndpoint endpoint, out ErrorCode ec);
+
+        /// <summary>Asynchronously connects to the endpoint.  Handler receives ErrorCode.</summary>
+        [Represents("async_connect")]
+        public void ConnectAsync(TcpEndpoint endpoint, Action<ErrorCode> handler);
+
+        // ── Reading ───────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Reads up to buffer.Length bytes into buffer.
+        /// Returns the number of bytes actually read.
+        /// </summary>
+        [Represents("read_some")]
+        public int Read(byte[] buffer);
+
+        /// <summary>Reads up to buffer.Length bytes; sets ec instead of throwing.</summary>
+        [Represents("read_some")]
+        public int Read(byte[] buffer, out ErrorCode ec);
+
+        /// <summary>
+        /// Asynchronously reads up to buffer.Length bytes.
+        /// Handler receives (ErrorCode, bytesTransferred).
+        /// </summary>
+        [Represents("async_read_some")]
+        public void ReadAsync(byte[] buffer, Action<ErrorCode, int> handler);
+
+        // ── Writing ───────────────────────────────────────────────────────────
+
+        /// <summary>Writes bytes from buffer.  Returns number of bytes sent.</summary>
+        [Represents("write_some")]
+        public int Write(byte[] buffer);
+
+        /// <summary>Writes bytes; sets ec instead of throwing.</summary>
+        [Represents("write_some")]
+        public int Write(byte[] buffer, out ErrorCode ec);
+
+        /// <summary>
+        /// Asynchronously sends buffer contents.
+        /// Handler receives (ErrorCode, bytesTransferred).
+        /// </summary>
+        [Represents("async_write_some")]
+        public void WriteAsync(byte[] buffer, Action<ErrorCode, int> handler);
+
+        // ── Lifecycle ─────────────────────────────────────────────────────────
+
+        /// <summary>Closes the socket, cancelling all pending async operations.</summary>
+        [Represents("close")]
+        public void Close();
+
+        /// <summary>Closes; sets ec instead of throwing.</summary>
+        [Represents("close")]
+        public void Close(out ErrorCode ec);
+
+        /// <summary>Cancels all async operations without closing the socket.</summary>
+        [Represents("cancel")]
+        public void Cancel();
+
+        /// <summary>
+        /// Disables send, receive, or both.
+        /// Use ShutdownType.Both for a clean connection teardown.
+        /// </summary>
+        [Represents("shutdown")]
+        public void Shutdown(ShutdownType type);
+
+        // ── Properties ────────────────────────────────────────────────────────
+
+        /// <summary>True if the socket is open.</summary>
+        [Represents("is_open")]
+        public bool IsOpen { get; }
+
+        /// <summary>The local endpoint this socket is bound to.</summary>
+        [Represents("local_endpoint")]
+        public TcpEndpoint LocalEndpoint { get; }
+
+        /// <summary>The remote endpoint this socket is connected to.</summary>
+        [Represents("remote_endpoint")]
+        public TcpEndpoint RemoteEndpoint { get; }
+    }
+
+    /// <summary>
+    /// Controls which direction(s) of a socket are shut down.
+    /// Maps to: C++ boost::asio::ip::tcp::socket::shutdown_type
+    /// </summary>
+    [Represents("boost::asio::ip::tcp::socket::shutdown_type", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<boost/asio.hpp>")]
+    public enum ShutdownType {
+        /// <summary>Disables further receives.</summary>
+        [Represents("shutdown_receive")]
+        Receive,
+
+        /// <summary>Disables further sends.</summary>
+        [Represents("shutdown_send")]
+        Send,
+
+        /// <summary>Disables both sends and receives.</summary>
+        [Represents("shutdown_both")]
+        Both
+    }
+}

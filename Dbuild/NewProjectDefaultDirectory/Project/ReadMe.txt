@@ -1,0 +1,1 @@
+The "Project" folder is a neccessary part of building this program or library. If it is removed you will need to generate a new project and import your previous project files.

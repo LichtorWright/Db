@@ -1,0 +1,77 @@
+namespace GMP {
+    /// <summary>
+    /// Arbitrary-precision binary floating-point backed by GMP's mpf_class.
+    /// Unlike BigDecimal (MPFR), rounding mode is not guaranteed per-operation —
+    /// use BigDecimal when you need IEEE-754-style correct rounding guarantees.
+    /// Use BigFloat when you need raw GMP float speed without MPFR overhead.
+    /// Maps to: C++ mpf_class  (include gmpxx.h, link -lgmp)
+    /// </summary>
+    [Represents("mpf_class", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<gmpxx.h>")]
+    public class BigFloat {
+
+        // ── Constructors ──────────────────────────────────────────────────────
+
+        /// <summary>Constructs zero at the default precision.</summary>
+        public BigFloat();
+
+        /// <summary>Constructs from a double at the given precision in bits.</summary>
+        public BigFloat(double value, int precisionBits);
+
+        /// <summary>Constructs from a double at the default precision.</summary>
+        public BigFloat(double value);
+
+        /// <summary>Constructs from a BigInteger.</summary>
+        public BigFloat(BigInteger value, int precisionBits);
+
+        /// <summary>Parses from a decimal string at the given precision.</summary>
+        public BigFloat(string text, int precisionBits);
+
+        // ── Precision ─────────────────────────────────────────────────────────
+
+        /// <summary>Precision of this value in bits.</summary>
+        [Represents("get_prec")]
+        public int Precision { get; }
+
+        /// <summary>Sets this value's precision in bits (may reduce precision).</summary>
+        [Represents("set_prec")]
+        public void SetPrecision(int bits);
+
+        /// <summary>Sets the global default precision for newly constructed BigFloats.</summary>
+        [Represents("mpf_set_default_prec", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<gmpxx.h>")]
+        public static void SetDefaultPrecision(int bits);
+
+        // ── Arithmetic ────────────────────────────────────────────────────────
+
+        [Represents("operator+")] public BigFloat Add(BigFloat other);
+        [Represents("operator-")] public BigFloat Subtract(BigFloat other);
+        [Represents("operator*")] public BigFloat Multiply(BigFloat other);
+        [Represents("operator/")] public BigFloat Divide(BigFloat other);
+        [Represents("operator-")] public BigFloat Negate();
+
+        // ── Math ──────────────────────────────────────────────────────────────
+
+        [Represents("sqrt")]    public BigFloat Sqrt();
+        [Represents("abs")]     public BigFloat Abs();
+
+        /// <summary>Returns 2 raised to this exponent (integer exponent).</summary>
+        [Represents("mpf_mul_2exp")]
+        public BigFloat Ldexp(long exponent);
+
+        // ── Comparison ────────────────────────────────────────────────────────
+
+        [Represents("operator==")] public bool Equals(BigFloat other);
+        [Represents("operator<")]  public bool LessThan(BigFloat other);
+        [Represents("operator>")]  public bool GreaterThan(BigFloat other);
+        [Represents("cmp")]        public int  CompareTo(BigFloat other);
+        [Represents("sgn")]        public int  Sign { get; }
+
+        // ── Conversion ────────────────────────────────────────────────────────
+
+        [Represents("get_d")]   public double      ToDouble();
+        [Represents("get_si")]  public long        ToInt64();
+
+        /// <summary>Returns a decimal string with the given number of digits.</summary>
+        [Represents("get_str")] public string ToString(int digits);
+        [Represents("get_str")] public string ToString();
+    }
+}

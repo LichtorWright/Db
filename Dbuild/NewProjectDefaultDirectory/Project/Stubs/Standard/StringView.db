@@ -1,0 +1,117 @@
+namespace Standard {
+    /// <summary>
+    /// Non-owning reference to a character sequence.
+    /// Maps to: C++ std::string_view
+    /// </summary>
+    [Represents("std::string_view")]
+    public class StringView {
+        /// <summary>Constructs an empty string view.</summary>
+        public StringView();
+
+        /// <summary>Constructs from a string.</summary>
+        public StringView(string str);
+
+        /// <summary>Constructs from a character pointer and length.</summary>
+        public StringView(char* str, int length);
+
+        /// <summary>The number of characters.</summary>
+        [Represents("length")]
+        public int Length { get; }
+
+        /// <summary>The sentinel value for "not found" search results.</summary>
+        [Represents("npos")]
+        public static int NotFound { get; }
+
+        /// <summary>The maximum possible number of characters.</summary>
+        [Represents("max_size")]
+        public int MaxLength { get; }
+
+        /// <summary>Whether the view is empty.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>Accesses the character at the given index.</summary>
+        [Represents("operator[]")]
+        public char this[int index] { get; }
+
+        /// <summary>Returns a slice of this view.</summary>
+        [Represents("substr")]
+        public StringView Slice(int startIndex, int length = -1);
+
+        /// <summary>Removes characters from the front.</summary>
+        [Represents("remove_prefix")]
+        public void TrimStart(int count);
+
+        /// <summary>Removes characters from the back.</summary>
+        [Represents("remove_suffix")]
+        public void TrimEnd(int count);
+
+        /// <summary>Finds the first occurrence of value.</summary>
+        [Represents("find")]
+        public int IndexOf(string value);
+
+        /// <summary>Finds the last occurrence of value.</summary>
+        [Represents("rfind")]
+        public int LastIndexOf(string value);
+
+        /// <summary>Finds the first character matching any in chars.</summary>
+        [Represents("find_first_of")]
+        public int IndexOfAny(string chars);
+
+        /// <summary>Finds the last character matching any in chars.</summary>
+        [Represents("find_last_of")]
+        public int LastIndexOfAny(string chars);
+
+        /// <summary>Tests equality.</summary>
+        [Represents("operator==")]
+        public static bool operator==(StringView left, StringView right);
+
+        /// <summary>Tests inequality.</summary>
+        [Represents("operator!=")]
+        public static bool operator!=(StringView left, StringView right);
+
+        /// <summary>Tests less than (lexicographic).</summary>
+        [Represents("operator<")]
+        public static bool operator<(StringView left, StringView right);
+
+        /// <summary>Tests greater than (lexicographic).</summary>
+        [Represents("operator>")]
+        public static bool operator>(StringView left, StringView right);
+
+        /// <summary>Tests less than or equal.</summary>
+        [Represents("operator<=")]
+        public static bool operator<=(StringView left, StringView right);
+
+        /// <summary>Tests greater than or equal.</summary>
+        [Represents("operator>=")]
+        public static bool operator>=(StringView left, StringView right);
+
+        /// <summary>The first character.</summary>
+        [Represents("front")]
+        public char Front();
+
+        /// <summary>The last character.</summary>
+        [Represents("back")]
+        public char Back();
+
+        /// <summary>Pointer to the character data.</summary>
+        [Represents("data")]
+        public string Data();
+
+        /// <summary>Whether this view starts with the given prefix.</summary>
+        [Represents("starts_with")]
+        public bool StartsWith(string prefix);
+
+        /// <summary>Whether this view ends with the given suffix.</summary>
+        [Represents("ends_with")]
+        public bool EndsWith(string suffix);
+
+        /// <summary>Finds the first character NOT matching any in chars.</summary>
+        [Represents("find_first_not_of")]
+        public int IndexOfNotAny(string chars);
+
+        /// <summary>Finds the last character NOT matching any in chars.</summary>
+        [Represents("find_last_not_of")]
+        public int LastIndexOfNotAny(string chars);
+    }
+}

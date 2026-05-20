@@ -1,0 +1,198 @@
+namespace Standard {
+    /// <summary>
+    /// Reads and writes a file as a stream of bytes or text lines.
+    /// Maps to: C++ std::fstream
+    /// </summary>
+    [Represents("std::fstream", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<fstream>")]
+    public class FileStream {
+        /// <summary>Opens the file at path for reading and writing.</summary>
+        public FileStream(string path);
+        /// <summary>Opens with explicit mode flags (e.g. "in", "out", "app", "binary").</summary>
+        public FileStream(string path, string mode);
+
+        /// <summary>True while the stream is in a valid (non-error) state.</summary>
+        [Represents("good")]   public bool IsGood    { get; }
+        /// <summary>True if the end-of-file bit is set.</summary>
+        [Represents("eof")]    public bool IsEof     { get; }
+        /// <summary>True if a non-recoverable error has occurred.</summary>
+        [Represents("fail")]   public bool HasFailed { get; }
+
+        /// <summary>Reads a single line (up to newline) from the file.</summary>
+        [Represents("std::getline")]
+        public bool ReadLine(out string line);
+
+        /// <summary>Writes text followed by a newline to the file.</summary>
+        [Represents("operator<<")]
+        public void WriteLine(string text);
+
+        /// <summary>Writes text to the file without a trailing newline.</summary>
+        [Represents("operator<<")]
+        public void Write(string text);
+
+        /// <summary>Reads the entire remaining file content as a string.</summary>
+        [Represents("rdbuf")]
+        public string ReadToEnd();
+
+        /// <summary>Flushes any buffered writes to the operating system.</summary>
+        [Represents("flush")]
+        public void Flush();
+
+        /// <summary>Closes the file and releases the OS handle.</summary>
+        [Represents("close")]
+        public void Close();
+
+        /// <summary>True if the file was successfully opened.</summary>
+        [Represents("is_open")]
+        public bool IsOpen { get; }
+
+        /// <summary>Seeks to the given byte offset from the beginning.</summary>
+        [Represents("seekg")]
+        public void SeekRead(long offset);
+
+        /// <summary>Returns the current read position in bytes.</summary>
+        [Represents("tellg")]
+        public long ReadPosition { get; }
+
+        /// <summary>Seeks the write position to the given byte offset.</summary>
+        [Represents("seekp")]
+        public void SeekWrite(long offset);
+
+        /// <summary>Returns the current write position in bytes.</summary>
+        [Represents("tellp")]
+        public long WritePosition { get; }
+    }
+
+    /// <summary>
+    /// Reads-only file stream.  Use when you only need to read.
+    /// Maps to: C++ std::ifstream
+    /// </summary>
+    [Represents("std::ifstream", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<fstream>")]
+    public class FileReader {
+        public FileReader(string path);
+
+        [Represents("good")]         public bool IsGood    { get; }
+        [Represents("eof")]          public bool IsEof     { get; }
+        [Represents("fail")]         public bool HasFailed { get; }
+        [Represents("is_open")]      public bool IsOpen    { get; }
+        [Represents("std::getline")] public bool ReadLine(out string line);
+        [Represents("rdbuf")]        public string ReadToEnd();
+        [Represents("seekg")]        public void Seek(long offset);
+        [Represents("tellg")]        public long Position { get; }
+        [Represents("close")]        public void Close();
+    }
+
+    /// <summary>
+    /// Write-only file stream.  Use when you only need to write.
+    /// Maps to: C++ std::ofstream
+    /// </summary>
+    [Represents("std::ofstream", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<fstream>")]
+    public class FileWriter {
+        public FileWriter(string path);
+        /// <summary>Append mode — new content goes to the end of the file.</summary>
+        public FileWriter(string path, bool append);
+
+        [Represents("good")]      public bool IsGood { get; }
+        [Represents("fail")]      public bool HasFailed { get; }
+        [Represents("is_open")]   public bool IsOpen { get; }
+        [Represents("operator<<")] public void Write(string text);
+        [Represents("operator<<")] public void WriteLine(string text);
+        [Represents("flush")]     public void Flush();
+        [Represents("seekp")]     public void Seek(long offset);
+        [Represents("tellp")]     public long Position { get; }
+        [Represents("close")]     public void Close();
+    }
+
+    /// <summary>
+    /// An in-memory string buffer that behaves like a stream.
+    /// Useful for building strings incrementally or parsing sub-strings.
+    /// Maps to: C++ std::stringstream
+    /// </summary>
+    [Represents("std::stringstream", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<sstream>")]
+    public class StringStream {
+        public StringStream();
+        /// <summary>Initialises the buffer with the given string.</summary>
+        public StringStream(string initial);
+
+        /// <summary>Returns the entire buffer as a string.</summary>
+        [Represents("str")]
+        public string ToString();
+
+        /// <summary>Replaces the buffer contents.</summary>
+        [Represents("str")]
+        public void SetString(string value);
+
+        /// <summary>Appends text to the buffer.</summary>
+        [Represents("operator<<")]
+        public void Write(string text);
+
+        [Represents("operator<<")] public void Write(int value);
+        [Represents("operator<<")] public void Write(long value);
+        [Represents("operator<<")] public void Write(double value);
+        [Represents("operator<<")] public void Write(float value);
+
+        /// <summary>Reads the next whitespace-delimited token into value.</summary>
+        [Represents("operator>>")]
+        public bool Read(out string value);
+
+        [Represents("operator>>")] public bool Read(out int value);
+        [Represents("operator>>")] public bool Read(out double value);
+
+        [Represents("good")] public bool IsGood { get; }
+        [Represents("eof")]  public bool IsEof  { get; }
+
+        /// <summary>Clears all error/eof flags and resets the buffer.</summary>
+        [Represents("clear")]
+        public void Clear();
+    }
+
+    /// <summary>
+    /// Standard input/output and error streams for the process.
+    /// Maps to: C++ std::cout / std::cin / std::cerr
+    /// </summary>
+    [Represents("", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<iostream>")]
+    public static class Console {
+        // ── Output ────────────────────────────────────────────────────────────
+
+        /// <summary>Writes text to standard output followed by a newline.</summary>
+        [Represents("std::cout << {0} << '\\n'")]
+        public static void WriteLine(string text);
+
+        [Represents("std::cout << {0} << '\\n'")] public static void WriteLine(int value);
+        [Represents("std::cout << {0} << '\\n'")] public static void WriteLine(long value);
+        [Represents("std::cout << {0} << '\\n'")] public static void WriteLine(double value);
+        [Represents("std::cout << {0} << '\\n'")] public static void WriteLine(bool value);
+
+        /// <summary>Writes text to standard output without a trailing newline.</summary>
+        [Represents("std::cout << {0}")]
+        public static void Write(string text);
+
+        [Represents("std::cout << {0}")] public static void Write(int value);
+        [Represents("std::cout << {0}")] public static void Write(double value);
+
+        /// <summary>Writes text to standard error followed by a newline.</summary>
+        [Represents("std::cerr << {0} << '\\n'")]
+        public static void WriteError(string text);
+
+        [Represents("std::cerr << {0} << '\\n'")] public static void WriteError(int value);
+        [Represents("std::cerr << {0} << '\\n'")] public static void WriteError(double value);
+
+        // ── Input ─────────────────────────────────────────────────────────────
+
+        /// <summary>Reads one line from standard input.  Returns null at EOF.</summary>
+        [Represents("std::getline(std::cin, {0})")]
+        public static string ReadLine();
+
+        /// <summary>Reads a whitespace-delimited token from standard input.</summary>
+        [Represents("std::cin >> {0}")]
+        public static string Read();
+
+        [Represents("std::cin >> {0}")] public static int    ReadInt();
+        [Represents("std::cin >> {0}")] public static double ReadDouble();
+
+        // ── Control ───────────────────────────────────────────────────────────
+
+        /// <summary>Flushes the stdout buffer.</summary>
+        [Represents("std::cout.flush()")]
+        public static void Flush();
+    }
+}

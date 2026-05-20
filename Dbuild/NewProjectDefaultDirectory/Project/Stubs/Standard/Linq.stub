@@ -1,0 +1,244 @@
+namespace Standard {
+    /// <summary>
+    /// LINQ-style free functions for List&lt;T&gt;.
+    /// Used with Db's pipeline syntax:
+    ///   myList, Where(pred), Select(fn)
+    ///   → Select(Where(myList, pred), fn) in C++.
+    /// Maps to: C++ &lt;algorithm&gt; / &lt;ranges&gt; / &lt;numeric&gt;
+    /// </summary>
+    [Represents("", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<algorithm>")]
+    public static class Linq {
+
+        // ── Filtering ─────────────────────────────────────────────────────────
+
+        /// <summary>Returns a new list containing only elements satisfying predicate.</summary>
+        [Represents("std::ranges::copy_if")]
+        public static List<T> Where<T>(List<T> source, Func<T, bool> predicate);
+
+        // ── Projection ────────────────────────────────────────────────────────
+
+        /// <summary>Projects each element to a new form.</summary>
+        [Represents("std::ranges::transform")]
+        public static List<TResult> Select<T, TResult>(List<T> source, Func<T, TResult> selector);
+
+        /// <summary>Projects each element to a list and flattens the results.</summary>
+        [Represents("std::ranges::transform")]
+        public static List<TResult> SelectMany<T, TResult>(List<T> source, Func<T, List<TResult>> selector);
+
+        // ── Element search ────────────────────────────────────────────────────
+
+        /// <summary>Returns the first element matching predicate, or default if none.</summary>
+        [Represents("std::ranges::find_if")]
+        public static T FirstOrDefault<T>(List<T> source, Func<T, bool> predicate);
+
+        /// <summary>Returns the first element, or default if the list is empty.</summary>
+        [Represents("std::ranges::find_if")]
+        public static T FirstOrDefault<T>(List<T> source);
+
+        /// <summary>Returns the first element matching predicate. Throws if none.</summary>
+        [Represents("std::ranges::find_if")]
+        public static T First<T>(List<T> source, Func<T, bool> predicate);
+
+        /// <summary>Returns the first element. Throws if empty.</summary>
+        [Represents("front")]
+        public static T First<T>(List<T> source);
+
+        /// <summary>Returns the last element matching predicate, or default if none.</summary>
+        [Represents("std::ranges::find_if")]
+        public static T LastOrDefault<T>(List<T> source, Func<T, bool> predicate);
+
+        /// <summary>Returns the last element, or default if empty.</summary>
+        [Represents("back")]
+        public static T LastOrDefault<T>(List<T> source);
+
+        /// <summary>Returns the single element matching predicate. Throws if 0 or &gt;1.</summary>
+        [Represents("std::ranges::find_if")]
+        public static T Single<T>(List<T> source, Func<T, bool> predicate);
+
+        /// <summary>Returns the single element, or default if none. Throws if &gt;1.</summary>
+        [Represents("std::ranges::find_if")]
+        public static T SingleOrDefault<T>(List<T> source, Func<T, bool> predicate);
+
+        // ── Quantifiers ───────────────────────────────────────────────────────
+
+        /// <summary>True if any element satisfies predicate.</summary>
+        [Represents("std::ranges::any_of")]
+        public static bool Any<T>(List<T> source, Func<T, bool> predicate);
+
+        /// <summary>True if the list has at least one element.</summary>
+        [Represents("std::ranges::any_of")]
+        public static bool Any<T>(List<T> source);
+
+        /// <summary>True if all elements satisfy predicate.</summary>
+        [Represents("std::ranges::all_of")]
+        public static bool All<T>(List<T> source, Func<T, bool> predicate);
+
+        /// <summary>True if no element satisfies predicate.</summary>
+        [Represents("std::ranges::none_of")]
+        public static bool None<T>(List<T> source, Func<T, bool> predicate);
+
+        // ── Counting ──────────────────────────────────────────────────────────
+
+        /// <summary>Returns the number of elements satisfying predicate.</summary>
+        [Represents("std::ranges::count_if")]
+        public static int Count<T>(List<T> source, Func<T, bool> predicate);
+
+        /// <summary>Returns the total element count.</summary>
+        [Represents("std::ranges::distance")]
+        public static int Count<T>(List<T> source);
+
+        // ── Aggregation ───────────────────────────────────────────────────────
+
+        /// <summary>Returns the minimum element (comparable T).</summary>
+        [Represents("std::ranges::min")]
+        public static T Min<T>(List<T> source);
+
+        /// <summary>Returns the minimum value produced by selector.</summary>
+        [Represents("std::ranges::min_element")]
+        public static TKey Min<T, TKey>(List<T> source, Func<T, TKey> selector);
+
+        /// <summary>Returns the maximum element (comparable T).</summary>
+        [Represents("std::ranges::max")]
+        public static T Max<T>(List<T> source);
+
+        /// <summary>Returns the maximum value produced by selector.</summary>
+        [Represents("std::ranges::max_element")]
+        public static TKey Max<T, TKey>(List<T> source, Func<T, TKey> selector);
+
+        /// <summary>Sums all elements (addable T).</summary>
+        [Represents("std::accumulate")]
+        public static T Sum<T>(List<T> source);
+
+        /// <summary>Sums values produced by selector.</summary>
+        [Represents("std::accumulate")]
+        public static TKey Sum<T, TKey>(List<T> source, Func<T, TKey> selector);
+
+        /// <summary>Arithmetic mean of elements (numeric T).</summary>
+        [Represents("std::accumulate")]
+        public static double Average<T>(List<T> source);
+
+        /// <summary>Mean of values produced by selector.</summary>
+        [Represents("std::accumulate")]
+        public static double Average<T, TKey>(List<T> source, Func<T, TKey> selector);
+
+        /// <summary>Reduces with a seed and an accumulator function.</summary>
+        [Represents("std::accumulate")]
+        public static TAccum Aggregate<T, TAccum>(List<T> source, TAccum seed, Func<TAccum, T, TAccum> accumulator);
+
+        // ── Ordering ──────────────────────────────────────────────────────────
+
+        /// <summary>Returns a new list sorted in ascending order by key.</summary>
+        [Represents("std::ranges::sort")]
+        public static List<T> OrderBy<T, TKey>(List<T> source, Func<T, TKey> keySelector);
+
+        /// <summary>Returns a new list sorted in descending order by key.</summary>
+        [Represents("std::ranges::sort")]
+        public static List<T> OrderByDescending<T, TKey>(List<T> source, Func<T, TKey> keySelector);
+
+        /// <summary>Secondary ascending sort (stable).</summary>
+        [Represents("std::ranges::stable_sort")]
+        public static List<T> ThenBy<T, TKey>(List<T> source, Func<T, TKey> keySelector);
+
+        /// <summary>Secondary descending sort (stable).</summary>
+        [Represents("std::ranges::stable_sort")]
+        public static List<T> ThenByDescending<T, TKey>(List<T> source, Func<T, TKey> keySelector);
+
+        /// <summary>Returns a reversed copy of the list.</summary>
+        [Represents("std::ranges::reverse")]
+        public static List<T> Reverse<T>(List<T> source);
+
+        // ── Partitioning ──────────────────────────────────────────────────────
+
+        /// <summary>Returns the first n elements.</summary>
+        [Represents("std::ranges::take")]
+        public static List<T> Take<T>(List<T> source, int count);
+
+        /// <summary>Returns elements while predicate is true.</summary>
+        [Represents("std::ranges::take_while")]
+        public static List<T> TakeWhile<T>(List<T> source, Func<T, bool> predicate);
+
+        /// <summary>Skips the first n elements.</summary>
+        [Represents("std::ranges::drop")]
+        public static List<T> Skip<T>(List<T> source, int count);
+
+        /// <summary>Skips elements while predicate is true, returns the rest.</summary>
+        [Represents("std::ranges::drop_while")]
+        public static List<T> SkipWhile<T>(List<T> source, Func<T, bool> predicate);
+
+        // ── Set operations ────────────────────────────────────────────────────
+
+        /// <summary>Returns distinct elements (duplicates removed).</summary>
+        [Represents("std::unique")]
+        public static List<T> Distinct<T>(List<T> source);
+
+        /// <summary>Returns elements distinct by key selector.</summary>
+        [Represents("std::unique")]
+        public static List<T> DistinctBy<T, TKey>(List<T> source, Func<T, TKey> keySelector);
+
+        /// <summary>Elements also present in other.</summary>
+        [Represents("std::set_intersection")]
+        public static List<T> Intersect<T>(List<T> source, List<T> other);
+
+        /// <summary>Elements not present in other.</summary>
+        [Represents("std::set_difference")]
+        public static List<T> Except<T>(List<T> source, List<T> other);
+
+        /// <summary>Concatenates two lists.</summary>
+        [Represents("std::ranges::copy")]
+        public static List<T> Concat<T>(List<T> source, List<T> other);
+
+        // ── Grouping ──────────────────────────────────────────────────────────
+
+        /// <summary>Groups elements by key; returns a dictionary of key → list.</summary>
+        [Represents("std::unordered_map")]
+        public static Dict<TKey, List<T>> GroupBy<T, TKey>(List<T> source, Func<T, TKey> keySelector);
+
+        // ── Conversion ────────────────────────────────────────────────────────
+
+        /// <summary>Returns a copy as a new List (identity for pipelines).</summary>
+        [Represents("std::vector")]
+        public static List<T> ToList<T>(List<T> source);
+
+        /// <summary>Builds a dictionary keyed by keySelector. Throws on duplicate keys.</summary>
+        [Represents("std::unordered_map")]
+        public static Dict<TKey, T> ToDictionary<T, TKey>(List<T> source, Func<T, TKey> keySelector);
+
+        /// <summary>Builds a dictionary with separate key and value selectors.</summary>
+        [Represents("std::unordered_map")]
+        public static Dict<TKey, TValue> ToDictionary<T, TKey, TValue>(List<T> source, Func<T, TKey> keySelector, Func<T, TValue> valueSelector);
+
+        /// <summary>Converts to a Set (removes duplicates).</summary>
+        [Represents("std::unordered_set")]
+        public static Set<T> ToSet<T>(List<T> source);
+
+        // ── Joining ───────────────────────────────────────────────────────────
+
+        /// <summary>Joins two sequences on matching keys.</summary>
+        [Represents("std::ranges::transform")]
+        public static List<TResult> Join<TOuter, TInner, TKey, TResult>(
+            List<TOuter> outer,
+            List<TInner> inner,
+            Func<TOuter, TKey> outerKeySelector,
+            Func<TInner, TKey> innerKeySelector,
+            Func<TOuter, TInner, TResult> resultSelector);
+
+        // ── Index access ──────────────────────────────────────────────────────
+
+        /// <summary>Returns element at index, or default if out of range.</summary>
+        [Represents("at")]
+        public static T ElementAtOrDefault<T>(List<T> source, int index);
+
+        // ── Containment ───────────────────────────────────────────────────────
+
+        /// <summary>True if source contains item (equality).</summary>
+        [Represents("std::ranges::contains")]
+        public static bool Contains<T>(List<T> source, T item);
+
+        // ── String joining ────────────────────────────────────────────────────
+
+        /// <summary>Concatenates string representations of all elements with a separator.</summary>
+        [Represents("std::accumulate")]
+        public static string StringJoin<T>(List<T> source, string separator);
+    }
+}
+

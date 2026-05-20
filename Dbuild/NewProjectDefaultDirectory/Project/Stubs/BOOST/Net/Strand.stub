@@ -1,0 +1,31 @@
+namespace Boost.Net {
+    /// <summary>
+    /// Serialises handler dispatch so that handlers sharing a strand never run
+    /// concurrently, even when the IoContext is driven by multiple threads.
+    /// Maps to: C++ boost::asio::strand&lt;boost::asio::io_context::executor_type&gt;
+    /// </summary>
+    [Represents("boost::asio::strand<boost::asio::io_context::executor_type>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/asio.hpp>")]
+    public class Strand {
+        /// <summary>Constructs a strand from an IoContext.</summary>
+        public Strand(IoContext context);
+
+        /// <summary>
+        /// Posts a handler to be invoked by the strand.
+        /// The handler runs as if inside the IoContext but serialised with all
+        /// other handlers on this strand.
+        /// </summary>
+        [Represents("post")]
+        public void Post(Action handler);
+
+        /// <summary>
+        /// Dispatches a handler immediately if the current thread is already
+        /// running inside this strand; otherwise posts it.
+        /// </summary>
+        [Represents("dispatch")]
+        public void Dispatch(Action handler);
+
+        /// <summary>True if the calling thread is currently executing inside this strand.</summary>
+        [Represents("running_in_this_thread")]
+        public bool RunningInThisThread { get; }
+    }
+}

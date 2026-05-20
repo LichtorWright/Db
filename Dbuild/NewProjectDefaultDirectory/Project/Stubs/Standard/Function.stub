@@ -1,0 +1,73 @@
+namespace Standard {
+    /// <summary>
+    /// Wraps a callable target (function pointer, lambda, or functor).
+    /// Maps to: C++ std::function&lt;TResult()&gt;
+    /// </summary>
+    [Represents("std::function", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<functional>")]
+    public class Function<TResult> {
+        /// <summary>Constructs an empty function (contains no target).</summary>
+        public Function();
+
+        /// <summary>Constructs from a function pointer.</summary>
+        public Function(TResult (*func)());
+
+        /// <summary>Invokes the stored callable.</summary>
+        public TResult Invoke();
+
+        /// <summary>Whether the function contains a callable target.</summary>
+        [Represents("operator bool")]
+        public static implicit operator bool(Function<TResult> func);
+
+        /// <summary>Swaps contents with another function.</summary>
+        [Represents("swap")]
+        public void Swap(Function<TResult> other);
+    }
+
+    /// <summary>
+    /// Wraps a callable target with one parameter.
+    /// Maps to: C++ std::function&lt;TResult(TArg)&gt;
+    /// </summary>
+    [Represents("std::function", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<functional>")]
+    public class Function<TArg, TResult> {
+        /// <summary>Constructs an empty function (contains no target).</summary>
+        public Function();
+
+        /// <summary>Constructs from a function pointer.</summary>
+        public Function(TResult (*func)(TArg));
+
+        /// <summary>Invokes the stored callable with one argument.</summary>
+        public TResult Invoke(TArg arg);
+
+        /// <summary>Whether the function contains a callable target.</summary>
+        [Represents("operator bool")]
+        public static implicit operator bool(Function<TArg, TResult> func);
+
+        /// <summary>Swaps contents with another function.</summary>
+        [Represents("swap")]
+        public void Swap(Function<TArg, TResult> other);
+    }
+
+    /// <summary>
+    /// Wraps a callable target with two parameters.
+    /// Maps to: C++ std::function&lt;TResult(TArg1, TArg2)&gt;
+    /// </summary>
+    [Represents("std::function", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<functional>")]
+    public class Function<TArg1, TArg2, TResult> {
+        /// <summary>Constructs an empty function (contains no target).</summary>
+        public Function();
+
+        /// <summary>Constructs from a function pointer.</summary>
+        public Function(TResult (*func)(TArg1, TArg2));
+
+        /// <summary>Invokes the stored callable with two arguments.</summary>
+        public TResult Invoke(TArg1 arg1, TArg2 arg2);
+
+        /// <summary>Whether the function contains a callable target.</summary>
+        [Represents("operator bool")]
+        public static implicit operator bool(Function<TArg1, TArg2, TResult> func);
+
+        /// <summary>Swaps contents with another function.</summary>
+        [Represents("swap")]
+        public void Swap(Function<TArg1, TArg2, TResult> other);
+    }
+}

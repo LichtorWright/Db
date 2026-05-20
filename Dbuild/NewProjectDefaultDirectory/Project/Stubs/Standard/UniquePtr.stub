@@ -1,0 +1,42 @@
+namespace Standard {
+    /// <summary>
+    /// Exclusive-ownership smart pointer.
+    /// Maps to: C++ std::unique_ptr&lt;T&gt;
+    /// </summary>
+    [Represents("std::unique_ptr", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<memory>")]
+    public class UniquePtr<T> where T : class {
+        /// <summary>Constructs an empty unique pointer (null).</summary>
+        public UniquePtr();
+
+        /// <summary>Constructs from a raw pointer.</summary>
+        public UniquePtr(T ptr);
+
+        /// <summary>The raw pointer.</summary>
+        [Represents("get")]
+        public T Target { get; }
+
+        /// <summary>Dereferences the stored pointer.</summary>
+        [Represents("operator*")]
+        public T Dereference();
+
+        /// <summary>Accesses the stored pointer via arrow operator.</summary>
+        [Represents("operator->")]
+        public T Arrow();
+
+        /// <summary>Releases ownership and returns the raw pointer.</summary>
+        public T Release();
+
+        /// <summary>Resets to null (deletes the managed object).</summary>
+        public void Reset();
+
+        /// <summary>Resets to take ownership of ptr.</summary>
+        public void Reset(T ptr);
+
+        /// <summary>Swaps contents with another unique pointer.</summary>
+        [Represents("swap")]
+        public void Swap(UniquePtr<T> other);
+
+        /// <summary>Whether the unique pointer holds a non-null value.</summary>
+        public static implicit operator bool(UniquePtr<T> ptr);
+    }
+}

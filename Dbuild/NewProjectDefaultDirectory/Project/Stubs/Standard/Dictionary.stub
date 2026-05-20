@@ -1,0 +1,9 @@
+namespace Standard {
+    /// <summary>
+    /// .NET-familiar alias for Standard.Map.
+    /// Maps to: C++ std::map&lt;TKey, TValue&gt;
+    /// </summary>
+    public class Dictionary<TKey, TValue> : Map<TKey, TValue> {
+        public Dictionary() : base() { }
+    }
+}

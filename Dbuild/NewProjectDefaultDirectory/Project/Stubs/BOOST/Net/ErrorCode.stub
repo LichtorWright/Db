@@ -1,0 +1,49 @@
+namespace Boost.Net {
+    /// <summary>
+    /// Carries a system or library error value and its human-readable message.
+    /// A default-constructed ErrorCode represents success (value == 0).
+    /// Maps to: C++ boost::system::error_code
+    /// </summary>
+    [Represents("boost::system::error_code", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/system/error_code.hpp>")]
+    public class ErrorCode {
+        /// <summary>Constructs a success error code (value 0).</summary>
+        public ErrorCode();
+
+        /// <summary>The numeric error value.  0 means success.</summary>
+        [Represents("value")]
+        public int Value { get; }
+
+        /// <summary>A human-readable description of the error.</summary>
+        [Represents("message")]
+        public string Message { get; }
+
+        /// <summary>
+        /// True when this code represents an actual error (value != 0).
+        /// Equivalent to checking Value != 0.
+        /// </summary>
+        [Represents("operator bool")]
+        public bool HasError { get; }
+
+        /// <summary>Resets this error code to success.</summary>
+        [Represents("clear")]
+        public void Clear();
+
+        // ── Common error constants ────────────────────────────────────────────
+
+        /// <summary>The operation was aborted (e.g. timer cancelled).</summary>
+        [Represents("boost::asio::error::operation_aborted", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/asio.hpp>")]
+        public static ErrorCode OperationAborted { get; }
+
+        /// <summary>Connection refused by the remote host.</summary>
+        [Represents("boost::asio::error::connection_refused", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/asio.hpp>")]
+        public static ErrorCode ConnectionRefused { get; }
+
+        /// <summary>End of file / connection closed cleanly by peer.</summary>
+        [Represents("boost::asio::error::eof", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/asio.hpp>")]
+        public static ErrorCode EndOfFile { get; }
+
+        /// <summary>Host not found (DNS resolution failure).</summary>
+        [Represents("boost::asio::error::host_not_found", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/asio.hpp>")]
+        public static ErrorCode HostNotFound { get; }
+    }
+}

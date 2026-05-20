@@ -1,0 +1,8 @@
+namespace Db
+{
+    /// <summary>
+    /// Marks a variable or parameter as an lvalue reference (T&amp;) in the destination language.
+    /// In C++: int&amp; x — an alias to an existing T.
+    /// </summary>
+    public class ReferenceAttribute { }
+}

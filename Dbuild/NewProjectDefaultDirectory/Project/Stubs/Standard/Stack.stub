@@ -1,0 +1,45 @@
+namespace Standard {
+    /// <summary>
+    /// LIFO stack supporting push and pop at the top.
+    /// Maps to: C++ std::stack&lt;T&gt;
+    /// </summary>
+    [Represents("std::stack", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<stack>")]
+    public class Stack<T> {
+        /// <summary>Constructs an empty stack.</summary>
+        public Stack();
+
+        /// <summary>The number of elements.</summary>
+        [Represents("size")]
+        public int Count { get; }
+
+        /// <summary>Whether the stack is empty.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>The top element.</summary>
+        [Represents("top")]
+        public T Peek();
+
+        /// <summary>Pushes an element onto the stack.</summary>
+        [Represents("push")]
+        public void Push(T item);
+
+        /// <summary>Removes and returns the top element.</summary>
+        [Represents("pop")]
+        public T Pop();
+
+        /// <summary>Swaps contents with another stack.</summary>
+        [Represents("swap")]
+        public void Swap(Stack<T> other);
+
+        /// <summary>Tries to peek at the top element. Returns false if empty.</summary>
+        public bool TryPeek(out T result);
+
+        /// <summary>Tries to pop the top element. Returns false if empty.</summary>
+        public bool TryPop(out T result);
+
+        /// <summary>Constructs an element in place on the stack.</summary>
+        [Represents("emplace")]
+        public void PushInPlace(T item);
+    }
+}

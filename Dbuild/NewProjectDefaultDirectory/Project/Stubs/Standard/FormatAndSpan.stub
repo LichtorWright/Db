@@ -1,0 +1,140 @@
+namespace Standard {
+    /// <summary>
+    /// String formatting, conversion, and parsing utilities.
+    /// Maps to: C++ &lt;format&gt;, &lt;string&gt;, &lt;charconv&gt;
+    /// </summary>
+    [Represents("", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<format>")]
+    public static class Format {
+        // ── Formatting ────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Formats a string using C++20 std::format syntax (e.g. "{0}, {1}").
+        /// Maps to: std::format
+        /// </summary>
+        [Represents("std::format")]
+        public static string Fmt(string format, params object[] args);
+
+        // ── Number → string ───────────────────────────────────────────────────
+
+        [Represents("std::to_string")] public static string ToString(int value);
+        [Represents("std::to_string")] public static string ToString(long value);
+        [Represents("std::to_string")] public static string ToString(uint value);
+        [Represents("std::to_string")] public static string ToString(ulong value);
+        [Represents("std::to_string")] public static string ToString(float value);
+        [Represents("std::to_string")] public static string ToString(double value);
+        [Represents("std::to_string")] public static string ToString(bool value);
+
+        // ── String → number ───────────────────────────────────────────────────
+
+        /// <summary>Parses a decimal integer from string.  Throws on failure.</summary>
+        [Represents("std::stoi")]
+        public static int ParseInt(string s);
+
+        /// <summary>Parses a 64-bit integer from string.</summary>
+        [Represents("std::stoll")]
+        public static long ParseLong(string s);
+
+        /// <summary>Parses an unsigned 64-bit integer from string.</summary>
+        [Represents("std::stoull")]
+        public static ulong ParseULong(string s);
+
+        /// <summary>Parses a 32-bit float from string.</summary>
+        [Represents("std::stof")]
+        public static float ParseFloat(string s);
+
+        /// <summary>Parses a double from string.</summary>
+        [Represents("std::stod")]
+        public static double ParseDouble(string s);
+
+        /// <summary>Parses a long double from string.</summary>
+        [Represents("std::stold")]
+        public static double ParseLongDouble(string s);
+
+        /// <summary>Parses an integer in the given base (2..36).</summary>
+        [Represents("std::stoi")]
+        public static int ParseInt(string s, int base_);
+
+        // ── Safe parse (no-throw) ─────────────────────────────────────────────
+
+        /// <summary>Returns true and sets result if parsing succeeds; false otherwise.</summary>
+        [Represents("std::from_chars")]
+        public static bool TryParseInt(string s, out int result);
+
+        [Represents("std::from_chars")] public static bool TryParseLong(string s,   out long result);
+        [Represents("std::from_chars")] public static bool TryParseDouble(string s, out double result);
+
+        // ── Radix / hex formatting ────────────────────────────────────────────
+
+        /// <summary>Converts value to its hexadecimal representation (no "0x" prefix).</summary>
+        [Represents("std::format(\"{:x}\", {0})")]
+        public static string ToHex(long value);
+
+        [Represents("std::format(\"{:X}\", {0})")] public static string ToHexUpper(long value);
+
+        /// <summary>Converts value to its binary string representation.</summary>
+        [Represents("std::format(\"{:b}\", {0})")]
+        public static string ToBinary(long value);
+
+        /// <summary>Converts value to its octal string representation.</summary>
+        [Represents("std::format(\"{:o}\", {0})")]
+        public static string ToOctal(long value);
+
+        // ── Fixed-precision floating point ────────────────────────────────────
+
+        /// <summary>Formats a double with exactly decimals digits after the decimal point.</summary>
+        [Represents("std::format(\"{:.Nf}\", {0})")]
+        public static string ToFixed(double value, int decimals);
+
+        /// <summary>Formats a double in scientific notation (e.g. "1.23e+04").</summary>
+        [Represents("std::format(\"{:.Ne}\", {0})")]
+        public static string ToScientific(double value, int decimals);
+    }
+
+    /// <summary>
+    /// A non-owning view into a contiguous sequence of elements.
+    /// Use in APIs that want to accept either an array or a vector without copying.
+    /// Maps to: C++ std::span&lt;T&gt;
+    /// </summary>
+    [Represents("std::span", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<span>")]
+    public class Span<T> {
+        /// <summary>Constructs a span over the entire vector/array.</summary>
+        public Span(T[] data);
+
+        /// <summary>Constructs a span over a subrange starting at offset with given length.</summary>
+        public Span(T[] data, int offset, int length);
+
+        /// <summary>Element at index (bounds-checked in debug builds).</summary>
+        [Represents("operator[]")]
+        public T Get(int index);
+
+        [Represents("operator[]")] public void Set(int index, T value);
+
+        /// <summary>Number of elements in the span.</summary>
+        [Represents("size")]
+        public int Count { get; }
+
+        /// <summary>True if Count == 0.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>Returns a sub-span starting at offset.</summary>
+        [Represents("subspan")]
+        public Span<T> Slice(int offset);
+
+        /// <summary>Returns a sub-span starting at offset with given length.</summary>
+        [Represents("subspan")]
+        public Span<T> Slice(int offset, int length);
+
+        /// <summary>Returns the first n elements as a sub-span.</summary>
+        [Represents("first")]
+        public Span<T> First(int n);
+
+        /// <summary>Returns the last n elements as a sub-span.</summary>
+        [Represents("last")]
+        public Span<T> Last(int n);
+
+        /// <summary>Raw pointer to the first element.</summary>
+        [Represents("data")]
+        public IntPtr Data { get; }
+    }
+}

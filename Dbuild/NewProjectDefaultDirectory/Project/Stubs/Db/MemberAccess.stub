@@ -1,0 +1,40 @@
+namespace Db
+{
+    /// <summary>
+    /// Identifies the accessor operator between a receiver and a member.
+    /// Used by the emitter to reconstruct the correct destination-language expression.
+    /// Db source always uses "." or "?." — other values are emitter output directives.
+    /// </summary>
+    public enum MemberAccess
+    {
+        /// <summary>obj.member</summary>
+        Dot,
+
+        /// <summary>obj->member — raw/smart pointers.</summary>
+        Arrow,
+
+        /// <summary>obj: — generic colon form (slicing, dictionaries).</summary>
+        Colon,
+
+        /// <summary>Type::member — static members, namespaces, enum class values.</summary>
+        Colons,
+
+        /// <summary>obj.*member — pointer-to-member.</summary>
+        DotAsterisk,
+
+        /// <summary>obj->*member — pointer-to-member via pointer.</summary>
+        ArrowAsterisk,
+
+        /// <summary>obj?.member — null-conditional.</summary>
+        QuestionMarkDot,
+
+        /// <summary>obj?[index] — null-conditional index.</summary>
+        QuestionMarkBracket,
+
+        /// <summary>obj[index] — index operator.</summary>
+        Bracket,
+
+        /// <summary>No accessor — free functions, constructors, top-level constants.</summary>
+        None,
+    }
+}

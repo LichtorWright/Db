@@ -1,0 +1,70 @@
+namespace Boost.Net.Sockets {
+    /// <summary>
+    /// Listens on a local endpoint and accepts incoming TCP connections.
+    /// Typical pattern: construct → Bind() → Listen() → AcceptAsync() in a loop.
+    /// Maps to: C++ boost::asio::ip::tcp::acceptor
+    /// </summary>
+    [Represents("boost::asio::ip::tcp::acceptor", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/asio.hpp>")]
+    public class TcpAcceptor {
+        /// <summary>Constructs an acceptor not yet bound to any endpoint.</summary>
+        public TcpAcceptor(IoContext context);
+
+        /// <summary>
+        /// Constructs, binds, and starts listening in one step.
+        /// Equivalent to calling Bind(endpoint) then Listen().
+        /// </summary>
+        public TcpAcceptor(IoContext context, TcpEndpoint endpoint);
+
+        // ── Setup ─────────────────────────────────────────────────────────────
+
+        /// <summary>Binds the acceptor to the given local endpoint.</summary>
+        [Represents("bind")]
+        public void Bind(TcpEndpoint endpoint);
+
+        /// <summary>Marks the acceptor as ready to accept connections.</summary>
+        [Represents("listen")]
+        public void Listen();
+
+        /// <summary>Marks the acceptor ready with the given connection backlog.</summary>
+        [Represents("listen")]
+        public void Listen(int backlog);
+
+        // ── Accepting ─────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Synchronously accepts the next incoming connection into socket.
+        /// Blocks until a connection arrives.
+        /// </summary>
+        [Represents("accept")]
+        public void Accept(TcpSocket socket);
+
+        /// <summary>Synchronously accepts; sets ec instead of throwing.</summary>
+        [Represents("accept")]
+        public void Accept(TcpSocket socket, out ErrorCode ec);
+
+        /// <summary>
+        /// Asynchronously waits for and accepts the next connection into socket.
+        /// Handler receives ErrorCode.
+        /// </summary>
+        [Represents("async_accept")]
+        public void AcceptAsync(TcpSocket socket, Action<ErrorCode> handler);
+
+        // ── Lifecycle ─────────────────────────────────────────────────────────
+
+        /// <summary>Closes the acceptor and cancels all pending async operations.</summary>
+        [Represents("close")]
+        public void Close();
+
+        /// <summary>Cancels all pending async operations without closing.</summary>
+        [Represents("cancel")]
+        public void Cancel();
+
+        /// <summary>True if the acceptor is open.</summary>
+        [Represents("is_open")]
+        public bool IsOpen { get; }
+
+        /// <summary>The local endpoint this acceptor is bound to.</summary>
+        [Represents("local_endpoint")]
+        public TcpEndpoint LocalEndpoint { get; }
+    }
+}

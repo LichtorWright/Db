@@ -1,0 +1,9 @@
+namespace Db
+{
+    /// <summary>
+    /// Strips any default type decoration, emitting the type as plain T.
+    /// Use when the emitter would otherwise add a pointer or reference qualifier
+    /// that you want to suppress.
+    /// </summary>
+    public class NakedAttribute { }
+}

@@ -1,0 +1,89 @@
+namespace Standard {
+    /// <summary>
+    /// Represents a Unicode character.
+    /// Maps to: C++ char
+    /// </summary>
+    [Represents("char")]
+    public class Char {
+        /// <summary>Default constructor (initializes to '\\0').</summary>
+        public Char();
+
+        /// <summary>Constructs from a char value.</summary>
+        public Char(char value);
+
+        /// <summary>The minimum char value.</summary>
+        public static char MinValue { get; }
+
+        /// <summary>The maximum char value.</summary>
+        public static char MaxValue { get; }
+
+        /// <summary>Converts to a single-character string.</summary>
+        public override string ToString();
+
+        /// <summary>Parses a single-character string to a Char.</summary>
+        public static Char Parse(string s);
+
+        /// <summary>Safely parses a string to a Char.</summary>
+        public static bool TryParse(string s, out Char result);
+
+        /// <summary>Whether the character is a letter.</summary>
+        public static bool IsLetter(char c);
+
+        /// <summary>Whether the character is a digit.</summary>
+        public static bool IsDigit(char c);
+
+        /// <summary>Whether the character is whitespace.</summary>
+        public static bool IsWhiteSpace(char c);
+
+        /// <summary>Whether the character is uppercase.</summary>
+        public static bool IsUpper(char c);
+
+        /// <summary>Whether the character is lowercase.</summary>
+        public static bool IsLower(char c);
+
+        /// <summary>Converts to lowercase.</summary>
+        public static char ToLower(char c);
+
+        /// <summary>Converts to uppercase.</summary>
+        public static char ToUpper(char c);
+
+        /// <summary>Whether the character is punctuation.</summary>
+        public static bool IsPunctuation(char c);
+
+        /// <summary>Whether the character is a control character.</summary>
+        public static bool IsControl(char c);
+
+        /// <summary>Whether the character is a letter or digit.</summary>
+        public static bool IsLetterOrDigit(char c);
+
+        /// <summary>Whether the character is a separator.</summary>
+        public static bool IsSeparator(char c);
+
+        /// <summary>Gets the numeric value of a digit character, or -1.</summary>
+        public static double GetNumericValue(char c);
+
+        /// <summary>Tests equality.</summary>
+        [Represents("operator==")]
+        public static bool operator==(Char left, Char right);
+
+        /// <summary>Tests inequality.</summary>
+        [Represents("operator!=")]
+        public static bool operator!=(Char left, Char right);
+
+        /// <summary>Less than.</summary>
+        [Represents("operator<")]
+        public static bool operator<(Char left, Char right);
+
+        /// <summary>Greater than.</summary>
+        [Represents("operator>")]
+        public static bool operator>(Char left, Char right);
+
+        /// <summary>Less than or equal.</summary>
+        [Represents("operator<=")]
+        public static bool operator<=(Char left, Char right);
+
+        /// <summary>Greater than or equal.</summary>
+        [Represents("operator>=")]
+        public static bool operator>=(Char left, Char right);
+    }
+}

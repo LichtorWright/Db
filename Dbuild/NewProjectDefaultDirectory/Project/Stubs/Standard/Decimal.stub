@@ -1,0 +1,110 @@
+namespace Standard {
+    /// <summary>
+    /// Represents a decimal number with high precision.
+    /// Maps to: System.Decimal (placeholder — no direct C++ standard equivalent)
+    /// </summary>
+    [Represents("System.Decimal")]
+    public class Decimal {
+        /// <summary>Default constructor (initializes to 0).</summary>
+        public Decimal();
+
+        /// <summary>Constructs from a double (lossy).</summary>
+        public Decimal(double value);
+
+        /// <summary>Constructs from an int.</summary>
+        public Decimal(int value);
+
+        /// <summary>The minimum value.</summary>
+        [Represents("System.Decimal.MinValue")]
+        public static decimal MinValue { get; }
+
+        /// <summary>The maximum value.</summary>
+        [Represents("System.Decimal.MaxValue")]
+        public static decimal MaxValue { get; }
+
+        /// <summary>The value zero.</summary>
+        [Represents("System.Decimal.Zero")]
+        public static decimal Zero { get; }
+
+        /// <summary>The value one.</summary>
+        [Represents("System.Decimal.One")]
+        public static decimal One { get; }
+
+        /// <summary>The value negative one.</summary>
+        [Represents("System.Decimal.MinusOne")]
+        public static decimal MinusOne { get; }
+
+        /// <summary>Compares this to another Decimal.</summary>
+        public int CompareTo(Decimal other);
+
+        /// <summary>Tests equality with another Decimal.</summary>
+        public bool Equals(Decimal other);
+
+        /// <summary>Gets a hash code.</summary>
+        public override int GetHashCode();
+
+        /// <summary>Converts to string.</summary>
+        public override string ToString();
+
+        /// <summary>Converts to string with format.</summary>
+        public string ToString(string format);
+
+        /// <summary>Parses a string to a Decimal.</summary>
+        public static Decimal Parse(string s);
+
+        /// <summary>Safely parses a string to a Decimal.</summary>
+        public static bool TryParse(string s, out Decimal result);
+
+        /// <summary>Addition.</summary>
+        [Represents("operator+")]
+        public static Decimal operator+(Decimal left, Decimal right);
+
+        /// <summary>Subtraction.</summary>
+        [Represents("operator-")]
+        public static Decimal operator-(Decimal left, Decimal right);
+
+        /// <summary>Multiplication.</summary>
+        [Represents("operator*")]
+        public static Decimal operator*(Decimal left, Decimal right);
+
+        /// <summary>Division.</summary>
+        [Represents("operator/")]
+        public static Decimal operator/(Decimal left, Decimal right);
+
+        /// <summary>Modulus.</summary>
+        [Represents("operator%")]
+        public static Decimal operator%(Decimal left, Decimal right);
+
+        /// <summary>Increments by one.</summary>
+        [Represents("operator++")]
+        public Decimal Increment();
+
+        /// <summary>Decrements by one.</summary>
+        [Represents("operator--")]
+        public Decimal Decrement();
+
+        /// <summary>Less than.</summary>
+        [Represents("operator<")]
+        public static bool operator<(Decimal left, Decimal right);
+
+        /// <summary>Greater than.</summary>
+        [Represents("operator>")]
+        public static bool operator>(Decimal left, Decimal right);
+
+        /// <summary>Less than or equal.</summary>
+        [Represents("operator<=")]
+        public static bool operator<=(Decimal left, Decimal right);
+
+        /// <summary>Greater than or equal.</summary>
+        [Represents("operator>=")]
+        public static bool operator>=(Decimal left, Decimal right);
+
+        /// <summary>Equality.</summary>
+        [Represents("operator==")]
+        public static bool operator==(Decimal left, Decimal right);
+
+        /// <summary>Inequality.</summary>
+        [Represents("operator!=")]
+        public static bool operator!=(Decimal left, Decimal right);
+    }
+}

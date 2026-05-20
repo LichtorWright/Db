@@ -1,0 +1,49 @@
+namespace Standard {
+    /// <summary>
+    /// FIFO queue supporting insertion at the back and removal from the front.
+    /// Maps to: C++ std::queue&lt;T&gt;
+    /// </summary>
+    [Represents("std::queue", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<queue>")]
+    public class Queue<T> {
+        /// <summary>Constructs an empty queue.</summary>
+        public Queue();
+
+        /// <summary>The number of elements.</summary>
+        [Represents("size")]
+        public int Count { get; }
+
+        /// <summary>Whether the queue is empty.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>The front element.</summary>
+        [Represents("front")]
+        public T Peek();
+
+        /// <summary>The back element.</summary>
+        [Represents("back")]
+        public T PeekLast();
+
+        /// <summary>Adds an element to the back.</summary>
+        [Represents("push")]
+        public void Enqueue(T item);
+
+        /// <summary>Removes and returns the front element.</summary>
+        [Represents("pop")]
+        public T Dequeue();
+
+        /// <summary>Swaps contents with another queue.</summary>
+        [Represents("swap")]
+        public void Swap(Queue<T> other);
+
+        /// <summary>Tries to peek at the front element. Returns false if empty.</summary>
+        public bool TryPeek(out T result);
+
+        /// <summary>Tries to dequeue the front element. Returns false if empty.</summary>
+        public bool TryDequeue(out T result);
+
+        /// <summary>Constructs an element in place at the back.</summary>
+        [Represents("emplace")]
+        public void EnqueueInPlace(T item);
+    }
+}

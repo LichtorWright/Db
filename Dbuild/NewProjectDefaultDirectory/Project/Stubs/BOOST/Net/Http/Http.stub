@@ -1,0 +1,137 @@
+namespace Boost.Net.Http {
+    /// <summary>
+    /// HTTP request verb (method).
+    /// Maps to: C++ boost::beast::http::verb
+    /// </summary>
+    [Represents("boost::beast::http::verb", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<boost/beast/http.hpp>")]
+    public enum Verb {
+        [Represents("get")]     Get,
+        [Represents("post")]    Post,
+        [Represents("put")]     Put,
+        [Represents("delete_")] Delete,
+        [Represents("patch")]   Patch,
+        [Represents("head")]    Head,
+        [Represents("options")] Options,
+        [Represents("connect")] Connect,
+        [Represents("trace")]   Trace,
+        [Represents("unknown")] Unknown
+    }
+
+    /// <summary>
+    /// HTTP response status codes.
+    /// Maps to: C++ boost::beast::http::status
+    /// </summary>
+    [Represents("boost::beast::http::status", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<boost/beast/http.hpp>")]
+    public enum Status {
+        [Represents("continue_")]                   Continue          = 100,
+        [Represents("ok")]                          Ok                = 200,
+        [Represents("created")]                     Created           = 201,
+        [Represents("accepted")]                    Accepted          = 202,
+        [Represents("no_content")]                  NoContent         = 204,
+        [Represents("moved_permanently")]           MovedPermanently  = 301,
+        [Represents("found")]                       Found             = 302,
+        [Represents("not_modified")]                NotModified       = 304,
+        [Represents("bad_request")]                 BadRequest        = 400,
+        [Represents("unauthorized")]                Unauthorized      = 401,
+        [Represents("forbidden")]                   Forbidden         = 403,
+        [Represents("not_found")]                   NotFound          = 404,
+        [Represents("method_not_allowed")]          MethodNotAllowed  = 405,
+        [Represents("conflict")]                    Conflict          = 409,
+        [Represents("unprocessable_entity")]        UnprocessableEntity = 422,
+        [Represents("too_many_requests")]           TooManyRequests   = 429,
+        [Represents("internal_server_error")]       InternalServerError = 500,
+        [Represents("not_implemented")]             NotImplemented    = 501,
+        [Represents("bad_gateway")]                 BadGateway        = 502,
+        [Represents("service_unavailable")]         ServiceUnavailable = 503,
+        [Represents("gateway_timeout")]             GatewayTimeout    = 504
+    }
+
+    /// <summary>
+    /// An HTTP/1.1 request with a plain-string body.
+    /// Construct it, set the verb and target, populate headers, then send it
+    /// through a TcpSocket using an HttpClient or manually.
+    /// Maps to: C++ boost::beast::http::request&lt;boost::beast::http::string_body&gt;
+    /// </summary>
+    [Represents("boost::beast::http::request<boost::beast::http::string_body>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/beast/http.hpp>")]
+    public class Request {
+        /// <summary>Constructs an empty HTTP/1.1 request.</summary>
+        public Request();
+
+        /// <summary>Constructs a request with the given verb and URL target.</summary>
+        public Request(Verb verb, string target);
+
+        /// <summary>Constructs a request with verb, target, and HTTP version (10 or 11).</summary>
+        public Request(Verb verb, string target, int version);
+
+        /// <summary>The HTTP method (GET, POST, …).</summary>
+        [Represents("method")]
+        public Verb Method { get; set; }
+
+        /// <summary>The request-target (path + optional query string).</summary>
+        [Represents("target")]
+        public string Target { get; set; }
+
+        /// <summary>The HTTP version as an integer: 10 = HTTP/1.0, 11 = HTTP/1.1.</summary>
+        [Represents("version")]
+        public int Version { get; set; }
+
+        /// <summary>The plain-string body content.</summary>
+        [Represents("body")]
+        public string Body { get; set; }
+
+        /// <summary>
+        /// Sets a header field.  Common names: "Host", "Content-Type",
+        /// "Authorization", "Accept".
+        /// </summary>
+        [Represents("set")]
+        public void SetHeader(string name, string value);
+
+        /// <summary>Gets a header field value by name.  Returns empty if absent.</summary>
+        [Represents("at")]
+        public string GetHeader(string name);
+
+        /// <summary>
+        /// Recalculates and sets the Content-Length header based on the current body.
+        /// Always call this before sending if you set a body.
+        /// </summary>
+        [Represents("prepare_payload")]
+        public void PreparePayload();
+    }
+
+    /// <summary>
+    /// An HTTP/1.1 response with a plain-string body.
+    /// Maps to: C++ boost::beast::http::response&lt;boost::beast::http::string_body&gt;
+    /// </summary>
+    [Represents("boost::beast::http::response<boost::beast::http::string_body>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/beast/http.hpp>")]
+    public class Response {
+        /// <summary>Constructs an empty 200 OK response.</summary>
+        public Response();
+
+        /// <summary>Constructs a response with the given status code.</summary>
+        public Response(Status status);
+
+        /// <summary>The HTTP status code.</summary>
+        [Represents("result")]
+        public Status StatusCode { get; set; }
+
+        /// <summary>The HTTP version: 10 or 11.</summary>
+        [Represents("version")]
+        public int Version { get; set; }
+
+        /// <summary>The response body as a string.</summary>
+        [Represents("body")]
+        public string Body { get; set; }
+
+        /// <summary>Sets a header field.</summary>
+        [Represents("set")]
+        public void SetHeader(string name, string value);
+
+        /// <summary>Gets a header field value.  Returns empty if absent.</summary>
+        [Represents("at")]
+        public string GetHeader(string name);
+
+        /// <summary>Recalculates and sets the Content-Length header.</summary>
+        [Represents("prepare_payload")]
+        public void PreparePayload();
+    }
+}

@@ -1,0 +1,271 @@
+namespace Crypto {
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Hashing
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// SHA-256 hash function (256-bit / 32-byte digest).
+    /// Maps to: C++ OpenSSL EVP_MD_CTX with EVP_sha256
+    /// </summary>
+    [Represents("EVP_MD_CTX", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<openssl/evp.h>")]
+    public class Sha256 {
+        public Sha256();
+
+        /// <summary>Feeds more data into the hash state.</summary>
+        [Represents("EVP_DigestUpdate")]
+        public void Update(byte[] data);
+
+        [Represents("EVP_DigestUpdate")] public void Update(byte[] data, int offset, int count);
+        [Represents("EVP_DigestUpdate")] public void Update(string text);
+
+        /// <summary>Finalises and returns the 32-byte digest.  Resets the context.</summary>
+        [Represents("EVP_DigestFinal_ex")]
+        public byte[] Digest();
+
+        /// <summary>Returns the digest as a lowercase hex string.</summary>
+        [Represents("EVP_DigestFinal_ex")]
+        public string DigestHex();
+
+        // ── One-shot ─────────────────────────────────────────────────────────
+
+        [Represents("EVP_Digest", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/evp.h>")]
+        public static byte[]  Hash(byte[] data);
+        [Represents("EVP_Digest", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/evp.h>")]
+        public static string  HashHex(byte[] data);
+        [Represents("EVP_Digest", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/evp.h>")]
+        public static string  HashHex(string text);
+    }
+
+    /// <summary>
+    /// SHA-512 hash function (512-bit / 64-byte digest).
+    /// Maps to: C++ OpenSSL EVP_MD_CTX with EVP_sha512
+    /// </summary>
+    [Represents("EVP_MD_CTX", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<openssl/evp.h>")]
+    public class Sha512 {
+        public Sha512();
+
+        [Represents("EVP_DigestUpdate")]   public void   Update(byte[] data);
+        [Represents("EVP_DigestUpdate")]   public void   Update(string text);
+        [Represents("EVP_DigestFinal_ex")] public byte[] Digest();
+        [Represents("EVP_DigestFinal_ex")] public string DigestHex();
+
+        [Represents("EVP_Digest", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/evp.h>")]
+        public static byte[] Hash(byte[] data);
+        [Represents("EVP_Digest", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/evp.h>")]
+        public static string HashHex(byte[] data);
+        [Represents("EVP_Digest", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/evp.h>")]
+        public static string HashHex(string text);
+    }
+
+    /// <summary>
+    /// MD5 hash function (128-bit digest — not collision-resistant; use for checksums only).
+    /// Maps to: C++ OpenSSL EVP_MD_CTX with EVP_md5
+    /// </summary>
+    [Represents("EVP_MD_CTX", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<openssl/evp.h>")]
+    public class Md5 {
+        public Md5();
+
+        [Represents("EVP_DigestUpdate")]   public void   Update(byte[] data);
+        [Represents("EVP_DigestUpdate")]   public void   Update(string text);
+        [Represents("EVP_DigestFinal_ex")] public byte[] Digest();
+        [Represents("EVP_DigestFinal_ex")] public string DigestHex();
+
+        [Represents("EVP_Digest", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/evp.h>")]
+        public static byte[] Hash(byte[] data);
+        [Represents("EVP_Digest", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/evp.h>")]
+        public static string HashHex(byte[] data);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // HMAC
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// HMAC-SHA256 message authentication code.
+    /// Maps to: C++ OpenSSL HMAC with EVP_sha256
+    /// </summary>
+    [Represents("HMAC_CTX", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<openssl/hmac.h>")]
+    public class Hmac {
+        /// <summary>Initialises HMAC with the given key using SHA-256.</summary>
+        public Hmac(byte[] key);
+        /// <summary>Initialises HMAC with a string key using SHA-256.</summary>
+        public Hmac(string key);
+
+        [Represents("HMAC_Update")] public void   Update(byte[] data);
+        [Represents("HMAC_Update")] public void   Update(string text);
+        [Represents("HMAC_Final")]  public byte[] Digest();
+        [Represents("HMAC_Final")]  public string DigestHex();
+
+        [Represents("HMAC", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/hmac.h>")]
+        public static byte[] Sign(byte[] key, byte[] data);
+        [Represents("HMAC", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/hmac.h>")]
+        public static string SignHex(string key, string message);
+    }
+
+    /// <summary>
+    /// HMAC-SHA512 message authentication code.
+    /// Maps to: C++ OpenSSL HMAC with EVP_sha512
+    /// </summary>
+    [Represents("HMAC_CTX", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<openssl/hmac.h>")]
+    public class HmacSha512 {
+        public HmacSha512(byte[] key);
+        public HmacSha512(string key);
+
+        [Represents("HMAC_Update")] public void   Update(byte[] data);
+        [Represents("HMAC_Update")] public void   Update(string text);
+        [Represents("HMAC_Final")]  public byte[] Digest();
+        [Represents("HMAC_Final")]  public string DigestHex();
+
+        [Represents("HMAC", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/hmac.h>")]
+        public static byte[] Sign(byte[] key, byte[] data);
+        [Represents("HMAC", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/hmac.h>")]
+        public static string SignHex(string key, string message);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Symmetric encryption
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// AES symmetric encryption and decryption (128, 192, or 256-bit key).
+    /// Default mode: AES-256-CBC with PKCS#7 padding.
+    /// Maps to: C++ OpenSSL EVP_CIPHER_CTX
+    /// </summary>
+    [Represents("EVP_CIPHER_CTX", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<openssl/evp.h>")]
+    public class Aes {
+        /// <summary>Constructs an AES context with a 32-byte key and 16-byte IV.</summary>
+        public Aes(byte[] key, byte[] iv);
+
+        // ── Encryption ─────────────────────────────────────────────────────
+
+        [Represents("EVP_EncryptInit_ex")]  public void   BeginEncrypt();
+        [Represents("EVP_EncryptUpdate")]   public byte[] EncryptBlock(byte[] plaintext);
+        [Represents("EVP_EncryptFinal_ex")] public byte[] FinishEncrypt();
+
+        /// <summary>One-shot: encrypts plaintext and returns ciphertext (with padding).</summary>
+        [Represents("EVP_EncryptInit_ex", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/evp.h>")]
+        public static byte[] Encrypt(byte[] key, byte[] iv, byte[] plaintext);
+
+        [Represents("EVP_EncryptInit_ex", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/evp.h>")]
+        public static byte[] Encrypt(byte[] key, byte[] iv, string plaintext);
+
+        // ── Decryption ─────────────────────────────────────────────────────
+
+        [Represents("EVP_DecryptInit_ex")]  public void   BeginDecrypt();
+        [Represents("EVP_DecryptUpdate")]   public byte[] DecryptBlock(byte[] ciphertext);
+        [Represents("EVP_DecryptFinal_ex")] public byte[] FinishDecrypt();
+
+        /// <summary>One-shot: decrypts ciphertext and returns plaintext bytes.</summary>
+        [Represents("EVP_DecryptInit_ex", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/evp.h>")]
+        public static byte[] Decrypt(byte[] key, byte[] iv, byte[] ciphertext);
+
+        [Represents("EVP_DecryptInit_ex", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/evp.h>")]
+        public static string DecryptString(byte[] key, byte[] iv, byte[] ciphertext);
+
+        // ── Key/IV helpers ─────────────────────────────────────────────────
+
+        /// <summary>Generates a random 32-byte (256-bit) AES key using the system RNG.</summary>
+        [Represents("RAND_bytes", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/rand.h>")]
+        public static byte[] GenerateKey();
+
+        /// <summary>Generates a random 16-byte IV.</summary>
+        [Represents("RAND_bytes", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/rand.h>")]
+        public static byte[] GenerateIv();
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Asymmetric encryption / signing
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// RSA key pair for signing, verification, and asymmetric encryption.
+    /// Maps to: C++ OpenSSL EVP_PKEY / RSA
+    /// </summary>
+    [Represents("EVP_PKEY", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<openssl/evp.h>")]
+    public class Rsa {
+        /// <summary>Generates a new RSA key pair with the given bit size (e.g. 2048, 4096).</summary>
+        [Represents("EVP_RSA_gen", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/evp.h>")]
+        public static Rsa Generate(int bits);
+
+        /// <summary>Loads a PEM-encoded private key.</summary>
+        [Represents("PEM_read_bio_PrivateKey", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/pem.h>")]
+        public static Rsa FromPrivatePem(string pem);
+
+        /// <summary>Loads a PEM-encoded public key.</summary>
+        [Represents("PEM_read_bio_PUBKEY", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<openssl/pem.h>")]
+        public static Rsa FromPublicPem(string pem);
+
+        /// <summary>Exports the private key as a PEM string.</summary>
+        [Represents("PEM_write_bio_PrivateKey")]
+        public string ExportPrivatePem();
+
+        /// <summary>Exports the public key as a PEM string.</summary>
+        [Represents("PEM_write_bio_PUBKEY")]
+        public string ExportPublicPem();
+
+        // ── Signing (RSASSA-PSS with SHA-256) ─────────────────────────────
+
+        /// <summary>Signs a message with the private key; returns a DER signature.</summary>
+        [Represents("EVP_DigestSign")]
+        public byte[] Sign(byte[] message);
+
+        [Represents("EVP_DigestSign")] public byte[] Sign(string message);
+
+        /// <summary>Verifies a signature against the public key.  Returns true if valid.</summary>
+        [Represents("EVP_DigestVerify")]
+        public bool Verify(byte[] message, byte[] signature);
+
+        [Represents("EVP_DigestVerify")] public bool Verify(string message, byte[] signature);
+
+        // ── Encryption (OAEP with SHA-256) ────────────────────────────────
+
+        /// <summary>Encrypts with the public key (small payloads only).</summary>
+        [Represents("EVP_PKEY_encrypt")]
+        public byte[] Encrypt(byte[] plaintext);
+
+        /// <summary>Decrypts with the private key.</summary>
+        [Represents("EVP_PKEY_decrypt")]
+        public byte[] Decrypt(byte[] ciphertext);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Random bytes
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Cryptographically secure random byte generation.
+    /// Maps to: C++ OpenSSL RAND_bytes
+    /// </summary>
+    [Represents("", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<openssl/rand.h>")]
+    public static class SecureRandom {
+        /// <summary>Returns count cryptographically random bytes.</summary>
+        [Represents("RAND_bytes")]
+        public static byte[] GetBytes(int count);
+
+        /// <summary>Returns a single cryptographically random unsigned 64-bit integer.</summary>
+        [Represents("RAND_bytes")]
+        public static ulong GetULong();
+
+        /// <summary>Returns a uniform random int in [min, max] using RAND_bytes.</summary>
+        [Represents("RAND_bytes")]
+        public static int GetInt(int min, int max);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Encoding helpers
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Base64 encoding and decoding (RFC 4648 standard alphabet).
+    /// Maps to: C++ OpenSSL BIO_f_base64 / EVP_EncodeBlock
+    /// </summary>
+    [Represents("", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<openssl/bio.h>")]
+    public static class Base64 {
+        [Represents("EVP_EncodeBlock")] public static string Encode(byte[] data);
+        [Represents("EVP_DecodeBlock")] public static byte[] Decode(string base64);
+
+        /// <summary>URL-safe Base64 ('+' → '-', '/' → '_', no padding).</summary>
+        [Represents("EVP_EncodeBlock")] public static string EncodeUrl(byte[] data);
+        [Represents("EVP_DecodeBlock")] public static byte[] DecodeUrl(string base64url);
+    }
+}

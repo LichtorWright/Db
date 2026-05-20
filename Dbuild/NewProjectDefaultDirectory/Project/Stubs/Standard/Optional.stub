@@ -1,0 +1,44 @@
+namespace Standard {
+    /// <summary>
+    /// Represents an optional value that may or may not be present.
+    /// Maps to: C++ std::optional&lt;T&gt;
+    /// </summary>
+    [Represents("std::optional", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<optional>")]
+    public class Optional<T> where T : struct {
+        /// <summary>Constructs an empty optional (no value).</summary>
+        public Optional();
+
+        /// <summary>Constructs an optional containing the given value.</summary>
+        public Optional(T value);
+
+        /// <summary>Whether this optional contains a value.</summary>
+        [Represents("has_value")]
+        public bool HasValue { get; }
+
+        /// <summary>The contained value. Throws if no value is present.</summary>
+        [Represents("value")]
+        public T Value { get; }
+
+        /// <summary>Returns the value if present, otherwise the given default.</summary>
+        [Represents("value_or")]
+        public T GetValueOrDefault(T defaultValue);
+
+        /// <summary>Returns the value if present, otherwise the type's default.</summary>
+        public T GetValueOrDefault();
+
+        /// <summary>Resets to an empty state (no value).</summary>
+        public void Reset();
+
+        /// <summary>Constructs a value in place.</summary>
+        [Represents("emplace")]
+        public void Emplace(T value);
+
+        /// <summary>Swaps contents with another optional.</summary>
+        [Represents("swap")]
+        public void Swap(Optional<T> other);
+
+        /// <summary>Whether this optional contains a value (implicit conversion).</summary>
+        [Represents("operator bool")]
+        public static implicit operator bool(Optional<T> opt);
+    }
+}

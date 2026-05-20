@@ -1,0 +1,85 @@
+namespace Boost.IO {
+    /// <summary>
+    /// An immutable filesystem path.  Supports composition with / and decomposition
+    /// into individual segments.  Does not check whether the path actually exists.
+    /// Maps to: C++ boost::filesystem::path
+    /// </summary>
+    [Represents("boost::filesystem::path", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/filesystem.hpp>")]
+    public class Path {
+        /// <summary>Constructs an empty path.</summary>
+        public Path();
+
+        /// <summary>Constructs a path from a string.</summary>
+        public Path(string text);
+
+        // ── Composition ───────────────────────────────────────────────────────
+
+        /// <summary>Appends a path segment, inserting a separator as needed.</summary>
+        [Represents("append")]
+        public Path Append(string segment);
+
+        /// <summary>Appends a string directly without inserting a separator.</summary>
+        [Represents("concat")]
+        public Path Concat(string text);
+
+        // ── Decomposition ─────────────────────────────────────────────────────
+
+        /// <summary>The root name, e.g. "C:" on Windows or "" on POSIX.</summary>
+        [Represents("root_name")]
+        public string RootName { get; }
+
+        /// <summary>The root directory, e.g. "/" or "".</summary>
+        [Represents("root_directory")]
+        public string RootDirectory { get; }
+
+        /// <summary>The parent directory path.</summary>
+        [Represents("parent_path")]
+        public Path Parent { get; }
+
+        /// <summary>The final component of the path (filename + extension).</summary>
+        [Represents("filename")]
+        public string FileName { get; }
+
+        /// <summary>The filename without its last extension.</summary>
+        [Represents("stem")]
+        public string Stem { get; }
+
+        /// <summary>The last extension of the filename, including the dot.</summary>
+        [Represents("extension")]
+        public string Extension { get; }
+
+        // ── Queries ───────────────────────────────────────────────────────────
+
+        /// <summary>True if this is an absolute path.</summary>
+        [Represents("is_absolute")]
+        public bool IsAbsolute { get; }
+
+        /// <summary>True if this is a relative path.</summary>
+        [Represents("is_relative")]
+        public bool IsRelative { get; }
+
+        /// <summary>True if the path string is empty.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        // ── Conversion ────────────────────────────────────────────────────────
+
+        /// <summary>Returns the native string representation of the path.</summary>
+        [Represents("string")]
+        public string ToString();
+
+        /// <summary>Returns the path with all separators normalised to '/'.</summary>
+        [Represents("generic_string")]
+        public string ToGenericString();
+
+        // ── Static helpers ────────────────────────────────────────────────────
+
+        /// <summary>Returns the current working directory as a Path.</summary>
+        [Represents("boost::filesystem::current_path", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static Path CurrentDirectory { get; }
+
+        /// <summary>Returns the OS temporary directory as a Path.</summary>
+        [Represents("boost::filesystem::temp_directory_path", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/filesystem.hpp>")]
+        public static Path TempDirectory { get; }
+    }
+}

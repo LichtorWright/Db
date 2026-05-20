@@ -1,0 +1,79 @@
+namespace Standard {
+    /// <summary>
+    /// Sorted set of unique elements backed by a red-black tree.
+    /// Maps to: C++ std::set&lt;T&gt;
+    /// </summary>
+    [Represents("std::set", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<set>")]
+    public class Set<T> {
+        /// <summary>Constructs an empty set.</summary>
+        public Set();
+
+        /// <summary>The number of elements.</summary>
+        [Represents("size")]
+        public int Count { get; }
+
+        /// <summary>Whether the set is empty.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>Adds an element. Returns whether it was newly added.</summary>
+        [Represents("insert")]
+        public bool Add(T item);
+
+        /// <summary>Removes the element. Returns whether it was present.</summary>
+        [Represents("erase")]
+        public bool Remove(T item);
+
+        /// <summary>Removes all elements.</summary>
+        [Represents("clear")]
+        public void Clear();
+
+        /// <summary>Whether the set contains the given element.</summary>
+        [Represents("contains")]
+        public bool Contains(T item);
+
+        /// <summary>Adds all elements from another set.</summary>
+        public void UnionWith(Set<T> other);
+
+        /// <summary>Keeps only elements also in the other set.</summary>
+        public void IntersectWith(Set<T> other);
+
+        /// <summary>Removes all elements also in the other set.</summary>
+        public void ExceptWith(Set<T> other);
+
+        /// <summary>Whether all elements are also in the other set.</summary>
+        public bool IsSubsetOf(Set<T> other);
+
+        /// <summary>Whether any element is also in the other set.</summary>
+        public bool Overlaps(Set<T> other);
+
+        /// <summary>The number of elements matching the given item (always 0 or 1 for set).</summary>
+        [Represents("count")]
+        public int CountOf(T item);
+
+        /// <summary>Returns an iterator to the first element not less than item.</summary>
+        [Represents("lower_bound")]
+        public T LowerBound(T item);
+
+        /// <summary>Returns an iterator to the first element greater than item.</summary>
+        [Represents("upper_bound")]
+        public T UpperBound(T item);
+
+        /// <summary>Returns the range of elements matching item.</summary>
+        [Represents("equal_range")]
+        public void EqualRange(T item);
+
+        /// <summary>Swaps contents with another set.</summary>
+        [Represents("swap")]
+        public void Swap(Set<T> other);
+
+        /// <summary>Supports foreach iteration over the set.</summary>
+        public class Enumerator {
+            public T Current { get; }
+            public bool MoveNext();
+            public void Reset();
+        }
+
+        public Enumerator GetEnumerator();
+    }
+}

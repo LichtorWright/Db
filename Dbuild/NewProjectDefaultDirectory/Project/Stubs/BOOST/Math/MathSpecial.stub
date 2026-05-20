@@ -1,0 +1,97 @@
+namespace Boost {
+/// <summary>
+/// Special mathematical functions not in the C++ standard library.
+/// Accessed as MathSpecial.Gamma(x), MathSpecial.Erf(x), etc.
+/// No namespace — mirrors the flat feel of System.Math.
+/// Maps to: C++ boost::math free functions
+/// </summary>
+[Represents("boost::math", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<boost/math/special_functions.hpp>")]
+public static class MathSpecial {
+
+    // ── Gamma / Beta ──────────────────────────────────────────────────────────
+
+    /// <summary>Gamma function Γ(x).  Generalises the factorial: Γ(n+1) = n!</summary>
+    [Represents("boost::math::tgamma")]
+    public static double Gamma(double x);
+
+    /// <summary>Natural logarithm of |Γ(x)|.  Avoids overflow for large x.</summary>
+    [Represents("boost::math::lgamma")]
+    public static double LogGamma(double x);
+
+    /// <summary>Digamma function ψ(x) = d/dx ln Γ(x).</summary>
+    [Represents("boost::math::digamma")]
+    public static double Digamma(double x);
+
+    /// <summary>Beta function B(a, b) = Γ(a)Γ(b) / Γ(a+b).</summary>
+    [Represents("boost::math::beta")]
+    public static double Beta(double a, double b);
+
+    /// <summary>Regularised incomplete gamma function γ(a, x) / Γ(a).</summary>
+    [Represents("boost::math::gamma_p")]
+    public static double GammaP(double a, double x);
+
+    /// <summary>Upper regularised incomplete gamma function Γ(a, x) / Γ(a).</summary>
+    [Represents("boost::math::gamma_q")]
+    public static double GammaQ(double a, double x);
+
+    /// <summary>Regularised incomplete beta function I_x(a, b).</summary>
+    [Represents("boost::math::ibeta")]
+    public static double IBeta(double a, double b, double x);
+
+    // ── Error functions ───────────────────────────────────────────────────────
+
+    /// <summary>Error function erf(x).</summary>
+    [Represents("boost::math::erf")]
+    public static double Erf(double x);
+
+    /// <summary>Complementary error function erfc(x) = 1 - erf(x).</summary>
+    [Represents("boost::math::erfc")]
+    public static double Erfc(double x);
+
+    /// <summary>Inverse error function — returns x such that erf(x) == p.</summary>
+    [Represents("boost::math::erf_inv")]
+    public static double ErfInv(double p);
+
+    /// <summary>Inverse complementary error function.</summary>
+    [Represents("boost::math::erfc_inv")]
+    public static double ErfcInv(double p);
+
+    // ── Bessel functions ──────────────────────────────────────────────────────
+
+    /// <summary>Bessel function of the first kind J_n(x).</summary>
+    [Represents("boost::math::cyl_bessel_j")]
+    public static double BesselJ(double n, double x);
+
+    /// <summary>Bessel function of the second kind Y_n(x).</summary>
+    [Represents("boost::math::cyl_neumann")]
+    public static double BesselY(double n, double x);
+
+    /// <summary>Modified Bessel function of the first kind I_n(x).</summary>
+    [Represents("boost::math::cyl_bessel_i")]
+    public static double BesselI(double n, double x);
+
+    /// <summary>Modified Bessel function of the second kind K_n(x).</summary>
+    [Represents("boost::math::cyl_bessel_k")]
+    public static double BesselK(double n, double x);
+
+    // ── Factorials / combinatorics ────────────────────────────────────────────
+
+    /// <summary>Exact factorial n! as a double.  Throws for n &gt; 170.</summary>
+    [Represents("boost::math::factorial<double>")]
+    public static double Factorial(int n);
+
+    /// <summary>Binomial coefficient C(n, k) = n! / (k!(n-k)!).</summary>
+    [Represents("boost::math::binomial_coefficient<double>")]
+    public static double Choose(int n, int k);
+
+    // ── Powers / roots ────────────────────────────────────────────────────────
+
+    /// <summary>x raised to an integer power n.  Faster than Pow for integer exponents.</summary>
+    [Represents("boost::math::pow")]
+    public static double Pow(double x, int n);
+
+    /// <summary>Returns the nth root of x.</summary>
+    [Represents("boost::math::cbrt")]
+    public static double Root(double x, int n);
+}
+}

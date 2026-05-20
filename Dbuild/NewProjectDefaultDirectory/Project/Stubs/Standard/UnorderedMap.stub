@@ -1,0 +1,67 @@
+namespace Standard {
+    /// <summary>
+    /// Hash-based key-value dictionary with average O(1) lookup.
+    /// Maps to: C++ std::unordered_map&lt;TKey, TValue&gt;
+    /// </summary>
+    [Represents("std::unordered_map", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<unordered_map>")]
+    public class UnorderedMap<TKey, TValue> {
+        /// <summary>Constructs an empty unordered map.</summary>
+        public UnorderedMap();
+
+        /// <summary>The number of entries.</summary>
+        [Represents("size")]
+        public int Count { get; }
+
+        /// <summary>Whether the map is empty.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>Accesses or inserts the value for the given key.</summary>
+        [Represents("operator[]")]
+        public TValue this[TKey key] { get; set; }
+
+        /// <summary>Accesses the value for the given key with bounds checking.</summary>
+        [Represents("at")]
+        public TValue GetAt(TKey key);
+
+        /// <summary>Adds a key-value pair.</summary>
+        [Represents("insert")]
+        public void Add(TKey key, TValue value);
+
+        /// <summary>Removes the entry with the given key. Returns whether removed.</summary>
+        [Represents("erase")]
+        public bool Remove(TKey key);
+
+        /// <summary>Removes all entries.</summary>
+        [Represents("clear")]
+        public void Clear();
+
+        /// <summary>Whether the map contains the given key.</summary>
+        [Represents("contains")]
+        public bool ContainsKey(TKey key);
+
+        /// <summary>Whether the map contains the given value.</summary>
+        public bool ContainsValue(TValue value);
+
+        /// <summary>Tries to get the value for the given key.</summary>
+        public bool TryGetValue(TKey key, out TValue value);
+
+        /// <summary>The number of entries matching the given key (always 0 or 1).</summary>
+        [Represents("count")]
+        public int CountOf(TKey key);
+
+        /// <summary>Swaps contents with another unordered map.</summary>
+        [Represents("swap")]
+        public void Swap(UnorderedMap<TKey, TValue> other);
+
+        /// <summary>Supports foreach iteration over the map.</summary>
+        public class Enumerator {
+            public TKey Key { get; }
+            public TValue Value { get; set; }
+            public bool MoveNext();
+            public void Reset();
+        }
+
+        public Enumerator GetEnumerator();
+    }
+}

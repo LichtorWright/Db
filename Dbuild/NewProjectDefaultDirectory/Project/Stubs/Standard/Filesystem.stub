@@ -1,0 +1,68 @@
+namespace Standard {
+    /// <summary>
+    /// Filesystem operations for querying and manipulating paths, files, and directories.
+    /// Maps to: C++ &lt;filesystem&gt; (std::filesystem)
+    /// </summary>
+    [Represents("std::filesystem", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+    public static class Filesystem {
+        /// <summary>True if the path refers to an existing file or directory.</summary>
+        [Represents("std::filesystem::exists", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static bool Exists(string path);
+
+        /// <summary>True if the path refers to a regular file.</summary>
+        [Represents("std::filesystem::is_regular_file", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static bool IsFile(string path);
+
+        /// <summary>True if the path refers to a directory.</summary>
+        [Represents("std::filesystem::is_directory", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static bool IsDirectory(string path);
+
+        /// <summary>Returns the size of the file in bytes.</summary>
+        [Represents("std::filesystem::file_size", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static long FileSize(string path);
+
+        /// <summary>Creates all directories in the path that don't exist.</summary>
+        [Represents("std::filesystem::create_directories", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static bool CreateDirectory(string path);
+
+        /// <summary>Removes a file or empty directory. Returns true if removed.</summary>
+        [Represents("std::filesystem::remove", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static bool Remove(string path);
+
+        /// <summary>Removes a file or directory and all its contents. Returns count removed.</summary>
+        [Represents("std::filesystem::remove_all", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static int RemoveAll(string path);
+
+        /// <summary>Copies a file or directory.</summary>
+        [Represents("std::filesystem::copy", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static void Copy(string source, string destination);
+
+        /// <summary>Renames (moves) a file or directory.</summary>
+        [Represents("std::filesystem::rename", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static void Rename(string source, string destination);
+
+        /// <summary>Returns the current working directory.</summary>
+        [Represents("std::filesystem::current_path", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static string CurrentDirectory { get; }
+
+        /// <summary>Combines two path components.</summary>
+        [Represents("std::filesystem::path / std::filesystem::path", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static string Combine(string path1, string path2);
+
+        /// <summary>Returns the parent directory of the path.</summary>
+        [Represents("std::filesystem::path::parent_path", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static string GetParentPath(string path);
+
+        /// <summary>Returns the filename portion of the path (with extension).</summary>
+        [Represents("std::filesystem::path::filename", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static string GetFileName(string path);
+
+        /// <summary>Returns the file extension (including the dot).</summary>
+        [Represents("std::filesystem::path::extension", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static string GetExtension(string path);
+
+        /// <summary>Returns the filename without extension.</summary>
+        [Represents("std::filesystem::path::stem", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<filesystem>")]
+        public static string GetFileNameWithoutExtension(string path);
+    }
+}

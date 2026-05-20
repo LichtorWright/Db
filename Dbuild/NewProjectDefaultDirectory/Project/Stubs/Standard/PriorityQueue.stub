@@ -1,0 +1,45 @@
+namespace Standard {
+    /// <summary>
+    /// Max-heap priority queue where the largest element is always on top.
+    /// Maps to: C++ std::priority_queue&lt;T&gt;
+    /// </summary>
+    [Represents("std::priority_queue", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<queue>")]
+    public class PriorityQueue<T> {
+        /// <summary>Constructs an empty priority queue.</summary>
+        public PriorityQueue();
+
+        /// <summary>The number of elements.</summary>
+        [Represents("size")]
+        public int Count { get; }
+
+        /// <summary>Whether the priority queue is empty.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>The top element (largest).</summary>
+        [Represents("top")]
+        public T Peek();
+
+        /// <summary>Adds an element to the priority queue.</summary>
+        [Represents("push")]
+        public void Enqueue(T item);
+
+        /// <summary>Removes and returns the top element.</summary>
+        [Represents("pop")]
+        public T Dequeue();
+
+        /// <summary>Swaps contents with another priority queue.</summary>
+        [Represents("swap")]
+        public void Swap(PriorityQueue<T> other);
+
+        /// <summary>Tries to peek at the top element. Returns false if empty.</summary>
+        public bool TryPeek(out T result);
+
+        /// <summary>Tries to dequeue the top element. Returns false if empty.</summary>
+        public bool TryDequeue(out T result);
+
+        /// <summary>Constructs an element in place.</summary>
+        [Represents("emplace")]
+        public void EnqueueInPlace(T item);
+    }
+}

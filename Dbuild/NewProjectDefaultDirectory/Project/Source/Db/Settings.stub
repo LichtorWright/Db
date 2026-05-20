@@ -1,0 +1,9 @@
+using Standard;
+
+namespace Db {
+    public class Settings {
+        public string Path => _path;
+        public bool IsDirty => _dirty;
+        public static Settings Load(string path);
+    }
+}

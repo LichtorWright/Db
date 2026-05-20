@@ -1,0 +1,49 @@
+namespace Standard {
+    /// <summary>
+    /// Fixed-size array with compile-time known length.
+    /// Maps to: C++ std::array&lt;T, N&gt;
+    /// </summary>
+    [Represents("std::array", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<array>")]
+    public class Array<T, int N> {
+        /// <summary>The number of elements in the array.</summary>
+        [Represents("size")]
+        public int Length { get; }
+
+        /// <summary>Whether the array is empty (always false for N > 0).</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>Accesses the element at the given index without bounds checking.</summary>
+        [Represents("operator[]")]
+        public T this[int index] { get; set; }
+
+        /// <summary>Accesses the element at the given index with bounds checking.</summary>
+        [Represents("at")]
+        public T GetAt(int index);
+
+        /// <summary>The first element.</summary>
+        [Represents("front")]
+        public T First { get; }
+
+        /// <summary>The last element.</summary>
+        [Represents("back")]
+        public T Last { get; }
+
+        /// <summary>Pointer to the underlying element storage.</summary>
+        [Represents("data")]
+        public T Data { get; }
+
+        /// <summary>Fills the array with the given value.</summary>
+        [Represents("fill")]
+        public void Fill(T value);
+
+        /// <summary>Supports foreach iteration over the array.</summary>
+        public class Enumerator {
+            public T Current { get; }
+            public bool MoveNext();
+            public void Reset();
+        }
+
+        public Enumerator GetEnumerator();
+    }
+}

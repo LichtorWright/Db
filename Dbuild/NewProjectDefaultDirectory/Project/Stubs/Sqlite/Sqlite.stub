@@ -1,0 +1,213 @@
+namespace Sqlite {
+    /// <summary>
+    /// The type of value stored in a SQLite column.
+    /// Maps to: C++ SQLITE_INTEGER / SQLITE_FLOAT / SQLITE_TEXT / SQLITE_BLOB / SQLITE_NULL
+    /// </summary>
+    [Represents("int", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<sqlite3.h>")]
+    public enum ColumnType {
+        [Represents("SQLITE_INTEGER")] Integer = 1,
+        [Represents("SQLITE_FLOAT")]   Float   = 2,
+        [Represents("SQLITE_TEXT")]    Text    = 3,
+        [Represents("SQLITE_BLOB")]    Blob    = 4,
+        [Represents("SQLITE_NULL")]    Null    = 5,
+    }
+
+    /// <summary>
+    /// An open connection to a SQLite database file (or :memory:).
+    /// Maps to: C++ sqlite3* managed as RAII
+    /// </summary>
+    [Represents("sqlite3*", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<sqlite3.h>")]
+    public class Database {
+        /// <summary>Opens (or creates) the database at the given file path.</summary>
+        public Database(string path);
+
+        /// <summary>Opens an in-memory database.</summary>
+        public Database();
+
+        // ── Execution ─────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Executes one or more SQL statements with no result set.
+        /// Useful for DDL and DML (CREATE TABLE, INSERT without RETURNING, etc.).
+        /// Maps to: sqlite3_exec
+        /// </summary>
+        [Represents("sqlite3_exec")]
+        public void Execute(string sql);
+
+        /// <summary>
+        /// Prepares and returns a Statement for a single parameterised query.
+        /// Maps to: sqlite3_prepare_v2
+        /// </summary>
+        [Represents("sqlite3_prepare_v2")]
+        public Statement Prepare(string sql);
+
+        /// <summary>
+        /// Executes a SELECT and returns all rows immediately as a list.
+        /// Maps to: sqlite3_prepare_v2 + step loop
+        /// </summary>
+        [Represents("sqlite3_prepare_v2")]
+        public Row[] Query(string sql);
+
+        /// <summary>Executes a SELECT with bind parameters and returns all rows.</summary>
+        [Represents("sqlite3_prepare_v2")]
+        public Row[] Query(string sql, params object[] bindValues);
+
+        /// <summary>
+        /// Returns the row-id of the last INSERT into any table.
+        /// Maps to: sqlite3_last_insert_rowid
+        /// </summary>
+        [Represents("sqlite3_last_insert_rowid")]
+        public long LastInsertId { get; }
+
+        /// <summary>
+        /// Returns the number of rows changed by the last DML statement.
+        /// Maps to: sqlite3_changes
+        /// </summary>
+        [Represents("sqlite3_changes")]
+        public int ChangedRows { get; }
+
+        // ── Transactions ──────────────────────────────────────────────────────
+
+        [Represents("sqlite3_exec")] public void BeginTransaction();
+        [Represents("sqlite3_exec")] public void Commit();
+        [Represents("sqlite3_exec")] public void Rollback();
+
+        // ── Schema helpers ────────────────────────────────────────────────────
+
+        /// <summary>Returns true if a table with the given name exists.</summary>
+        [Represents("sqlite3_prepare_v2")]
+        public bool TableExists(string name);
+
+        /// <summary>Returns the list of table names in the main schema.</summary>
+        [Represents("sqlite3_prepare_v2")]
+        public string[] GetTableNames();
+
+        // ── Lifecycle ─────────────────────────────────────────────────────────
+
+        /// <summary>True if the connection is still open.</summary>
+        [Represents("sqlite3_db_filename")]
+        public bool IsOpen { get; }
+
+        /// <summary>Closes the connection and releases all resources.</summary>
+        [Represents("sqlite3_close_v2")]
+        public void Close();
+
+        /// <summary>The file path this database was opened with (empty for in-memory).</summary>
+        [Represents("sqlite3_db_filename")]
+        public string FilePath { get; }
+    }
+
+    /// <summary>
+    /// A compiled, parameterised SQL statement.
+    /// Obtain from Database.Prepare().  Bind parameters by index (1-based) or name.
+    /// Maps to: C++ sqlite3_stmt*
+    /// </summary>
+    [Represents("sqlite3_stmt*", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<sqlite3.h>")]
+    public class Statement {
+        // ── Binding ───────────────────────────────────────────────────────────
+
+        [Represents("sqlite3_bind_int")]    public void Bind(int param, int value);
+        [Represents("sqlite3_bind_int64")]  public void Bind(int param, long value);
+        [Represents("sqlite3_bind_double")] public void Bind(int param, double value);
+        [Represents("sqlite3_bind_text")]   public void Bind(int param, string value);
+        [Represents("sqlite3_bind_blob")]   public void Bind(int param, byte[] value);
+        [Represents("sqlite3_bind_null")]   public void BindNull(int param);
+
+        /// <summary>Binds by named placeholder (e.g. ":name", "@name", "?name").</summary>
+        [Represents("sqlite3_bind_parameter_index")]
+        public void Bind(string name, int value);
+        [Represents("sqlite3_bind_parameter_index")] public void Bind(string name, long value);
+        [Represents("sqlite3_bind_parameter_index")] public void Bind(string name, double value);
+        [Represents("sqlite3_bind_parameter_index")] public void Bind(string name, string value);
+        [Represents("sqlite3_bind_parameter_index")] public void Bind(string name, byte[] value);
+        [Represents("sqlite3_bind_parameter_index")] public void BindNull(string name);
+
+        // ── Execution ─────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Advances to the next result row.
+        /// Returns true if a row is available; false if the query is exhausted.
+        /// Maps to: sqlite3_step
+        /// </summary>
+        [Represents("sqlite3_step")]
+        public bool Step();
+
+        /// <summary>Executes a non-SELECT statement (no result rows expected).</summary>
+        [Represents("sqlite3_step")]
+        public void Run();
+
+        /// <summary>Runs all rows and returns them as a list.</summary>
+        [Represents("sqlite3_step")]
+        public Row[] FetchAll();
+
+        /// <summary>Runs and returns only the first row, or null if no rows.</summary>
+        [Represents("sqlite3_step")]
+        public Row FetchOne();
+
+        // ── Column access (after Step() returns true) ─────────────────────────
+
+        [Represents("sqlite3_column_int64")]  public long    GetLong(int col);
+        [Represents("sqlite3_column_int")]    public int     GetInt(int col);
+        [Represents("sqlite3_column_double")] public double  GetDouble(int col);
+        [Represents("sqlite3_column_text")]   public string  GetString(int col);
+        [Represents("sqlite3_column_blob")]   public byte[]  GetBlob(int col);
+        [Represents("sqlite3_column_type")]   public ColumnType GetType(int col);
+
+        /// <summary>Returns the name of the given result column (0-based).</summary>
+        [Represents("sqlite3_column_name")]   public string  GetColumnName(int col);
+
+        /// <summary>Number of result columns in this statement.</summary>
+        [Represents("sqlite3_column_count")]  public int     ColumnCount { get; }
+
+        // ── Lifecycle ─────────────────────────────────────────────────────────
+
+        /// <summary>Resets the statement so it can be executed again (keeps bindings).</summary>
+        [Represents("sqlite3_reset")]
+        public void Reset();
+
+        /// <summary>Clears all parameter bindings.</summary>
+        [Represents("sqlite3_clear_bindings")]
+        public void ClearBindings();
+
+        /// <summary>Resets the statement and clears all bindings.</summary>
+        [Represents("sqlite3_reset")]
+        public void ResetFull();
+
+        /// <summary>Finalises and frees the statement.</summary>
+        [Represents("sqlite3_finalize")]
+        public void Dispose();
+    }
+
+    /// <summary>
+    /// An immutable snapshot of a single result row.
+    /// Maps to: a collection of column values obtained after sqlite3_step returns SQLITE_ROW.
+    /// </summary>
+    [Represents("std::vector<std::pair<std::string,std::string>>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<sqlite3.h>")]
+    public class Row {
+        /// <summary>Number of columns in this row.</summary>
+        [Represents("size")]
+        public int ColumnCount { get; }
+
+        /// <summary>Gets the string value of column at the given 0-based index.</summary>
+        [Represents("operator[]")]
+        public string Get(int index);
+
+        /// <summary>Gets the string value of a named column.</summary>
+        [Represents("at")]
+        public string Get(string name);
+
+        [Represents("at")] public long   GetLong(string name);
+        [Represents("at")] public int    GetInt(string name);
+        [Represents("at")] public double GetDouble(string name);
+        [Represents("at")] public bool   IsNull(string name);
+
+        [Represents("operator[]")] public long   GetLong(int index);
+        [Represents("operator[]")] public int    GetInt(int index);
+        [Represents("operator[]")] public double GetDouble(int index);
+        [Represents("operator[]")] public bool   IsNull(int index);
+
+        /// <summary>The column names in declaration order.</summary>
+        [Represents("keys")]
+        public string[] Columns { get; }
+    }
+}

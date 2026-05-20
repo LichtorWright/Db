@@ -1,0 +1,5 @@
+namespace Db
+{
+    /// <summary>Emits the "mutable" specifier on a field, allowing it to be modified inside const methods.</summary>
+    public class MutableAttribute { }
+}

@@ -1,0 +1,109 @@
+namespace Standard {
+    /// <summary>
+    /// A duration of time expressed in nanoseconds internally.
+    /// Construct from named factory methods (FromSeconds, FromMilliseconds, etc.)
+    /// or by adding/subtracting other TimeSpans.
+    /// Maps to: C++ std::chrono::nanoseconds (via duration_cast)
+    /// </summary>
+    [Represents("std::chrono::nanoseconds", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<chrono>")]
+    public class TimeSpan {
+        public TimeSpan();
+        public TimeSpan(long nanoseconds);
+
+        [Represents("count")]                   public long TotalNanoseconds  { get; }
+        [Represents("std::chrono::duration_cast<std::chrono::microseconds>")] public long TotalMicroseconds { get; }
+        [Represents("std::chrono::duration_cast<std::chrono::milliseconds>")] public long TotalMilliseconds { get; }
+        [Represents("std::chrono::duration_cast<std::chrono::seconds>")]      public long TotalSeconds      { get; }
+        [Represents("std::chrono::duration_cast<std::chrono::minutes>")]      public long TotalMinutes      { get; }
+        [Represents("std::chrono::duration_cast<std::chrono::hours>")]        public long TotalHours        { get; }
+
+        [Represents("operator+")] public TimeSpan Add(TimeSpan other);
+        [Represents("operator-")] public TimeSpan Subtract(TimeSpan other);
+        [Represents("operator*")] public TimeSpan Multiply(double factor);
+        [Represents("operator/")] public double   DivideBy(TimeSpan other);
+        [Represents("operator-")] public TimeSpan Negate();
+
+        [Represents("operator==")] public bool Equals(TimeSpan other);
+        [Represents("operator<")]  public bool LessThan(TimeSpan other);
+        [Represents("operator>")]  public bool GreaterThan(TimeSpan other);
+
+        // ── Factories ─────────────────────────────────────────────────────────
+
+        [Represents("std::chrono::nanoseconds",  CodePart.Member, Language.Cpp, MemberAccess.Colons, "<chrono>")] public static TimeSpan FromNanoseconds(long ns);
+        [Represents("std::chrono::microseconds", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<chrono>")] public static TimeSpan FromMicroseconds(long us);
+        [Represents("std::chrono::milliseconds", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<chrono>")] public static TimeSpan FromMilliseconds(long ms);
+        [Represents("std::chrono::seconds",      CodePart.Member, Language.Cpp, MemberAccess.Colons, "<chrono>")] public static TimeSpan FromSeconds(long s);
+        [Represents("std::chrono::minutes",      CodePart.Member, Language.Cpp, MemberAccess.Colons, "<chrono>")] public static TimeSpan FromMinutes(long m);
+        [Represents("std::chrono::hours",        CodePart.Member, Language.Cpp, MemberAccess.Colons, "<chrono>")] public static TimeSpan FromHours(long h);
+
+        [Represents("std::chrono::nanoseconds::zero()",  CodePart.Member, Language.Cpp, MemberAccess.Colons, "<chrono>")] public static TimeSpan Zero { get; }
+        [Represents("std::chrono::nanoseconds::max()",   CodePart.Member, Language.Cpp, MemberAccess.Colons, "<chrono>")] public static TimeSpan MaxValue { get; }
+    }
+
+    /// <summary>
+    /// A point in time measured from the system clock epoch (Jan 1 1970 UTC).
+    /// Maps to: C++ std::chrono::system_clock::time_point
+    /// </summary>
+    [Represents("std::chrono::system_clock::time_point", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<chrono>")]
+    public class DateTime {
+        public DateTime();
+
+        /// <summary>Constructs from milliseconds since Unix epoch.</summary>
+        public DateTime(long epochMilliseconds);
+
+        // ── Current time ──────────────────────────────────────────────────────
+
+        /// <summary>The current UTC date and time.</summary>
+        [Represents("std::chrono::system_clock::now", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<chrono>")]
+        public static DateTime UtcNow { get; }
+
+        /// <summary>The current local date and time.</summary>
+        [Represents("std::chrono::system_clock::now", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<chrono>")]
+        public static DateTime Now { get; }
+
+        // ── Arithmetic ────────────────────────────────────────────────────────
+
+        [Represents("operator+")] public DateTime Add(TimeSpan duration);
+        [Represents("operator-")] public DateTime Subtract(TimeSpan duration);
+
+        /// <summary>Returns the duration between this and other (this - other).</summary>
+        [Represents("operator-")] public TimeSpan Difference(DateTime other);
+
+        [Represents("operator==")] public bool Equals(DateTime other);
+        [Represents("operator<")]  public bool Before(DateTime other);
+        [Represents("operator>")]  public bool After(DateTime other);
+
+        // ── Components ────────────────────────────────────────────────────────
+
+        /// <summary>Milliseconds since Unix epoch (Jan 1 1970 00:00:00 UTC).</summary>
+        [Represents("std::chrono::duration_cast<std::chrono::milliseconds>")]
+        public long EpochMilliseconds { get; }
+
+        /// <summary>Seconds since Unix epoch.</summary>
+        [Represents("std::chrono::duration_cast<std::chrono::seconds>")]
+        public long EpochSeconds { get; }
+
+        /// <summary>
+        /// Formats this timestamp as a human-readable string (local time).
+        /// Example output: "2025-01-15 14:30:00"
+        /// Maps to: std::format + std::localtime conversion
+        /// </summary>
+        [Represents("Db_TimestampToString", CodePart.Member, Language.Cpp, MemberAccess.Dot, "<chrono>")]
+        public string ToString();
+    }
+
+    /// <summary>
+    /// A high-resolution monotonic clock for measuring elapsed time.
+    /// Not related to wall-clock time — use DateTime for that.
+    /// Maps to: C++ std::chrono::steady_clock
+    /// </summary>
+    [Represents("std::chrono::steady_clock", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<chrono>")]
+    public static class Stopwatch {
+        /// <summary>
+        /// Returns the current monotonic timestamp.
+        /// Subtract two timestamps to get a TimeSpan.
+        /// </summary>
+        [Represents("std::chrono::steady_clock::now")]
+        public static DateTime Now { get; }
+    }
+}

@@ -1,0 +1,171 @@
+namespace GMP {
+    /// <summary>
+    /// Arbitrary-precision integer with no fixed size limit.
+    /// All arithmetic operators (+, -, *, /, %) are supported and produce
+    /// a new BigInteger without overflow.
+    /// Maps to: C++ mpz_class  (include gmpxx.h, link -lgmp)
+    /// </summary>
+    [Represents("mpz_class", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<gmpxx.h>")]
+    public class BigInteger {
+
+        // ── Constructors ──────────────────────────────────────────────────────
+
+        /// <summary>Constructs the value zero.</summary>
+        public BigInteger();
+
+        /// <summary>Constructs from a native int.</summary>
+        public BigInteger(int value);
+
+        /// <summary>Constructs from a native 64-bit integer.</summary>
+        public BigInteger(long value);
+
+        /// <summary>Constructs from a double (truncated toward zero).</summary>
+        public BigInteger(double value);
+
+        /// <summary>
+        /// Parses a big integer from a string in the given base (2–62).
+        /// Throws on invalid characters.
+        /// </summary>
+        public BigInteger(string text, int base);
+
+        /// <summary>Parses from a decimal string.</summary>
+        public BigInteger(string text);
+
+        // ── Arithmetic operators ──────────────────────────────────────────────
+
+        [Represents("operator+")] public BigInteger Add(BigInteger other);
+        [Represents("operator-")] public BigInteger Subtract(BigInteger other);
+        [Represents("operator*")] public BigInteger Multiply(BigInteger other);
+        /// <summary>Integer (truncated) division.  Throws if other is zero.</summary>
+        [Represents("operator/")] public BigInteger Divide(BigInteger other);
+        /// <summary>Remainder after truncated division.</summary>
+        [Represents("operator%")] public BigInteger Modulo(BigInteger other);
+        [Represents("operator-")] public BigInteger Negate();
+
+        // ── Bitwise operators ─────────────────────────────────────────────────
+
+        [Represents("operator&")]  public BigInteger And(BigInteger other);
+        [Represents("operator|")]  public BigInteger Or(BigInteger other);
+        [Represents("operator^")]  public BigInteger Xor(BigInteger other);
+        [Represents("operator~")]  public BigInteger Not();
+        [Represents("operator<<")] public BigInteger ShiftLeft(int bits);
+        [Represents("operator>>")] public BigInteger ShiftRight(int bits);
+
+        // ── Comparison ────────────────────────────────────────────────────────
+
+        [Represents("operator==")] public bool Equals(BigInteger other);
+        [Represents("operator<")]  public bool LessThan(BigInteger other);
+        [Represents("operator>")]  public bool GreaterThan(BigInteger other);
+
+        /// <summary>
+        /// Returns -1, 0, or 1 as this is less than, equal to, or greater than other.
+        /// Maps to: C++ cmp(a, b)
+        /// </summary>
+        [Represents("cmp")]
+        public int CompareTo(BigInteger other);
+
+        // ── Properties ────────────────────────────────────────────────────────
+
+        /// <summary>The sign: -1, 0, or 1.</summary>
+        [Represents("sgn")]
+        public int Sign { get; }
+
+        /// <summary>True if the value is zero.</summary>
+        [Represents("sgn")]
+        public bool IsZero { get; }
+
+        /// <summary>True if the value is negative.</summary>
+        [Represents("sgn")]
+        public bool IsNegative { get; }
+
+        /// <summary>Number of bits required to represent the absolute value.</summary>
+        [Represents("mpz_sizeinbase")]
+        public long BitLength { get; }
+
+        // ── Math methods ──────────────────────────────────────────────────────
+
+        /// <summary>Absolute value.</summary>
+        [Represents("abs")]
+        public BigInteger Abs();
+
+        /// <summary>Integer square root (floor).</summary>
+        [Represents("sqrt")]
+        public BigInteger Sqrt();
+
+        /// <summary>Returns this raised to the given non-negative integer exponent.</summary>
+        [Represents("mpz_pow_ui")]
+        public BigInteger Pow(long exponent);
+
+        /// <summary>Greatest common divisor of this and other.  Always non-negative.</summary>
+        [Represents("gcd")]
+        public BigInteger Gcd(BigInteger other);
+
+        /// <summary>Least common multiple of this and other.</summary>
+        [Represents("lcm")]
+        public BigInteger Lcm(BigInteger other);
+
+        /// <summary>
+        /// Probabilistic primality test using reps Miller-Rabin rounds.
+        /// Returns 2 if definitely prime, 1 if probably prime, 0 if composite.
+        /// reps = 15 gives a false-positive rate below 2^-30.
+        /// </summary>
+        [Represents("mpz_probab_prime_p")]
+        public int IsProbablyPrime(int reps);
+
+        /// <summary>Returns the smallest prime strictly greater than this value.</summary>
+        [Represents("mpz_nextprime")]
+        public BigInteger NextPrime();
+
+        /// <summary>Returns (this * multiplier + addend) % modulus.</summary>
+        [Represents("mpz_addmul")]
+        public BigInteger MultiplyAdd(BigInteger multiplier, BigInteger addend, BigInteger modulus);
+
+        /// <summary>Modular inverse of this modulo mod.  Throws if no inverse exists.</summary>
+        [Represents("mpz_invert")]
+        public BigInteger ModInverse(BigInteger mod);
+
+        // ── Conversion ────────────────────────────────────────────────────────
+
+        /// <summary>Returns the value as a 64-bit signed integer.  Throws on overflow.</summary>
+        [Represents("get_si")]
+        public long ToInt64();
+
+        /// <summary>Returns the closest double (may lose precision).</summary>
+        [Represents("get_d")]
+        public double ToDouble();
+
+        /// <summary>Returns the decimal string representation.</summary>
+        [Represents("get_str")]
+        public string ToString();
+
+        /// <summary>Returns the string representation in the given base (2–62).</summary>
+        [Represents("get_str")]
+        public string ToString(int base);
+
+        // ── Static factories ──────────────────────────────────────────────────
+
+        /// <summary>The value zero.</summary>
+        [Represents("mpz_class(0)", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<gmpxx.h>")]
+        public static BigInteger Zero { get; }
+
+        /// <summary>The value one.</summary>
+        [Represents("mpz_class(1)", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<gmpxx.h>")]
+        public static BigInteger One { get; }
+
+        /// <summary>Returns 2 raised to the given exponent.</summary>
+        [Represents("mpz_ui_pow_ui")]
+        public static BigInteger PowerOfTwo(long exponent);
+
+        /// <summary>Returns the factorial of n (n!).</summary>
+        [Represents("mpz_fac_ui")]
+        public static BigInteger Factorial(long n);
+
+        /// <summary>Returns the binomial coefficient C(n, k).</summary>
+        [Represents("mpz_bin_ui")]
+        public static BigInteger Choose(BigInteger n, long k);
+
+        /// <summary>Returns the nth Fibonacci number.</summary>
+        [Represents("mpz_fib_ui")]
+        public static BigInteger Fibonacci(long n);
+    }
+}

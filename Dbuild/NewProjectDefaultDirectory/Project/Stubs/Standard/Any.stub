@@ -1,0 +1,36 @@
+namespace Standard {
+    /// <summary>
+    /// Type-erased container that can hold any copyable type.
+    /// Maps to: C++ std::any
+    /// </summary>
+    [Represents("std::any", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<any>")]
+    public class Any {
+        /// <summary>Constructs an empty any (contains no value).</summary>
+        public Any();
+
+        /// <summary>Constructs an any containing the given value.</summary>
+        public Any(object value);
+
+        /// <summary>Whether this any currently holds a value.</summary>
+        [Represents("has_value")]
+        public bool HasValue { get; }
+
+        /// <summary>The type_info of the contained value, or void_type if empty.</summary>
+        [Represents("type")]
+        public Type Type { get; }
+
+        /// <summary>Resets to an empty state (contains no value).</summary>
+        public void Reset();
+
+        /// <summary>Swaps contents with another any.</summary>
+        [Represents("swap")]
+        public void Swap(Any other);
+
+        /// <summary>Extracts the contained value as type T. Throws if type mismatch or empty.</summary>
+        [Represents("std::any_cast")]
+        public T Cast<T>();
+
+        /// <summary>Safely extracts the contained value as type T. Returns false if type mismatch or empty.</summary>
+        public bool TryCast<T>(out T value);
+    }
+}

@@ -1,0 +1,142 @@
+namespace Boost.Distributions {
+    /// <summary>
+    /// Normal (Gaussian) distribution with given mean and standard deviation.
+    /// Use Pdf() for the density, Cdf() for the cumulative probability, and
+    /// Quantile() for the inverse CDF (percent-point function).
+    /// Maps to: C++ boost::math::normal_distribution&lt;double&gt;
+    /// </summary>
+    [Represents("boost::math::normal_distribution<double>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/math/distributions/normal.hpp>")]
+    public class Normal {
+        public Normal();
+        public Normal(double mean, double stddev);
+
+        [Represents("mean")]   public double Mean   { get; }
+        [Represents("standard_deviation")] public double StdDev { get; }
+
+        [Represents("boost::math::pdf")]      public double Pdf(double x);
+        [Represents("boost::math::cdf")]      public double Cdf(double x);
+        [Represents("boost::math::quantile")] public double Quantile(double p);
+        [Represents("boost::math::mean")]     public double Mean();
+        [Represents("boost::math::variance")] public double Variance();
+    }
+
+    /// <summary>
+    /// Uniform distribution over [lower, upper].
+    /// Maps to: C++ boost::math::uniform_distribution&lt;double&gt;
+    /// </summary>
+    [Represents("boost::math::uniform_distribution<double>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/math/distributions/uniform.hpp>")]
+    public class Uniform {
+        public Uniform(double lower, double upper);
+
+        [Represents("lower")]  public double Lower { get; }
+        [Represents("upper")]  public double Upper { get; }
+
+        [Represents("boost::math::pdf")]      public double Pdf(double x);
+        [Represents("boost::math::cdf")]      public double Cdf(double x);
+        [Represents("boost::math::quantile")] public double Quantile(double p);
+    }
+
+    /// <summary>
+    /// Binomial distribution — number of successes in n independent trials each
+    /// with probability p.
+    /// Maps to: C++ boost::math::binomial_distribution&lt;double&gt;
+    /// </summary>
+    [Represents("boost::math::binomial_distribution<double>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/math/distributions/binomial.hpp>")]
+    public class Binomial {
+        public Binomial(int trials, double probability);
+
+        [Represents("success_fraction")] public double Probability { get; }
+        [Represents("trials")]           public int    Trials      { get; }
+
+        [Represents("boost::math::pdf")]      public double Pdf(double k);
+        [Represents("boost::math::cdf")]      public double Cdf(double k);
+        [Represents("boost::math::quantile")] public double Quantile(double p);
+        [Represents("boost::math::mean")]     public double Mean();
+        [Represents("boost::math::variance")] public double Variance();
+    }
+
+    /// <summary>
+    /// Poisson distribution — number of events in a fixed interval given mean rate.
+    /// Maps to: C++ boost::math::poisson_distribution&lt;double&gt;
+    /// </summary>
+    [Represents("boost::math::poisson_distribution<double>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/math/distributions/poisson.hpp>")]
+    public class Poisson {
+        public Poisson(double mean);
+
+        [Represents("mean")] public double Mean { get; }
+
+        [Represents("boost::math::pdf")]      public double Pdf(double k);
+        [Represents("boost::math::cdf")]      public double Cdf(double k);
+        [Represents("boost::math::quantile")] public double Quantile(double p);
+        [Represents("boost::math::variance")] public double Variance();
+    }
+
+    /// <summary>
+    /// Exponential distribution — time between Poisson events.
+    /// Maps to: C++ boost::math::exponential_distribution&lt;double&gt;
+    /// </summary>
+    [Represents("boost::math::exponential_distribution<double>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/math/distributions/exponential.hpp>")]
+    public class Exponential {
+        public Exponential(double rate);
+
+        [Represents("rate")] public double Rate { get; }
+
+        [Represents("boost::math::pdf")]      public double Pdf(double x);
+        [Represents("boost::math::cdf")]      public double Cdf(double x);
+        [Represents("boost::math::quantile")] public double Quantile(double p);
+        [Represents("boost::math::mean")]     public double Mean();
+        [Represents("boost::math::variance")] public double Variance();
+    }
+
+    /// <summary>
+    /// Student's t-distribution with the given degrees of freedom.
+    /// Commonly used for small-sample hypothesis testing.
+    /// Maps to: C++ boost::math::students_t_distribution&lt;double&gt;
+    /// </summary>
+    [Represents("boost::math::students_t_distribution<double>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/math/distributions/students_t.hpp>")]
+    public class StudentT {
+        public StudentT(double degreesOfFreedom);
+
+        [Represents("degrees_of_freedom")] public double DegreesOfFreedom { get; }
+
+        [Represents("boost::math::pdf")]      public double Pdf(double t);
+        [Represents("boost::math::cdf")]      public double Cdf(double t);
+        [Represents("boost::math::quantile")] public double Quantile(double p);
+    }
+
+    /// <summary>
+    /// Chi-squared distribution with the given degrees of freedom.
+    /// Used in goodness-of-fit and independence tests.
+    /// Maps to: C++ boost::math::chi_squared_distribution&lt;double&gt;
+    /// </summary>
+    [Represents("boost::math::chi_squared_distribution<double>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/math/distributions/chi_squared.hpp>")]
+    public class ChiSquared {
+        public ChiSquared(double degreesOfFreedom);
+
+        [Represents("degrees_of_freedom")] public double DegreesOfFreedom { get; }
+
+        [Represents("boost::math::pdf")]      public double Pdf(double x);
+        [Represents("boost::math::cdf")]      public double Cdf(double x);
+        [Represents("boost::math::quantile")] public double Quantile(double p);
+        [Represents("boost::math::mean")]     public double Mean();
+        [Represents("boost::math::variance")] public double Variance();
+    }
+
+    /// <summary>
+    /// Beta distribution over (0, 1) with shape parameters alpha and beta.
+    /// Maps to: C++ boost::math::beta_distribution&lt;double&gt;
+    /// </summary>
+    [Represents("boost::math::beta_distribution<double>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/math/distributions/beta.hpp>")]
+    public class Beta {
+        public Beta(double alpha, double beta);
+
+        [Represents("alpha")] public double Alpha { get; }
+        [Represents("beta")]  public double BetaParam  { get; }
+
+        [Represents("boost::math::pdf")]      public double Pdf(double x);
+        [Represents("boost::math::cdf")]      public double Cdf(double x);
+        [Represents("boost::math::quantile")] public double Quantile(double p);
+        [Represents("boost::math::mean")]     public double Mean();
+        [Represents("boost::math::variance")] public double Variance();
+    }
+}

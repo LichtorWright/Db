@@ -1,0 +1,13 @@
+namespace Standard {
+    /// <summary>
+    /// C++-familiar alias for Standard.List.
+    /// Maps to: C++ std::vector&lt;T&gt;
+    /// </summary>
+    public class Vector<T> : List<T> {
+        public Vector() : base() { }
+
+        public Vector(int capacity) : base(capacity) { }
+
+        public Vector(int count, T item) : base(count, item) { }
+    }
+}

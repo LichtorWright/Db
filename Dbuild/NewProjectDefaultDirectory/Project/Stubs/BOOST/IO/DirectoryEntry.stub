@@ -1,0 +1,40 @@
+namespace Boost.IO {
+    /// <summary>
+    /// Represents a single filesystem entry returned by a directory iterator.
+    /// Provides the path, status, and type of the entry without additional syscalls.
+    /// Maps to: C++ boost::filesystem::directory_entry
+    /// </summary>
+    [Represents("boost::filesystem::directory_entry", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/filesystem.hpp>")]
+    public class DirectoryEntry {
+        /// <summary>Constructs an entry for the given path.</summary>
+        public DirectoryEntry(Path path);
+
+        /// <summary>The full path of this entry.</summary>
+        [Represents("path")]
+        public Path Path { get; }
+
+        /// <summary>True if this entry is a regular file.</summary>
+        [Represents("is_regular_file")]
+        public bool IsFile { get; }
+
+        /// <summary>True if this entry is a directory.</summary>
+        [Represents("is_directory")]
+        public bool IsDirectory { get; }
+
+        /// <summary>True if this entry is a symbolic link.</summary>
+        [Represents("is_symlink")]
+        public bool IsSymlink { get; }
+
+        /// <summary>True if this entry refers to something that exists on disk.</summary>
+        [Represents("exists")]
+        public bool Exists { get; }
+
+        /// <summary>File size in bytes.  Only valid if IsFile is true.</summary>
+        [Represents("file_size")]
+        public long Size { get; }
+
+        /// <summary>Last-write time as seconds since epoch.</summary>
+        [Represents("last_write_time")]
+        public long LastWriteTime { get; }
+    }
+}

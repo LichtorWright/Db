@@ -1,0 +1,44 @@
+namespace Boost.Events {
+    /// <summary>
+    /// A type-safe, multi-slot signal.  Connect any number of handlers; calling
+    /// Emit() invokes them all in connection order.  Thread-safe by default.
+    /// Maps to: C++ boost::signals2::signal&lt;T&gt;
+    /// </summary>
+    [Represents("boost::signals2::signal", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/signals2.hpp>")]
+    public class Signal<T> {
+        /// <summary>Constructs an empty signal with no connected slots.</summary>
+        public Signal();
+
+        /// <summary>
+        /// Connects a handler and returns a Connection that can be used to
+        /// disconnect it later.  Handlers are called in the order they were connected.
+        /// </summary>
+        [Represents("connect")]
+        public Connection Connect(T handler);
+
+        /// <summary>
+        /// Connects a handler at the given group index.
+        /// Lower group indices fire before higher ones.
+        /// </summary>
+        [Represents("connect")]
+        public Connection Connect(int group, T handler);
+
+        /// <summary>
+        /// Fires the signal, invoking all connected handlers with the given arguments.
+        /// </summary>
+        [Represents("operator()")]
+        public void Emit();
+
+        /// <summary>Disconnects all connected handlers.</summary>
+        [Represents("disconnect_all_slots")]
+        public void DisconnectAll();
+
+        /// <summary>True if there are no connected handlers.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>The number of connected handlers.</summary>
+        [Represents("num_slots")]
+        public int Count { get; }
+    }
+}

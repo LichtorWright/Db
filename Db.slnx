@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Dbuild/Dbuild.csproj" />
+  <Project Path="taste/taste.csproj" />
+</Solution>

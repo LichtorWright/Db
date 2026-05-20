@@ -1,0 +1,65 @@
+namespace Standard {
+    /// <summary>
+    /// Sorted key-value multimap allowing duplicate keys.
+    /// Maps to: C++ std::multimap&lt;TKey, TValue&gt;
+    /// </summary>
+    [Represents("std::multimap", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<map>")]
+    public class MultiMap<TKey, TValue> {
+        /// <summary>Constructs an empty multimap.</summary>
+        public MultiMap();
+
+        /// <summary>The number of entries.</summary>
+        [Represents("size")]
+        public int Count { get; }
+
+        /// <summary>Whether the multimap is empty.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>Adds a key-value pair (allows duplicate keys).</summary>
+        [Represents("insert")]
+        public void Add(TKey key, TValue value);
+
+        /// <summary>Removes all entries with the given key. Returns count removed.</summary>
+        [Represents("erase")]
+        public int Remove(TKey key);
+
+        /// <summary>Removes all entries.</summary>
+        [Represents("clear")]
+        public void Clear();
+
+        /// <summary>Whether the multimap contains the given key.</summary>
+        [Represents("contains")]
+        public bool ContainsKey(TKey key);
+
+        /// <summary>The number of entries matching the given key.</summary>
+        [Represents("count")]
+        public int CountOf(TKey key);
+
+        /// <summary>Returns an iterator to the first element not less than key.</summary>
+        [Represents("lower_bound")]
+        public KeyValuePair LowerBound(TKey key);
+
+        /// <summary>Returns an iterator to the first element greater than key.</summary>
+        [Represents("upper_bound")]
+        public KeyValuePair UpperBound(TKey key);
+
+        /// <summary>Returns the range of elements matching key.</summary>
+        [Represents("equal_range")]
+        public void EqualRange(TKey key);
+
+        /// <summary>Swaps contents with another multimap.</summary>
+        [Represents("swap")]
+        public void Swap(MultiMap<TKey, TValue> other);
+
+        /// <summary>Supports foreach iteration over the multimap.</summary>
+        public class Enumerator {
+            public TKey Key { get; }
+            public TValue Value { get; set; }
+            public bool MoveNext();
+            public void Reset();
+        }
+
+        public Enumerator GetEnumerator();
+    }
+}

@@ -1,0 +1,120 @@
+namespace Standard {
+    /// <summary>
+    /// A compiled regular expression pattern.  Compile once, apply many times.
+    /// Maps to: C++ std::regex (ECMAScript syntax by default)
+    /// </summary>
+    [Represents("std::regex", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<regex>")]
+    public class Regex {
+        /// <summary>Compiles the pattern with default (ECMAScript) syntax.</summary>
+        public Regex(string pattern);
+        /// <summary>Compiles with explicit syntax flags (e.g. "icase" for case-insensitive).</summary>
+        public Regex(string pattern, string flags);
+
+        // ── Static match helpers ──────────────────────────────────────────────
+
+        /// <summary>
+        /// Returns true if pattern matches the entire string.
+        /// Maps to: std::regex_match
+        /// </summary>
+        [Represents("std::regex_match", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<regex>")]
+        public static bool IsMatch(string input, string pattern);
+
+        /// <summary>
+        /// Returns true if pattern appears anywhere in the string.
+        /// Maps to: std::regex_search
+        /// </summary>
+        [Represents("std::regex_search", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<regex>")]
+        public static bool Contains(string input, string pattern);
+
+        /// <summary>
+        /// Replaces all non-overlapping matches with replacement.
+        /// Maps to: std::regex_replace with std::regex_constants::format_default
+        /// </summary>
+        [Represents("std::regex_replace", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<regex>")]
+        public static string Replace(string input, string pattern, string replacement);
+
+        // ── Instance methods ──────────────────────────────────────────────────
+
+        /// <summary>Tests whether this regex matches the entire input string.</summary>
+        [Represents("std::regex_match")]
+        public bool IsMatch(string input);
+
+        /// <summary>Tests whether this regex appears anywhere in the input.</summary>
+        [Represents("std::regex_search")]
+        public bool Contains(string input);
+
+        /// <summary>Finds the first match in input and returns it, or null.</summary>
+        [Represents("std::regex_search")]
+        public RegexMatch Match(string input);
+
+        /// <summary>Returns all non-overlapping matches in input.</summary>
+        [Represents("std::sregex_iterator")]
+        public RegexMatch[] Matches(string input);
+
+        /// <summary>Replaces all matches with replacement.</summary>
+        [Represents("std::regex_replace")]
+        public string Replace(string input, string replacement);
+    }
+
+    /// <summary>
+    /// The result of a successful regex search or match.
+    /// Maps to: C++ std::smatch (std::match_results&lt;std::string::const_iterator&gt;)
+    /// </summary>
+    [Represents("std::smatch", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<regex>")]
+    public class RegexMatch {
+        /// <summary>True if the match object holds a valid result.</summary>
+        [Represents("ready")]
+        public bool IsSuccess { get; }
+
+        /// <summary>The full matched text (group 0).</summary>
+        [Represents("str")]
+        public string Value { get; }
+
+        /// <summary>Byte offset of the match in the input string.</summary>
+        [Represents("position")]
+        public int Index { get; }
+
+        /// <summary>Length of the matched text in bytes.</summary>
+        [Represents("length")]
+        public int Length { get; }
+
+        /// <summary>Number of capture groups (does not include group 0).</summary>
+        [Represents("size")]
+        public int GroupCount { get; }
+
+        /// <summary>Returns the text captured by group number (1-based; 0 = whole match).</summary>
+        [Represents("operator[]")]
+        public RegexGroup Group(int index);
+
+        /// <summary>The portion of the input before the match.</summary>
+        [Represents("prefix")]
+        public string Prefix { get; }
+
+        /// <summary>The portion of the input after the match.</summary>
+        [Represents("suffix")]
+        public string Suffix { get; }
+    }
+
+    /// <summary>
+    /// A single capture group within a RegexMatch.
+    /// Maps to: C++ std::ssub_match
+    /// </summary>
+    [Represents("std::ssub_match", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<regex>")]
+    public class RegexGroup {
+        /// <summary>True if this group participated in the match.</summary>
+        [Represents("matched")]
+        public bool IsMatched { get; }
+
+        /// <summary>The captured text for this group.</summary>
+        [Represents("str")]
+        public string Value { get; }
+
+        /// <summary>Byte offset of this group in the input string.</summary>
+        [Represents("first")]
+        public int Index { get; }
+
+        /// <summary>Length of this group's captured text.</summary>
+        [Represents("length")]
+        public int Length { get; }
+    }
+}

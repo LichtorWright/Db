@@ -1,0 +1,64 @@
+namespace Standard {
+    /// <summary>
+    /// Sorted set allowing duplicate elements.
+    /// Maps to: C++ std::multiset&lt;T&gt;
+    /// </summary>
+    [Represents("std::multiset", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<set>")]
+    public class Multiset<T> {
+        /// <summary>Constructs an empty multiset.</summary>
+        public Multiset();
+
+        /// <summary>The number of elements.</summary>
+        [Represents("size")]
+        public int Count { get; }
+
+        /// <summary>Whether the multiset is empty.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>Adds an element (allows duplicates).</summary>
+        [Represents("insert")]
+        public void Add(T item);
+
+        /// <summary>Removes all elements equal to item. Returns count removed.</summary>
+        [Represents("erase")]
+        public int Remove(T item);
+
+        /// <summary>Removes all elements.</summary>
+        [Represents("clear")]
+        public void Clear();
+
+        /// <summary>Whether the multiset contains the given element.</summary>
+        [Represents("contains")]
+        public bool Contains(T item);
+
+        /// <summary>The number of elements matching the given item.</summary>
+        [Represents("count")]
+        public int CountOf(T item);
+
+        /// <summary>Returns an iterator to the first element not less than item.</summary>
+        [Represents("lower_bound")]
+        public T LowerBound(T item);
+
+        /// <summary>Returns an iterator to the first element greater than item.</summary>
+        [Represents("upper_bound")]
+        public T UpperBound(T item);
+
+        /// <summary>Returns the range of elements matching item.</summary>
+        [Represents("equal_range")]
+        public void EqualRange(T item);
+
+        /// <summary>Swaps contents with another multiset.</summary>
+        [Represents("swap")]
+        public void Swap(Multiset<T> other);
+
+        /// <summary>Supports foreach iteration over the multiset.</summary>
+        public class Enumerator {
+            public T Current { get; }
+            public bool MoveNext();
+            public void Reset();
+        }
+
+        public Enumerator GetEnumerator();
+    }
+}

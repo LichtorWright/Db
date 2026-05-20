@@ -1,0 +1,41 @@
+namespace Standard {
+    /// <summary>
+    /// Weak reference to a shared object. Does not prevent deletion.
+    /// Maps to: C++ std::weak_ptr&lt;T&gt;
+    /// </summary>
+    [Represents("std::weak_ptr", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<memory>")]
+    public class WeakPtr<T> where T : class {
+        /// <summary>Constructs an empty weak pointer.</summary>
+        public WeakPtr();
+
+        /// <summary>Constructs from a shared pointer.</summary>
+        public WeakPtr(SharedPtr<T> shared);
+
+        /// <summary>Whether the referenced object has been deleted.</summary>
+        [Represents("expired")]
+        public bool IsExpired { get; }
+
+        /// <summary>The number of shared pointers sharing ownership.</summary>
+        [Represents("use_count")]
+        public int UseCount { get; }
+
+        /// <summary>Attempts to acquire a shared pointer. Returns null if expired.</summary>
+        [Represents("lock")]
+        public SharedPtr<T> TryGetTarget();
+
+        /// <summary>Releases the weak reference.</summary>
+        public void Reset();
+
+        /// <summary>Swaps contents with another weak pointer.</summary>
+        [Represents("swap")]
+        public void Swap(WeakPtr<T> other);
+
+        /// <summary>Orders this weak pointer before the shared pointer.</summary>
+        [Represents("owner_before")]
+        public bool OwnerBefore(SharedPtr<T> other);
+
+        /// <summary>Orders this weak pointer before another weak pointer.</summary>
+        [Represents("owner_before")]
+        public bool OwnerBefore(WeakPtr<T> other);
+    }
+}

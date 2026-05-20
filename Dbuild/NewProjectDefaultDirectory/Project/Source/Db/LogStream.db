@@ -1,0 +1,107 @@
+using Standard;
+
+namespace Db {
+
+    /// <summary>
+    /// A log destination that receives messages and writes them to a backend.
+    /// Create streams for different sinks: console, file, network, etc.
+    /// Usage: log myStream for MessageType.Info "Server started";
+    /// </summary>
+    public class LogStream
+    {
+        private string _name;
+        private string _backend;     // "console", "file", "network", "system"
+        private string _path;         // file path or network address
+        private MessageType _minLevel;
+
+        /// <summary>The name of this stream (used in log statements).</summary>
+        public string Name => _name;
+
+        /// <summary>The minimum message level this stream will process.</summary>
+        public MessageType MinLevel => _minLevel;
+
+        /// <summary>Creates a console log stream.</summary>
+        public static LogStream Console(string name = "console", MessageType minLevel = MessageType.Debug)
+        {
+            var s = LogStream();
+            s._name = name;
+            s._backend = "console";
+            s._minLevel = minLevel;
+            return s;
+        }
+
+        /// <summary>Creates a file log stream.</summary>
+        public static LogStream File(string name, string path, MessageType minLevel = MessageType.Debug)
+        {
+            var s = LogStream();
+            s._name = name;
+            s._backend = "file";
+            s._path = path;
+            s._minLevel = minLevel;
+            return s;
+        }
+
+        /// <summary>Creates a network log stream (sends to remote sink).</summary>
+        public static LogStream Network(string name, string address, int port, MessageType minLevel = MessageType.Info)
+        {
+            var s = LogStream();
+            s._name = name;
+            s._backend = "network";
+            s._path = address + ":" + port.ToString();
+            s._minLevel = minLevel;
+            return s;
+        }
+
+        /// <summary>
+        /// Writes a message to this stream.
+        /// Called by the log statement compiler output.
+        /// Respects MinLevel — messages below the threshold are silently dropped.
+        /// </summary>
+        public void Write(MessageType level, string message)
+        {
+            unless (level >= _minLevel)
+                return;
+
+            string prefix = FormatPrefix(level);
+
+            if (_backend == "console")
+            {
+                if (level >= MessageType.Warning)
+                    Standard.Console.WriteError(prefix + message);
+                else
+                    Standard.Console.WriteLine(prefix + message);
+            }
+            else if (_backend == "file")
+            {
+                var fs = FileStream(_path, "app");
+                fs.WriteLine(prefix + message);
+                fs.Close();
+            }
+            // network and system backends handled by future extensions
+        }
+
+        /// <summary>
+        /// Formats the prefix for a log line: [timestamp] [LEVEL] [stream].
+        /// </summary>
+        private string FormatPrefix(MessageType level)
+        {
+            string levelStr = LevelToString(level);
+            return "[" + Standard.DateTime.Now.ToString() + "] [" + levelStr + "] [" + _name + "] ";
+        }
+
+        /// <summary>Converts a MessageType to its short string representation.</summary>
+        private string LevelToString(MessageType level)
+        {
+            if (level == MessageType.Debug)     return "DBG";
+            if (level == MessageType.Info)      return "INF";
+            if (level == MessageType.Message)   return "MSG";
+            if (level == MessageType.Warning)   return "WRN";
+            if (level == MessageType.Error)     return "ERR";
+            if (level == MessageType.Critical)  return "CRT";
+            if (level == MessageType.Perf)      return "PRF";
+            if (level == MessageType.Audit)     return "AUD";
+            if (level == MessageType.Telemetry) return "TLM";
+            return "???";
+        }
+    }
+}

@@ -1,0 +1,125 @@
+namespace Boost.Net {
+    /// <summary>
+    /// High-level application lifecycle helpers.
+    /// Run() blocks the calling thread driving the IoContext event loop until
+    /// Exit() is called or the process receives a termination signal.
+    /// This mirrors the feel of System.Windows.Application.Run() / Environment.Exit().
+    ///
+    /// Typical usage:
+    ///   IoContext app = new IoContext()
+    ///   // … set up sockets, timers, signal handlers …
+    ///   Application.Run(app)   // blocks here
+    ///
+    /// Maps to: boost::asio::io_context::run() + executor_work_guard + signal_set
+    /// </summary>
+    [Represents("boost::asio", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<boost/asio.hpp>")]
+    public static class Application {
+        /// <summary>
+        /// Runs the IoContext event loop on the calling thread, blocking until all
+        /// work is exhausted or Exit() is called.
+        /// Automatically installs a SIGINT/SIGTERM handler that calls Exit(context).
+        /// </summary>
+        [Represents("boost::asio::io_context::run", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/asio.hpp>")]
+        public static void Run(IoContext context);
+
+        /// <summary>
+        /// Signals the event loop to stop and unblocks any thread currently in Run().
+        /// Safe to call from a signal handler or another thread.
+        /// </summary>
+        [Represents("boost::asio::io_context::stop", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/asio.hpp>")]
+        public static void Exit(IoContext context);
+    }
+
+    /// <summary>
+    /// Prevents an IoContext from running out of work and returning from Run()
+    /// prematurely.  Hold one for as long as the application should stay alive;
+    /// dispose (let it go out of scope) to allow Run() to drain and return.
+    /// Maps to: C++ boost::asio::executor_work_guard&lt;boost::asio::io_context::executor_type&gt;
+    /// </summary>
+    [Represents("boost::asio::executor_work_guard<boost::asio::io_context::executor_type>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/asio.hpp>")]
+    public class WorkGuard {
+        /// <summary>
+        /// Constructs a work guard tied to context.
+        /// Use boost::asio::make_work_guard(context) under the hood.
+        /// </summary>
+        public WorkGuard(IoContext context);
+
+        /// <summary>
+        /// Releases the guard, allowing the IoContext to stop once all pending
+        /// handlers have finished.
+        /// </summary>
+        [Represents("reset")]
+        public void Release();
+
+        /// <summary>True while the guard is active (has not been released).</summary>
+        [Represents("owns_work")]
+        public bool IsActive { get; }
+    }
+
+    /// <summary>
+    /// Listens for one or more OS signals (e.g. SIGINT, SIGTERM) and invokes
+    /// an async handler when any of them fires.  Use to implement clean shutdown.
+    /// Maps to: C++ boost::asio::signal_set
+    /// </summary>
+    [Represents("boost::asio::signal_set", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/asio.hpp>")]
+    public class SignalSet {
+        /// <summary>Constructs an empty signal set bound to context.</summary>
+        public SignalSet(IoContext context);
+
+        /// <summary>Constructs a signal set and immediately adds one signal number.</summary>
+        public SignalSet(IoContext context, int signal);
+
+        /// <summary>Constructs a signal set and immediately adds two signal numbers.</summary>
+        public SignalSet(IoContext context, int signal1, int signal2);
+
+        /// <summary>Adds a signal number to the set (e.g. Signal.Interrupt).</summary>
+        [Represents("add")]
+        public void Add(int signal);
+
+        /// <summary>Removes a signal number from the set.</summary>
+        [Represents("remove")]
+        public void Remove(int signal);
+
+        /// <summary>Removes all signal numbers from the set.</summary>
+        [Represents("clear")]
+        public void Clear();
+
+        /// <summary>Cancels any pending async wait.</summary>
+        [Represents("cancel")]
+        public void Cancel();
+
+        /// <summary>
+        /// Starts an asynchronous wait for any signal in the set.
+        /// Handler receives (ErrorCode, signalNumber).
+        /// Re-call WaitAsync inside the handler to keep listening.
+        /// </summary>
+        [Represents("async_wait")]
+        public void WaitAsync(Action<ErrorCode, int> handler);
+    }
+
+    /// <summary>
+    /// Common POSIX signal numbers as named constants.
+    /// </summary>
+    [Represents("", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<csignal>")]
+    public static class Signal {
+        /// <summary>Interrupt (Ctrl+C).</summary>
+        [Represents("SIGINT",  CodePart.Member, Language.Cpp, MemberAccess.Colons, "<csignal>")]
+        public static int Interrupt { get; }
+
+        /// <summary>Termination request (e.g. from kill or systemd stop).</summary>
+        [Represents("SIGTERM", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<csignal>")]
+        public static int Terminate { get; }
+
+        /// <summary>Hangup (terminal closed; also used for config reload by convention).</summary>
+        [Represents("SIGHUP",  CodePart.Member, Language.Cpp, MemberAccess.Colons, "<csignal>")]
+        public static int Hangup { get; }
+
+        /// <summary>User-defined signal 1 — free to repurpose in your application.</summary>
+        [Represents("SIGUSR1", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<csignal>")]
+        public static int User1 { get; }
+
+        /// <summary>User-defined signal 2.</summary>
+        [Represents("SIGUSR2", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<csignal>")]
+        public static int User2 { get; }
+    }
+}

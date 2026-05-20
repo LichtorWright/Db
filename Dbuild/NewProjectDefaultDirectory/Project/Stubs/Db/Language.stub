@@ -1,0 +1,18 @@
+namespace Db
+{
+    /// <summary>
+    /// Identifies the destination language a stub targets.
+    /// The emitter skips stubs whose Language does not match the active target.
+    /// </summary>
+    public enum Language
+    {
+        C,
+        Cpp,
+        Rust,
+        Python,
+        TypeScript,
+        Java,
+        Swift,
+        Go,
+    }
+}

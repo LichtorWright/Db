@@ -1,0 +1,44 @@
+namespace Standard {
+    /// <summary>
+    /// A pair of values.
+    /// Maps to: C++ std::pair&lt;TFirst, TSecond&gt;
+    /// </summary>
+    [Represents("std::pair", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<utility>")]
+    public class Pair<TFirst, TSecond> {
+        /// <summary>Constructs a default pair.</summary>
+        public Pair();
+
+        /// <summary>Constructs a pair with the given values.</summary>
+        public Pair(TFirst first, TSecond second);
+
+        /// <summary>The first value.</summary>
+        [Represents("first")]
+        public TFirst First { get; set; }
+
+        /// <summary>The second value.</summary>
+        [Represents("second")]
+        public TSecond Second { get; set; }
+
+        /// <summary>Converts to string.</summary>
+        public override string ToString();
+
+        /// <summary>Deconstructs into individual values.</summary>
+        public void Deconstruct(out TFirst first, out TSecond second);
+
+        /// <summary>Swaps contents with another pair.</summary>
+        [Represents("swap")]
+        public void Swap(Pair<TFirst, TSecond> other);
+
+        /// <summary>Tests equality.</summary>
+        [Represents("operator==")]
+        public static bool operator==(Pair<TFirst, TSecond> left, Pair<TFirst, TSecond> right);
+
+        /// <summary>Tests inequality.</summary>
+        [Represents("operator!=")]
+        public static bool operator!=(Pair<TFirst, TSecond> left, Pair<TFirst, TSecond> right);
+
+        /// <summary>Tests less than (lexicographic).</summary>
+        [Represents("operator<")]
+        public static bool operator<(Pair<TFirst, TSecond> left, Pair<TFirst, TSecond> right);
+    }
+}

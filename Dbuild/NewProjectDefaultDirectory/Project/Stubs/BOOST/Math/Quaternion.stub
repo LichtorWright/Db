@@ -1,0 +1,69 @@
+namespace Boost.Math {
+    /// <summary>
+    /// A quaternion q = w + xi + yj + zk used for representing 3D rotations
+    /// without gimbal lock.  Prefer Quaternion over Euler angles for any code
+    /// that interpolates or chains rotations.
+    /// Maps to: C++ boost::math::quaternion&lt;double&gt;
+    /// </summary>
+    [Represents("boost::math::quaternion<double>", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<boost/math/quaternion.hpp>")]
+    public class Quaternion {
+        /// <summary>The identity quaternion (no rotation): w=1, x=y=z=0.</summary>
+        public Quaternion();
+
+        /// <summary>Constructs a quaternion from its four components.</summary>
+        public Quaternion(double w, double x, double y, double z);
+
+        // ── Components ────────────────────────────────────────────────────────
+
+        [Represents("R_component_1")] public double W { get; }
+        [Represents("R_component_2")] public double X { get; }
+        [Represents("R_component_3")] public double Y { get; }
+        [Represents("R_component_4")] public double Z { get; }
+
+        // ── Magnitude ─────────────────────────────────────────────────────────
+
+        /// <summary>The magnitude (norm) √(w²+x²+y²+z²).</summary>
+        [Represents("boost::math::abs")]
+        public double Magnitude();
+
+        /// <summary>The squared magnitude w²+x²+y²+z²  (cheaper than Magnitude).</summary>
+        [Represents("boost::math::norm")]
+        public double MagnitudeSquared();
+
+        // ── Derived quaternions ───────────────────────────────────────────────
+
+        /// <summary>The conjugate q* = w - xi - yj - zk.</summary>
+        [Represents("boost::math::conj")]
+        public Quaternion Conjugate();
+
+        /// <summary>
+        /// Returns a unit quaternion representing the same rotation.
+        /// Equivalent to dividing by Magnitude().
+        /// </summary>
+        [Represents("boost::math::normalized")]
+        public Quaternion Normalize();
+
+        // ── Factory helpers ───────────────────────────────────────────────────
+
+        /// <summary>
+        /// Constructs a quaternion representing a rotation of angleRadians around
+        /// the given unit axis (x, y, z).
+        /// </summary>
+        [Represents("boost::math::spherical", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/math/quaternion.hpp>")]
+        public static Quaternion FromAxisAngle(double x, double y, double z, double angleRadians);
+
+        /// <summary>The identity quaternion (w=1, x=y=z=0).</summary>
+        [Represents("boost::math::quaternion<double>(1,0,0,0)", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/math/quaternion.hpp>")]
+        public static Quaternion Identity { get; }
+
+        // ── Interpolation ─────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Spherical linear interpolation between a and b.
+        /// t=0 returns a; t=1 returns b.  Produces smooth constant-speed rotation.
+        /// Maps to: hand-rolled slerp using boost quaternion operations.
+        /// </summary>
+        [Represents("boost::math::slerp", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<boost/math/quaternion.hpp>")]
+        public static Quaternion Slerp(Quaternion a, Quaternion b, double t);
+    }
+}

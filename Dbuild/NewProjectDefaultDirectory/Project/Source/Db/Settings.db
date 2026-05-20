@@ -1,0 +1,383 @@
+using Standard;
+
+namespace Db {
+
+    /// <summary>
+    /// Manages application settings stored in .dbset files.
+    /// .dbset format: INI-style sections with key = value pairs.
+    /// Multi-line values use triple-quoted strings (""").
+    /// </summary>
+    public class Settings
+    {
+        private Dictionary<string, Dictionary<string, string>> _sections;
+        private string _path;
+        private bool _dirty;
+
+        /// <summary>The file path this settings instance reads from and writes to.</summary>
+        public string Path => _path;
+
+        /// <summary>Whether any values have been changed since the last Save.</summary>
+        public bool IsDirty => _dirty;
+
+        /// <summary>
+        /// Loads settings from a .dbset file.
+        /// Returns an empty Settings if the file does not exist.
+        /// </summary>
+        public static Settings Load(string path)
+        {
+            var s = Settings();
+            s._path = path;
+            unless (Filesystem.Exists(path))
+                return s;
+
+            s.ReadFromDisk();
+            return s;
+        }
+
+        /// <summary>
+        /// Gets the raw string value from the root section by key.
+        /// Returns default if the key is not found.
+        /// </summary>
+        public string Get(string key, string default = "")
+        {
+            return Get("", key, default);
+        }
+
+        /// <summary>
+        /// Gets the raw string value from a named section by key.
+        /// Returns default if the section or key is not found.
+        /// </summary>
+        public string Get(string section, string key, string default = "")
+        {
+            unless (_sections.ContainsKey(section))
+                return default;
+            unless (_sections[section].ContainsKey(key))
+                return default;
+
+            return _sections[section][key];
+        }
+
+        /// <summary>
+        /// Gets an int value from the root section by key.
+        /// </summary>
+        public int GetInt(string key, int default = 0)
+        {
+            return GetInt("", key, default);
+        }
+
+        /// <summary>
+        /// Gets an int value from a named section by key.
+        /// </summary>
+        public int GetInt(string section, string key, int default = 0)
+        {
+            string raw = Get(section, key);
+            if (raw == "")
+                return default;
+            return int.Parse(raw);
+        }
+
+        /// <summary>
+        /// Gets a long value from the root section by key.
+        /// </summary>
+        public long GetLong(string key, long default = 0)
+        {
+            return GetLong("", key, default);
+        }
+
+        /// <summary>
+        /// Gets a long value from a named section by key.
+        /// </summary>
+        public long GetLong(string section, string key, long default = 0)
+        {
+            string raw = Get(section, key);
+            if (raw == "")
+                return default;
+            return long.Parse(raw);
+        }
+
+        /// <summary>
+        /// Gets a float value from the root section by key.
+        /// </summary>
+        public float GetFloat(string key, float default = 0.0f)
+        {
+            return GetFloat("", key, default);
+        }
+
+        /// <summary>
+        /// Gets a float value from a named section by key.
+        /// </summary>
+        public float GetFloat(string section, string key, float default = 0.0f)
+        {
+            string raw = Get(section, key);
+            if (raw == "")
+                return default;
+            return float.Parse(raw);
+        }
+
+        /// <summary>
+        /// Gets a double value from the root section by key.
+        /// </summary>
+        public double GetDouble(string key, double default = 0.0)
+        {
+            return GetDouble("", key, default);
+        }
+
+        /// <summary>
+        /// Gets a double value from a named section by key.
+        /// </summary>
+        public double GetDouble(string section, string key, double default = 0.0)
+        {
+            string raw = Get(section, key);
+            if (raw == "")
+                return default;
+            return double.Parse(raw);
+        }
+
+        /// <summary>
+        /// Gets a bool value from the root section by key.
+        /// </summary>
+        public bool GetBool(string key, bool default = false)
+        {
+            return GetBool("", key, default);
+        }
+
+        /// <summary>
+        /// Gets a bool value from a named section by key.
+        /// </summary>
+        public bool GetBool(string section, string key, bool default = false)
+        {
+            string raw = Get(section, key);
+            if (raw == "")
+                return default;
+            return bool.Parse(raw);
+        }
+
+        /// <summary>
+        /// Sets a value in the root (no section).
+        /// </summary>
+        public void Set(string key, string value)
+        {
+            Set("", key, value);
+        }
+
+        /// <summary>
+        /// Sets a value in a named section.
+        /// </summary>
+        public void Set(string section, string key, string value)
+        {
+            unless (_sections.ContainsKey(section))
+                _sections[section] = Dictionary<string, string>();
+
+            _sections[section][key] = value;
+            _dirty = true;
+        }
+
+        /// <summary>
+        /// Returns whether a key exists in the root section.
+        /// </summary>
+        public bool HasKey(string key)
+        {
+            return HasKey("", key);
+        }
+
+        /// <summary>
+        /// Returns whether a key exists in a named section.
+        /// </summary>
+        public bool HasKey(string section, string key)
+        {
+            unless (_sections.ContainsKey(section))
+                return false;
+            return _sections[section].ContainsKey(key);
+        }
+
+        /// <summary>
+        /// Removes a key from the root section.
+        /// Returns true if the key existed and was removed.
+        /// </summary>
+        public bool Remove(string key)
+        {
+            return Remove("", key);
+        }
+
+        /// <summary>
+        /// Removes a key from a named section.
+        /// Returns true if the key existed and was removed.
+        /// </summary>
+        public bool Remove(string section, string key)
+        {
+            unless (_sections.ContainsKey(section))
+                return false;
+
+            if (_sections[section].Remove(key))
+            {
+                _dirty = true;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns all section names.
+        /// </summary>
+        public List<string> GetSectionNames()
+        {
+            var names = List<string>();
+            foreach (var section in _sections.Keys)
+                unless (section == "")  // skip root
+                    names.Add(section);
+            return names;
+        }
+
+        /// <summary>
+        /// Returns all keys in a section.
+        /// </summary>
+        public List<string> GetKeys(string section = "")
+        {
+            unless (_sections.ContainsKey(section))
+                return List<string>();
+            return List<string>(_sections[section].Keys);
+        }
+
+        /// <summary>
+        /// Saves all settings to the .dbset file.
+        /// Only writes if values have changed since last save.
+        /// </summary>
+        public void Save()
+        {
+            unless (_dirty)
+                return;
+            WriteToDisk();
+            _dirty = false;
+        }
+
+        `Save();  // defer: auto-save when Settings goes out of scope
+
+        // ── Private ───────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Parses a .dbset file into _sections.
+        /// Format:
+        ///   [SectionName]        — starts a section
+        ///   key = value          — key-value pair in current section
+        ///   key = """            — starts a triple-quoted multi-line value
+        ///     line 1
+        ///     line 2
+        ///   """                  — ends triple-quoted value
+        ///   # comment            — lines starting with # are ignored
+        /// </summary>
+        private void ReadFromDisk()
+        {
+            _sections[""] = Dictionary<string, string>();  // root section
+            string currentSection = "";
+            bool inTripleQuote = false;
+            string tripleKey = "";
+            var tripleValue = String();
+
+            var fs = FileStream(_path, "in");
+            string line;
+            while (fs.ReadLine(out line))
+            {
+                if (inTripleQuote)
+                {
+                    if (line.Trim() == "\"\"\"")
+                    {
+                        _sections[currentSection][tripleKey] = tripleValue;
+                        inTripleQuote = false;
+                        tripleKey = "";
+                        tripleValue = String();
+                        continue;
+                    }
+                    tripleValue += line + "\n";
+                    continue;
+                }
+
+                string trimmed = line.Trim();
+
+                // Skip empty lines and comments
+                if (trimmed == "" || trimmed.StartsWith("#"))
+                    continue;
+
+                // Section header
+                if (trimmed.StartsWith("[") && trimmed.EndsWith("]"))
+                {
+                    currentSection = trimmed.Substring(1, trimmed.Length - 2).Trim();
+                    unless (_sections.ContainsKey(currentSection))
+                        _sections[currentSection] = Dictionary<string, string>();
+                    continue;
+                }
+
+                // Key = value
+                int eq = trimmed.IndexOf('=');
+                if (eq >= 0)
+                {
+                    string key = trimmed.Substring(0, eq).TrimEnd();
+                    string val = trimmed.Substring(eq + 1).TrimStart();
+
+                    // Check for triple-quoted value
+                    if (val == "\"\"\"")
+                    {
+                        inTripleQuote = true;
+                        tripleKey = key;
+                        tripleValue = String();
+                        continue;
+                    }
+
+                    _sections[currentSection][key] = val;
+                }
+            }
+            fs.Close();
+        }
+
+        /// <summary>
+        /// Writes all sections and key-value pairs to the .dbset file.
+        /// Multi-line values (containing newlines) are written as triple-quoted.
+        /// </summary>
+        private void WriteToDisk()
+        {
+            var fs = FileStream(_path, "out");
+
+            // Write root section keys first (no section header)
+            if (_sections.ContainsKey("") && _sections[""].Count > 0)
+            {
+                foreach (var key in _sections[""].Keys)
+                    WriteEntry(fs, key, _sections[""][key]);
+                fs.WriteLine("");
+            }
+
+            // Write named sections
+            foreach (var section in _sections.Keys)
+            {
+                if (section == "")
+                    continue;  // already wrote root
+                fs.WriteLine("[" + section + "]");
+                foreach (var key in _sections[section].Keys)
+                    WriteEntry(fs, key, _sections[section][key]);
+                fs.WriteLine("");
+            }
+
+            fs.Close();
+        }
+
+        /// <summary>
+        /// Writes a single key-value entry.
+        /// Uses triple-quoted format for multi-line values.
+        /// </summary>
+        private void WriteEntry(FileStream fs, string key, string value)
+        {
+            if (value.Contains("\n"))
+            {
+                fs.WriteLine(key + " = \"\"\"");
+                fs.Write(value);
+                unless (value.EndsWith("\n"))
+                    fs.WriteLine("");
+                fs.WriteLine("\"\"\"");
+            }
+            else
+            {
+                fs.WriteLine(key + " = " + value);
+            }
+        }
+
+
+    }
+}

@@ -1,0 +1,97 @@
+namespace Standard {
+    /// <summary>
+    /// Represents a 16-bit signed integer.
+    /// Maps to: C++ short
+    /// </summary>
+    [Represents("short")]
+    public class Int16 {
+        /// <summary>Default constructor (initializes to 0).</summary>
+        public Int16();
+
+        /// <summary>Constructs from a short value.</summary>
+        public Int16(short value);
+
+        /// <summary>The minimum value (-32768).</summary>
+        public static short MinValue { get; }
+
+        /// <summary>The maximum value (32767).</summary>
+        public static short MaxValue { get; }
+
+        /// <summary>Converts to string.</summary>
+        public override string ToString();
+
+        /// <summary>Parses a string to an Int16.</summary>
+        public static Int16 Parse(string s);
+
+        /// <summary>Safely parses a string to an Int16.</summary>
+        public static bool TryParse(string s, out Int16 result);
+
+        /// <summary>Addition.</summary>
+        [Represents("operator+")]
+        public static Int16 operator+(Int16 left, Int16 right);
+
+        /// <summary>Subtraction.</summary>
+        [Represents("operator-")]
+        public static Int16 operator-(Int16 left, Int16 right);
+
+        /// <summary>Multiplication.</summary>
+        [Represents("operator*")]
+        public static Int16 operator*(Int16 left, Int16 right);
+
+        /// <summary>Division.</summary>
+        [Represents("operator/")]
+        public static Int16 operator/(Int16 left, Int16 right);
+
+        /// <summary>Modulus.</summary>
+        [Represents("operator%")]
+        public static Int16 operator%(Int16 left, Int16 right);
+
+        /// <summary>Bitwise AND.</summary>
+        [Represents("operator&")]
+        public static Int16 operator&(Int16 left, Int16 right);
+
+        /// <summary>Bitwise OR.</summary>
+        [Represents("operator|")]
+        public static Int16 operator|(Int16 left, Int16 right);
+
+        /// <summary>Bitwise XOR.</summary>
+        [Represents("operator^")]
+        public static Int16 operator^(Int16 left, Int16 right);
+
+        /// <summary>Bitwise NOT.</summary>
+        [Represents("operator~")]
+        public static Int16 operator~(Int16 value);
+
+        /// <summary>Left shift.</summary>
+        [Represents("operator<<")]
+        public static Int16 operator<<(Int16 left, int shift);
+
+        /// <summary>Right shift.</summary>
+        [Represents("operator>>")]
+        public static Int16 operator>>(Int16 left, int shift);
+
+        /// <summary>Less than.</summary>
+        [Represents("operator<")]
+        public static bool operator<(Int16 left, Int16 right);
+
+        /// <summary>Greater than.</summary>
+        [Represents("operator>")]
+        public static bool operator>(Int16 left, Int16 right);
+
+        /// <summary>Less than or equal.</summary>
+        [Represents("operator<=")]
+        public static bool operator<=(Int16 left, Int16 right);
+
+        /// <summary>Greater than or equal.</summary>
+        [Represents("operator>=")]
+        public static bool operator>=(Int16 left, Int16 right);
+
+        /// <summary>Equality.</summary>
+        [Represents("operator==")]
+        public static bool operator==(Int16 left, Int16 right);
+
+        /// <summary>Inequality.</summary>
+        [Represents("operator!=")]
+        public static bool operator!=(Int16 left, Int16 right);
+    }
+}

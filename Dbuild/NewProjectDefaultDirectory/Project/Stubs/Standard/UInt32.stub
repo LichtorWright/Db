@@ -1,0 +1,97 @@
+namespace Standard {
+    /// <summary>
+    /// Represents a 32-bit unsigned integer.
+    /// Maps to: C++ unsigned int
+    /// </summary>
+    [Represents("unsigned int")]
+    public class UInt32 {
+        /// <summary>Default constructor (initializes to 0).</summary>
+        public UInt32();
+
+        /// <summary>Constructs from a uint value.</summary>
+        public UInt32(uint value);
+
+        /// <summary>The minimum value (0).</summary>
+        public static uint MinValue { get; }
+
+        /// <summary>The maximum value (4294967295).</summary>
+        public static uint MaxValue { get; }
+
+        /// <summary>Converts to string.</summary>
+        public override string ToString();
+
+        /// <summary>Parses a string to a UInt32.</summary>
+        public static UInt32 Parse(string s);
+
+        /// <summary>Safely parses a string to a UInt32.</summary>
+        public static bool TryParse(string s, out UInt32 result);
+
+        /// <summary>Addition.</summary>
+        [Represents("operator+")]
+        public static UInt32 operator+(UInt32 left, UInt32 right);
+
+        /// <summary>Subtraction.</summary>
+        [Represents("operator-")]
+        public static UInt32 operator-(UInt32 left, UInt32 right);
+
+        /// <summary>Multiplication.</summary>
+        [Represents("operator*")]
+        public static UInt32 operator*(UInt32 left, UInt32 right);
+
+        /// <summary>Division.</summary>
+        [Represents("operator/")]
+        public static UInt32 operator/(UInt32 left, UInt32 right);
+
+        /// <summary>Modulus.</summary>
+        [Represents("operator%")]
+        public static UInt32 operator%(UInt32 left, UInt32 right);
+
+        /// <summary>Bitwise AND.</summary>
+        [Represents("operator&")]
+        public static UInt32 operator&(UInt32 left, UInt32 right);
+
+        /// <summary>Bitwise OR.</summary>
+        [Represents("operator|")]
+        public static UInt32 operator|(UInt32 left, UInt32 right);
+
+        /// <summary>Bitwise XOR.</summary>
+        [Represents("operator^")]
+        public static UInt32 operator^(UInt32 left, UInt32 right);
+
+        /// <summary>Bitwise NOT.</summary>
+        [Represents("operator~")]
+        public static UInt32 operator~(UInt32 value);
+
+        /// <summary>Left shift.</summary>
+        [Represents("operator<<")]
+        public static UInt32 operator<<(UInt32 left, int shift);
+
+        /// <summary>Right shift.</summary>
+        [Represents("operator>>")]
+        public static UInt32 operator>>(UInt32 left, int shift);
+
+        /// <summary>Less than.</summary>
+        [Represents("operator<")]
+        public static bool operator<(UInt32 left, UInt32 right);
+
+        /// <summary>Greater than.</summary>
+        [Represents("operator>")]
+        public static bool operator>(UInt32 left, UInt32 right);
+
+        /// <summary>Less than or equal.</summary>
+        [Represents("operator<=")]
+        public static bool operator<=(UInt32 left, UInt32 right);
+
+        /// <summary>Greater than or equal.</summary>
+        [Represents("operator>=")]
+        public static bool operator>=(UInt32 left, UInt32 right);
+
+        /// <summary>Equality.</summary>
+        [Represents("operator==")]
+        public static bool operator==(UInt32 left, UInt32 right);
+
+        /// <summary>Inequality.</summary>
+        [Represents("operator!=")]
+        public static bool operator!=(UInt32 left, UInt32 right);
+    }
+}

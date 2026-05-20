@@ -1,0 +1,67 @@
+namespace Standard {
+    /// <summary>
+    /// Hash-based set of unique elements with average O(1) lookup.
+    /// Maps to: C++ std::unordered_set&lt;T&gt;
+    /// </summary>
+    [Represents("std::unordered_set", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<unordered_set>")]
+    public class UnorderedSet<T> {
+        /// <summary>Constructs an empty unordered set.</summary>
+        public UnorderedSet();
+
+        /// <summary>The number of elements.</summary>
+        [Represents("size")]
+        public int Count { get; }
+
+        /// <summary>Whether the set is empty.</summary>
+        [Represents("empty")]
+        public bool IsEmpty { get; }
+
+        /// <summary>Adds an element. Returns whether it was newly added.</summary>
+        [Represents("insert")]
+        public bool Add(T item);
+
+        /// <summary>Removes the element. Returns whether it was present.</summary>
+        [Represents("erase")]
+        public bool Remove(T item);
+
+        /// <summary>Removes all elements.</summary>
+        [Represents("clear")]
+        public void Clear();
+
+        /// <summary>Whether the set contains the given element.</summary>
+        [Represents("contains")]
+        public bool Contains(T item);
+
+        /// <summary>Adds all elements from another set.</summary>
+        public void UnionWith(UnorderedSet<T> other);
+
+        /// <summary>Keeps only elements also in the other set.</summary>
+        public void IntersectWith(UnorderedSet<T> other);
+
+        /// <summary>Removes all elements also in the other set.</summary>
+        public void ExceptWith(UnorderedSet<T> other);
+
+        /// <summary>Whether all elements are also in the other set.</summary>
+        public bool IsSubsetOf(UnorderedSet<T> other);
+
+        /// <summary>Whether any element is also in the other set.</summary>
+        public bool Overlaps(UnorderedSet<T> other);
+
+        /// <summary>The number of elements matching the given item (always 0 or 1).</summary>
+        [Represents("count")]
+        public int CountOf(T item);
+
+        /// <summary>Swaps contents with another unordered set.</summary>
+        [Represents("swap")]
+        public void Swap(UnorderedSet<T> other);
+
+        /// <summary>Supports foreach iteration over the set.</summary>
+        public class Enumerator {
+            public T Current { get; }
+            public bool MoveNext();
+            public void Reset();
+        }
+
+        public Enumerator GetEnumerator();
+    }
+}

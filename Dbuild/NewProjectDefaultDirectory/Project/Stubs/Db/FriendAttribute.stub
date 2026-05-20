@@ -1,0 +1,13 @@
+namespace Db
+{
+    /// <summary>
+    /// Grants another type or function access to private and protected members.
+    /// In C++: friend class T or friend void f().
+    /// The argument is the name of the type or function being granted access.
+    /// </summary>
+    public class FriendAttribute
+    {
+        public string Target { get; }
+        public FriendAttribute(string target);
+    }
+}

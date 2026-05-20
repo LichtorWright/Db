@@ -1,0 +1,101 @@
+namespace GMP {
+    /// <summary>
+    /// Arbitrary-precision rational number stored as an exact numerator/denominator
+    /// pair, always kept in lowest terms after canonicalisation.
+    /// Use for exact fractional arithmetic with no rounding error whatsoever.
+    /// Maps to: C++ mpq_class  (include gmpxx.h, link -lgmp)
+    /// </summary>
+    [Represents("mpq_class", CodePart.Class, Language.Cpp, MemberAccess.Dot, "<gmpxx.h>")]
+    public class BigRational {
+
+        // ── Constructors ──────────────────────────────────────────────────────
+
+        /// <summary>Constructs zero (0/1).</summary>
+        public BigRational();
+
+        /// <summary>Constructs the integer n as a rational (n/1).</summary>
+        public BigRational(BigInteger n);
+
+        /// <summary>Constructs n/d.  Does NOT automatically canonicalise — call Reduce() if needed.</summary>
+        public BigRational(BigInteger numerator, BigInteger denominator);
+
+        /// <summary>Constructs from native integers p/q.</summary>
+        public BigRational(long numerator, long denominator);
+
+        /// <summary>Constructs from a double (exact binary fraction, may have large denominator).</summary>
+        public BigRational(double value);
+
+        /// <summary>
+        /// Parses from a string in the form "num/den" or plain integer, base 10.
+        /// </summary>
+        public BigRational(string text);
+
+        // ── Components ────────────────────────────────────────────────────────
+
+        /// <summary>The numerator (reference — modifying rebuilds the rational).</summary>
+        [Represents("get_num")]
+        public BigInteger Numerator { get; }
+
+        /// <summary>The denominator (always positive after Reduce()).</summary>
+        [Represents("get_den")]
+        public BigInteger Denominator { get; }
+
+        /// <summary>
+        /// Reduces the fraction to lowest terms and ensures the denominator is positive.
+        /// Call after directly setting Numerator/Denominator.
+        /// </summary>
+        [Represents("canonicalize")]
+        public void Reduce();
+
+        // ── Arithmetic ────────────────────────────────────────────────────────
+
+        [Represents("operator+")] public BigRational Add(BigRational other);
+        [Represents("operator-")] public BigRational Subtract(BigRational other);
+        [Represents("operator*")] public BigRational Multiply(BigRational other);
+        [Represents("operator/")] public BigRational Divide(BigRational other);
+        [Represents("operator-")] public BigRational Negate();
+
+        /// <summary>Returns the reciprocal (denominator/numerator).</summary>
+        [Represents("mpq_inv")]
+        public BigRational Reciprocal();
+
+        /// <summary>Absolute value.</summary>
+        [Represents("abs")]
+        public BigRational Abs();
+
+        // ── Comparison ────────────────────────────────────────────────────────
+
+        [Represents("operator==")] public bool Equals(BigRational other);
+        [Represents("operator<")]  public bool LessThan(BigRational other);
+        [Represents("operator>")]  public bool GreaterThan(BigRational other);
+
+        [Represents("cmp")]
+        public int CompareTo(BigRational other);
+
+        /// <summary>The sign: -1, 0, or 1.</summary>
+        [Represents("sgn")]
+        public int Sign { get; }
+
+        // ── Conversion ────────────────────────────────────────────────────────
+
+        /// <summary>Returns the closest double (may lose precision).</summary>
+        [Represents("get_d")]
+        public double ToDouble();
+
+        /// <summary>Returns the truncated BigInteger part (floor toward zero).</summary>
+        [Represents("mpz_class")]
+        public BigInteger ToBigInteger();
+
+        /// <summary>Returns the decimal string "numerator/denominator".</summary>
+        [Represents("get_str")]
+        public string ToString();
+
+        // ── Static factories ──────────────────────────────────────────────────
+
+        [Represents("mpq_class(0)", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<gmpxx.h>")]
+        public static BigRational Zero { get; }
+
+        [Represents("mpq_class(1)", CodePart.Member, Language.Cpp, MemberAccess.Colons, "<gmpxx.h>")]
+        public static BigRational One { get; }
+    }
+}

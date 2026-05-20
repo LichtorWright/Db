@@ -1,0 +1,24 @@
+namespace Standard {
+    /// <summary>
+    /// Static utility class for common operations.
+    /// Maps to: C++ std::max, std::min, std::cout
+    /// </summary>
+    [Represents("Standard", CodePart.Class, Language.Cpp, MemberAccess.Colons, "<algorithm>")]
+    public class Static {
+        /// <summary>Returns the larger of two values.</summary>
+        [Represents("std::max", CodePart.FreeFunction, Language.Cpp, MemberAccess.Colons)]
+        public static T Max<T>(T a, T b);
+
+        /// <summary>Returns the smaller of two values.</summary>
+        [Represents("std::min", CodePart.FreeFunction, Language.Cpp, MemberAccess.Colons)]
+        public static T Min<T>(T a, T b);
+
+        /// <summary>Prints a line of text followed by a newline.</summary>
+        [Represents("std::cout", CodePart.FreeFunction, Language.Cpp, MemberAccess.Colons)]
+        public static void PrintLine(string text);
+
+        /// <summary>Prints text without a trailing newline.</summary>
+        [Represents("std::cout", CodePart.FreeFunction, Language.Cpp, MemberAccess.Colons)]
+        public static void Print(string text);
+    }
+}
